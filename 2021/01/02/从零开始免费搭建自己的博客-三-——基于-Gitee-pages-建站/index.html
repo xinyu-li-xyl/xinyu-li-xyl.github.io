@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    从零开始免费搭建自己的博客(三)——基于 Gitee pages 建站 |  塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-从零开始免费搭建自己的博客-三-——基于-Gitee-pages-建站"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  从零开始免费搭建自己的博客(三)——基于 Gitee pages 建站
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/" class="article-date">
+  <time datetime="2021-01-02T18:51:56.000Z" itemprop="datePublished">2021-01-02</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">10 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <blockquote>
+<p>​    本文是博客搭建系列文章第二篇，其他文章链接：</p>
+<ol>
+<li>从零开始免费搭建自己的博客(一)——本地搭建 Hexo 框架</li>
+<li>从零开始免费搭建自己的博客(二)——基于 GitHub pages 建站</li>
+<li><strong>从零开始免费搭建自己的博客(三)——基于 Gitee pages 建站</strong></li>
+<li>从零开始免费搭建自己的博客(四)——编写Markdown文章利器 Typora</li>
+<li>从零开始免费搭建自己的博客(五)——Typora + PicGo + GitHub/Gitee图床</li>
+<li>从零开始免费搭建自己的博客(六)——三个站点一键发布博客</li>
+<li>从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点</li>
+<li>从零开始免费搭建自己的博客(八)——博客网站个性化设置及优化</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在第一篇文章里，我们利用 Hexo 框架在本地搭建了一个精美的博客，第二篇文章里，我们利用 GitHub 提供的免费静态网页托管服务建立了个人博客网站，将博客发布到了互联网上。</p>
+<p>可是我们写博客的原因，一个是方便自己在不同的地方能直接打开网页就可以回顾知识，一个是为了方便他人查阅参考。由于国内网络环境的原因，某些地方某些时间，访问 GitHub 会比较慢，这就会导致博客无法被别人访问或者自己换个地方上网时也打不开自己的博客。</p>
+<p>好消息是现在国内有和 GitHub 功能类似的 Gitee，中文名码云。之前也有注意到这个平台，当时以为他仅仅是山寨 GitHub 而已，肯定火不起来。没想到随着 GitHub 网络环境越来越差，下载个工程才几kb的速度，经常等了很久之后下载失败。有一次尝试了下将 GitHub 项目同步到 Gitee 再下载，速度直接起飞，真香。随着许多有影响力的项目加入了 Gitee ，一些大佬的博客也开始推荐使用码云了，使用的人也越来越多了。</p>
+<p>当然了，使用 Gitee Pages 相对于 GitHub Pages 网速是上来了，也有很多缺点。我在实际使用过程中遇到了许多DAN疼的地方，比如每次提交需要手动更新部署，以及大于1M图片登陆后可见等，我会在下面文章中用<strong>加粗</strong>字体指出。没办法，鱼和熊掌不可兼得( ╯▽╰)。准备在第八篇讲优化的文章中尝试一种完美解决方案(GitHub + CDN加速)。</p>
+<p>本篇文章介绍怎样利用 Gitee  提供的免费静态网页托管服务 Gitee Pages 建站。</p>
+<h2 id="一、-Gitee-Pages-简介"><a href="#一、-Gitee-Pages-简介" class="headerlink" title="一、 Gitee Pages 简介"></a>一、 Gitee Pages 简介</h2><p>上篇说了，GitHub 设计 Pages 功能是为了让用户能设计一个图文并茂的网页作为项目首页，提升新手友好度。那么Gitee为什么要提供网页托管服务呢？应该是同样的原因，或者说是因为 GitHub 有这个功能？( ╯▽╰)</p>
+<p><a target="_blank" rel="noopener" href="https://gitee.com/help/articles/4136">Gitee pages 官网</a> 的介绍：Gitee Pages 是一个免费的静态网页托管服务，您可以使用 Gitee Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用 Gitee 的 Pages服务。目前 Gitee Pages 支持 Jekyll、Hugo、Hexo编译静态资源。</p>
+<p>二、Gitee Pages 准备</p>
+<p>在发布之前，要先准备好自己的 Gitee Pages 。</p>
+<p>Gitee Pages 仓库的创建方法和 GitHub 略有不同，官网的帮助文档提供了两种创建方法，第一种是直接在 Gitee 上创建仓库，第二种是直接把 GitHub 创建好的仓库同步过来。比如已经按照上一篇的方法在 GitHub 建立了博客，想在 Gitee 再搭建一次作为一个备份，可以直接用第二种方法同步过来。</p>
+<h3 id="1-注册-Gitee-账号"><a href="#1-注册-Gitee-账号" class="headerlink" title="1. 注册 Gitee 账号"></a>1. 注册 Gitee 账号</h3><p>首先需要注册一个 Gitee 账号，如果已经有账号直接看下一步。</p>
+<p>打开 Gitee 官网：<a target="_blank" rel="noopener" href="https://gitee.com/">gitee.com</a>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231193126082.png" alt="image-20201231193126082"></p>
+<p>点击右上角<kbd>注册</kbd>按钮，填写用户名，手机，验证码。也可以根据下面的选项使用其他平台账号登录。注意，此处用户名是唯一ID，建议取个有意义的名字。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231193349306.png" alt="image-20201231193349306"></p>
+<h3 id="2-创建-Gitee-Pages-仓库"><a href="#2-创建-Gitee-Pages-仓库" class="headerlink" title="2. 创建 Gitee Pages 仓库"></a>2. 创建 Gitee Pages 仓库</h3><p>登录账号后，点击页面右上角的<kbd>+</kbd>，选择<kbd>新建仓库</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231193543517.png" alt="image-20201231193543517"></p>
+<p>仓库名称这里建议填写<code>你的用户名</code>，这样生成出来的网页地址是比较纯净的形式，如<code>https://&lt;你的用户名&gt;.github.io</code>。当然也可以自定义名称，比如<code>blog </code>，但是这样后面生成出来的网页地址会带一个子目录，像<code>https://&lt;你的用户名&gt;.github.io/blog</code>这样。</p>
+<p>仓库介绍填写仓库描述，比如 <code>jacksparrow&#39;s blog</code>等，可不填。</p>
+<p>注意勾选 <code>使用Readme文件初始化这个仓库</code>，会自动创建<code>master</code>分支并生成一个 <code>readme.md</code>文件。</p>
+<p>最后点击下面的<kbd>创建</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231214142085.png" alt="image-20201231214142085"></p>
+<p>点击页面右上角的<kbd>服务</kbd>，选择<kbd>Gitee Pages</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231215720997.png" alt="image-20201231215720997"></p>
+<p>勾选<code>强制使用HTTPS</code>，点击<kbd>启动</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231220540958.png" alt="image-20201231220540958"></p>
+<h3 id="3-测试-Gitee-Pages-页面"><a href="#3-测试-Gitee-Pages-页面" class="headerlink" title="3. 测试  Gitee Pages 页面"></a>3. 测试  Gitee Pages 页面</h3><p>创建 Gitee Pages 仓库后，为了测试能否访问 Pages 服务，我们给它添加一个静态网页。</p>
+<p>先点击左边的<kbd>代码</kbd>回到文件页面，然后点击<kbd>文件</kbd> – <kbd>新建文件</kbd>在仓库下新建文件。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231220911962.png" alt="image-20201231220911962"></p>
+<p>输入文件名<code>index.html</code>，在下面输入内容<code>&lt;h1&gt;这是我的博客!&lt;/h1&gt;</code>，这是 html 标记语言，表示一级标题。</p>
+<p>其他保持默认，点击最下面的<kbd>提交</kbd>，提交文件到仓库。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231221057010.png" alt="image-20201231221057010"></p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231195353883.png" alt="image-20201231195353883"></p>
+<p><strong>与 GitHub 提交自动部署不同的是，Gitee上提交后需要手动部署。</strong>(网上有许多实现了 Gitee Pages 自动部署的脚本，其实就是用脚本模拟下面的操作，可以参考)</p>
+<p>点击页面右上角的<kbd>服务</kbd>，选择<kbd>Gitee Pages</kbd>回到部署界面。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231222024946.png" alt="image-20201231222024946"></p>
+<p>点击下面的<kbd>更新</kbd>，下图中红框圈出的就是你的博客地址了，格式为<code>https://&lt;你的用户名&gt;.github.io</code>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231222215450.png" alt="image-20201231222215450"></p>
+<p>点击博客地址或者在浏览器输入博客地址。此时就可以看见我们刚创建的网页，其中的内容就是刚才写的内容。说明 Gitee Pages 服务已经正常。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231222626659.png" alt="image-20201231222626659"></p>
+<h2 id="三、Gitee-Pages-发布"><a href="#三、Gitee-Pages-发布" class="headerlink" title="三、Gitee Pages 发布"></a>三、Gitee Pages 发布</h2><p>上一步 “测试  Gitee Pages 页面” 中，我们在 Gitee Pages 仓库目录下新建了一个<code>index.html</code>，就可以在自己的专属网址看到这个网页了。同理我们把自己的博客生成静态 html 网页，提交到这个仓库目录下，就可以在我们的网址看到博客页面了，这就是 Hexo 框架部署博客的原理。当然，对于 Hexo 来说，部署提交只需要几条命令。</p>
+<h3 id="1-配置-Git-参数"><a href="#1-配置-Git-参数" class="headerlink" title="1. 配置 Git 参数"></a>1. 配置 Git 参数</h3><p>过程跟上篇文章一样，已经做过的步骤不用再重复，直接到复制公钥那一步。</p>
+<p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
+<p>配置用户名和邮箱，这两个参数用于 Git 提交时的身份识别。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username 和 username@XXX.com 是你注册 Gitee 的用户名和邮箱，如果账号不是邮箱注册的话，填自己的一个邮箱地址就行了</span></span><br><span class="line">git config --global user.name &quot;username&quot;</span><br><span class="line">git config --global user.email &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233907818.png" alt="image-20201229233907818"></p>
+<p>生成 SSH keys，主要用于Git 提交时的权限控制和加密，本地根据 RSA 算法生成公私密钥对，然后将公钥添加到 Gitee 上，本机就可以提交代码到自己的 GitHub 库了。这个是根据当前使用的电脑的一些信息生成的，所以换电脑提交时要重新生成并添加。</p>
+<p>输入下面命令，然后一直按<kbd>回车</kbd>，直到结束。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username@XXX.com 同上，是你的注册邮箱</span></span><br><span class="line">ssh-keygen -t rsa -C &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233801498.png" alt="image-20201229233801498"></p>
+<p>输入下面的命令，查看公钥内容，应该是一个<code>ssh-rsa</code>开头，以<code>你的邮箱</code>结尾的长字符串。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat后面的路径就是上图中的公钥文件路径，直接复制过来就可以。其中XXX是你的电脑用户名。</span></span><br><span class="line">cat /c/Users/XXX/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229234452012.png" alt="image-20201229234452012"></p>
+<p>复制公钥内容（其实在<kbd>Git Bash</kbd>命令行里，默认选中文字松开鼠标就会自动把选中内容复制到剪贴板，点击鼠标中键是粘贴）。</p>
+<p>打开自己的 Gitee 主页，点击右上角的头像，点击<kbd>设置</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231223248489.png" alt="image-20201231223248489"></p>
+<p>点击<kbd>SSH公钥</kbd>。<code>标题</code>可以随便起一个名字，<code>公钥</code>填写上一步复制的公钥内容，然后点击<kbd>确定</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201231223630767.png" alt="image-20201231223630767"></p>
+<p>最后执行下面的命令，测试一下 Git 参数是否配置成功。出现<code>你的用户名</code>和<code>successfully</code>字样，说明配置成功。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下面的命令什么都不用改</span></span><br><span class="line">ssh -T git@gitee.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210101125339173.png" alt="image-20210101125339173"></p>
+<h3 id="2-安装-Hexo-发布插件"><a href="#2-安装-Hexo-发布插件" class="headerlink" title="2. 安装 Hexo 发布插件"></a>2. 安装 Hexo 发布插件</h3><p>上一篇已经安装过可以跳过这一步。</p>
+<p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
+<p>输入下面的命令，安装<code>hexo-deployer-git</code>。（安装失败或者卡住，参考第一篇文章修改 npm 源。）</p>
+<p>这个插件用于把生成好的静态页面上传到 Gitee Pages 仓库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230001107308.png" alt="image-20201230001107308"></p>
+<h3 id="3-发布"><a href="#3-发布" class="headerlink" title="3.  发布 ! ! !"></a>3.  发布 ! ! !</h3><p>从第一篇到现在这么多步骤过去了，可以说前面的所有操作都是在为最后的这一步<code>发布</code>做准备，现在终于到了见证奇迹的时刻了。</p>
+<p>先别着急激动，让我们完成最最后一步配置，我们需要告诉 hexo 发布到哪里去，也就是把文件上传到哪个仓库。</p>
+<p>打开博客<code>根目录配置文件</code>(<code>D:\MyBlog\_config.yaml</code>)，拉到文件最后一行，修改为下面的配置（没有的配置项自行添加），保存。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 其中 xxxxxx 是前面多次用到的你的GitHub用户名，注意是master分支</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@gitee.com:xxxxxx/xxxxxx.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>OK，现在万事俱备了，执行下面的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 注意最后变成d了，原来的s表示服务起在本地，现在的d表示部署在远端</span></span><br><span class="line">hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>待命令执行完毕，还记得<strong>Gitee上提交后需要手动部署</strong>吗？此时需要按照<code>3. 测试  Gitee Pages 页面</code>的方法更新部署。</p>
+<p>打开浏览器，输入网址<code>https://你的用户名.gitee.io</code>，可以看到一个和第一篇中本地部署的一模一样的博客出现了。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210102003427597.png" alt="image-20210102003427597"></p>
+<p>之前为了测试而发布的文章也在。<code>https://你的用户名.gitee.io</code>就是你的个人博客地址了，其他人都可以访问。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210102003454287.png" alt="image-20210102003454287"></p>
+<h2 id="四、后续"><a href="#四、后续" class="headerlink" title="四、后续"></a>四、后续</h2><p>至此，我们从零开始搭建一个博客的任务初步完成了。</p>
+<p>本篇文章介绍了利用 Gitee Pages 发布个人博客的方法，如果觉得 Gitee 每次发布博客需要手动更新太麻烦，可以参考上一篇文章，基于 Github Pages 搭建博客站点。</p>
+<p>我看到许多人的博客搭建好了，一直停留在一开始初始化的状态，没有新增过一篇文章，希望大家别把最重要事情忘了，我们搭网站是为了写博客，一定要坚持下去。工欲善其事，必先利其器，接下来第四篇文章，介绍怎么更方便地写 Markdown 格式的博客。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag">博客搭建</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">从零开始免费搭建自己的博客(二)——基于 GitHub pages 建站</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>
