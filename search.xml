@@ -222,7 +222,7 @@
 <h2 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h2><p>本文思路：使用 Hexo 框架搭建网站，发布到 GitHub pages 或者 Gitee pages .</p>
 <p>首先先看一下最终效果：</p>
 <p>GitHub pages 链接(国际站点)：<a href="https://yushuaige.github.io/">杰克小麻雀的博客</a><br>Gitee pages 链接(国内站点)：<a href="https://yushuaige.gitee.io/">杰克小麻雀的博客</a></p>
-<p>[image]</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/myblog.gif" alt="myblog"></p>
 <hr>
 <h2 id="一、Hexo-框架简介"><a href="#一、Hexo-框架简介" class="headerlink" title="一、Hexo 框架简介"></a>一、Hexo 框架简介</h2><p>首先，都 0202 年了，我们想搭建一个网站，当然不用自己从头开始写 html，因为有许多开源的代码可以供我们选择。Hexo 就是一个专门用于博客类网站的开源项目，使用 Node.js 语言开发，GitHub 上目前已经有 31.8k 的 star 了，现在网上大多数的个人博客都是使用这个框架搭建的。Hexo不仅搭建过程简单快捷，配置灵活，可定制型非常高，因此众多大佬开发者为它开发了丰富的主题库，而作为菜鸟我们只需要选择一个符合自己审美的主题直接用就行了，当然如果你懂前端和 js ，也可以自己修改定制，或者自己制作主题并分享到互联网上。</p>
 <p> Hexo 中文官网：<a href="https://hexo.io/zh-cn/">hexo.io</a> ，GitHub 地址：<a href="https://github.com/hexojs/hexo">hexojs/hexo</a> 。</p>
