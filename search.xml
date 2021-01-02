@@ -1,101 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>从零开始免费搭建自己的博客(二)——基于 GitHub pages 建站</title>
-    <url>/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/</url>
-    <content><![CDATA[<blockquote>
-<p>​    本文是博客搭建系列文章第二篇，其他文章链接：</p>
-<ol>
-<li>从零开始免费搭建自己的博客(一)——<a href="https://yushuaigee.gitee.io/2020/12/31/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%80-%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAhexo%E6%A1%86%E6%9E%B6/">本地搭建 Hexo 框架</a></li>
-<li><strong>从零开始免费搭建自己的博客(二)——<a href="https://yushuaigee.gitee.io/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/">基于 GitHub pages 建站</a></strong></li>
-<li>从零开始免费搭建自己的博客(三)——<a href="https://yushuaigee.gitee.io/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/">基于 Gitee pages 建站</a></li>
-<li>从零开始免费搭建自己的博客(四)——编写Markdown文章利器 Typora</li>
-<li>从零开始免费搭建自己的博客(五)——Typora + PicGo + GitHub/Gitee图床</li>
-<li>从零开始免费搭建自己的博客(六)——三个站点一键发布博客</li>
-<li>从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点</li>
-<li>从零开始免费搭建自己的博客(八)——博客网站个性化设置及优化</li>
-</ol>
-</blockquote>
-<hr>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在第一篇文章里，我们利用 Hexo 框架在本地搭建了一个精美的博客，可是只能本地访问，要想发布到互联网上，还需要将它部署在网站上。</p>
-<p>博客的功能只要能阅读文章就够了，因此可以考虑将其部署在提供静态网页托管服务的网站上，这样就省去了购买服务器(云主机)，购买域名，购买大网 IP 这些步骤，不仅省钱，更重要的是省事儿。</p>
-<p>当前云计算如此流行，许多平台都提供了静态网页托管服务，其中最方便的当然是 GitHub Pages，只需要注册一个账号就可以使用。GitHub Pages的服务器毕竟在国外，如果觉得访问太慢，也可以选择国内功能相似的 Gitee Pages。</p>
-<p>本篇文章介绍怎样利用 GitHub 提供的免费静态网页托管服务 GitHub Pages 建站。</p>
-<h2 id="一、-GitHub-Pages-简介"><a href="#一、-GitHub-Pages-简介" class="headerlink" title="一、 GitHub Pages 简介"></a>一、 GitHub Pages 简介</h2><p>GitHub 是世界上最流行的软件源代码托管服务平台，为什么要提供网页托管服务呢？</p>
-<p>这是因为一个项目的主页如果只有源码，对新接触的人很不友好，不知从何处下手。虽然已经有了 readme.md 文件，但毕竟不如一个直观的网页来的直接。于是 GitHub 就设计了 Pages 功能，允许用户设计一个图文并茂的网页作为项目首页。</p>
-<p>虽然 GitHub Pages 的初衷是提供自定义的项目首页，但是它的玩法不止这一个。因此许多博主都用这个功能来搭建自己的博客，因为它实在是太太方便了。</p>
-<p>去GitHub Pages 官网 <a href="https://pages.github.com/">pages.github</a> ，拉到最后，可以看到官方也推荐使用 GitHub Pages 搭建博客，并且提供了示例教程。</p>
-<h2 id="二、GitHub-Pages-准备"><a href="#二、GitHub-Pages-准备" class="headerlink" title="二、GitHub Pages 准备"></a>二、GitHub Pages 准备</h2><p>在发布之前，要先准备好自己的GitHub Pages 。</p>
-<h3 id="1-注册-GitHub-账号"><a href="#1-注册-GitHub-账号" class="headerlink" title="1. 注册 GitHub 账号"></a>1. 注册 GitHub 账号</h3><p>首先需要注册一个 GitHub 账号，如果已经有账号直接看下一步。</p>
-<p>打开 GitHub 官网：<a href="https://github.com/">github.com</a>。如果这里打开速度已经不容忍受了，建议直接看下一篇使用 Gitee 建站。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229223941265.png" alt="image-20201229223941265"></p>
-<p>点击右上角<kbd>Sign up</kbd>注册，填写用户名，邮箱，密码。注意，此处用户名是唯一ID，建议取个有意义的名字。点击注册后会发送一封验证邮件到填写的邮箱，登录自己的邮箱点击链接进行验证，GitHub 账号就注册好了。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224251159.png" alt="image-20201229224251159"></p>
-<h3 id="2-创建-GitHub-Pages-仓库"><a href="#2-创建-GitHub-Pages-仓库" class="headerlink" title="2. 创建 GitHub Pages 仓库"></a>2. 创建 GitHub Pages 仓库</h3><p>点击右上角<kbd>Sign in</kbd>登录后，点击左上角<kbd>New</kbd>新建仓库。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224505117.png" alt="image-20201229224505117"></p>
-<p>由于每个 GitHub 账户只能建立一个 GitHub Pages 页面，所以 Repository name 必须填<code>&lt;你的用户名&gt;.github.io</code>，否则就会建立一个普通仓库，GitHub Pages 功能不会生效。比如用户名是<code>jacksparrow</code>，Repository name 这里就填<code>jacksparrow.github.io</code>，不知道用户名是哪个，可以点击页面右上角头像，看到第一行“Signed in as <code>xxx</code>”字样， <code>xxx</code>即为这里的用户名。</p>
-<p>Description 填写仓库描述，比如 <code>jacksparrow&#39;s blog</code>等，可不填。</p>
-<p>注意勾选 <code>Public</code> ，否则 GitHub Pages 功能不会生效。建议勾选 <code>Add a README file</code>，会自动生成一个 <code>readme.md</code>文件。</p>
-<p>最后点击<kbd>Create repository</kbd>创建仓库。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224741804.png" alt="image-20201229224741804"></p>
-<h3 id="3-测试-GitHub-Pages-页面"><a href="#3-测试-GitHub-Pages-页面" class="headerlink" title="3. 测试  GitHub Pages 页面"></a>3. 测试  GitHub Pages 页面</h3><p>创建 GitHub Pages 仓库后，为了测试能否访问 GitHub Pages 服务，我们给它添加一个静态网页。</p>
-<p>点击<kbd>Add file</kbd> – <kbd>Create new file</kbd>在仓库下新建文件。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225208056.png" alt="image-20201229225208056"></p>
-<p>输入文件名<code>index.html</code>，在下面输入内容<code>&lt;h1&gt;Hello My Blog!&lt;/h1&gt;</code>，这是 html 标记语言，表示一级标题。</p>
-<p>其他保持默认，点击最下面<kbd>Commit new file</kbd>提交文件到仓库。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225639083.png" alt="image-20201229225639083"></p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225731351.png" alt="image-20201229225731351"></p>
-<p>然后在浏览器打开一个新的网页，输入网址<code>https://&lt;你的用户名&gt;.github.io</code>，就可以看见我们刚创建的网页，其中的内容就是刚才写的内容。说明 GitHub Pages 服务已经正常。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229230057034.png" alt="image-20201229230057034"></p>
-<h2 id="三、GitHub-Pages-发布"><a href="#三、GitHub-Pages-发布" class="headerlink" title="三、GitHub Pages 发布"></a>三、GitHub Pages 发布</h2><p>上一步 “测试  GitHub Pages 页面” 中，我们在 GitHub Pages 仓库目录下新建了一个<code>index.html</code>，就可以在自己的专属网址看到这个网页了。同理我们把自己的博客生成静态 html 网页，提交到这个仓库目录下，就可以在我们的网址看到博客页面了，这就是 Hexo 框架部署博客的原理。当然，对于 Hexo 来说，提交部署只需要几条命令。</p>
-<h3 id="1-配置-Git-参数"><a href="#1-配置-Git-参数" class="headerlink" title="1. 配置 Git 参数"></a>1. 配置 Git 参数</h3><p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
-<p>配置用户名和邮箱，这两个参数用于 Git 提交时的身份识别。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username 和 username@XXX.com 是你注册 GitHub 的用户名和邮箱</span></span><br><span class="line">git config --global user.name &quot;username&quot;</span><br><span class="line">git config --global user.email &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233907818.png" alt="image-20201229233907818"></p>
-<p>生成 SSH keys，主要用于Git 提交时的权限控制和加密，本地根据 RSA 算法生成公私密钥对，然后将公钥添加到 GitHub 上，本机就可以提交代码到自己的 GitHub 库了。这个是根据当前使用的电脑的一些信息生成的，所以换电脑提交时要重新生成并添加。</p>
-<p>输入下面命令，然后一直按<kbd>回车</kbd>，直到结束。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username@XXX.com 是你注册 GitHub 的邮箱</span></span><br><span class="line">ssh-keygen -t rsa -C &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233801498.png" alt="image-20201229233801498"></p>
-<p>输入下面的命令，查看公钥内容，应该是一个<code>ssh-rsa</code>开头，以<code>你的邮箱</code>结尾的长字符串。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat后面的路径就是上图中的公钥文件路径，直接复制过来就可以</span></span><br><span class="line">cat /c/Users/XXX/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229234452012.png" alt="image-20201229234452012"></p>
-<p>复制公钥内容（其实在<kbd>Git Bash</kbd>命令行里，默认选中文字松开鼠标就会自动把选中内容复制到剪贴板，默认鼠标中键是粘贴）。</p>
-<p>打开自己的 Github 主页，点击右上角的头像，点击<kbd>Settings</kbd>。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235035462.png" alt="image-20201229235035462"></p>
-<p>点击<kbd>SSH and GPG keys</kbd>，然后点击<kbd>New SSH keys</kbd>。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235220955.png" alt="image-20201229235220955"></p>
-<p>Title 可以随便起一个名字，Key 填写上一步复制的公钥内容，然后点击<kbd>Add SSH key</kbd>。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235704322.png" alt="image-20201229235704322"></p>
-<p>最后执行下面的命令，测试一下 Git 参数是否配置成功。出现<code>你的用户名</code>和<code>successfully</code>字样，说明配置成功。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下面的命令什么都不用改</span></span><br><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230000424483.png" alt="image-20201230000424483"></p>
-<h3 id="2-安装-Hexo-发布插件"><a href="#2-安装-Hexo-发布插件" class="headerlink" title="2. 安装 Hexo 发布插件"></a>2. 安装 Hexo 发布插件</h3><p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
-<p>输入下面的命令，安装<code>hexo-deployer-git</code>。（安装失败或者卡住，参考第一篇文章修改 npm 源。）</p>
-<p>这个插件用于把生成好的静态页面上传到 GitHub Pages 仓库。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git</span><br></pre></td></tr></table></figure>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230001107308.png" alt="image-20201230001107308"></p>
-<h3 id="3-发布"><a href="#3-发布" class="headerlink" title="3.  发布 ! ! !"></a>3.  发布 ! ! !</h3><p>从第一篇到现在这么多步骤过去了，可以说前面的所有操作都是在为最后的这一步<code>发布</code>做准备，现在终于到了见证奇迹的时刻了。</p>
-<p>先别着急激动，让我们完成最最后一步配置，我们需要告诉 hexo 发布到哪里去，也就是把文件上传到哪个仓库。</p>
-<p>打开博客<code>根目录配置文件</code>(<code>D:\MyBlog\_config.yaml</code>)，拉到文件最后一行，修改为下面的配置（没有的配置项自行添加），保存。</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 其中 xxxxxx 是前面多次用到的你的GitHub用户名</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:xxxxxx/xxxxxx.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
-<p>OK，现在万事俱备了，执行下面的命令。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 注意最后变成d了，原来的s表示服务起在本地，现在的d表示部署在远端</span></span><br><span class="line">hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
-<p>待命令执行完毕，打开浏览器，输入网址<code>https://你的用户名.github.io</code>，可以看到一个和第一篇中本地部署的一模一样的博客出现了。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230002849289.png" alt="image-20201230002849289"></p>
-<p>之前为了测试而发布的文章也在。<code>https://你的用户名.github.io</code>就是你的个人博客地址了，其他人都可以访问。</p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230003033418.png" alt="image-20201230003033418"></p>
-<h2 id="四、后续"><a href="#四、后续" class="headerlink" title="四、后续"></a>四、后续</h2><p>至此，我们从零开始搭建一个博客的任务初步完成了。</p>
-<p>本篇文章介绍了利用 GitHub Pages 发布个人博客的方法，如果觉得 GitHub 访问速度太慢，可以参考下面一篇文章，基于 Gitee Pages 搭建国内博客站点。如果觉得 GitHub Pages 很满意了，可以关注本系列后续文章，会继续介绍怎么更方便地写博客、老博客迁移到新站点以及主题个性化设置等内容。</p>
-]]></content>
-      <categories>
-        <category>博客搭建</category>
-      </categories>
-      <tags>
-        <tag>博客搭建</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>从零开始免费搭建自己的博客(三)——基于 Gitee pages 建站</title>
     <url>/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/</url>
     <content><![CDATA[<blockquote>
@@ -193,6 +98,101 @@
 <h2 id="四、后续"><a href="#四、后续" class="headerlink" title="四、后续"></a>四、后续</h2><p>至此，我们从零开始搭建一个博客的任务初步完成了。</p>
 <p>本篇文章介绍了利用 Gitee Pages 发布个人博客的方法，如果觉得 Gitee 每次发布博客需要手动更新太麻烦，可以参考上一篇文章，基于 Github Pages 搭建博客站点。</p>
 <p>我看到许多人的博客搭建好了，一直停留在一开始初始化的状态，没有新增过一篇文章，希望大家别把最重要事情忘了，我们搭网站是为了写博客，一定要坚持下去。工欲善其事，必先利其器，接下来第四篇文章，介绍怎么更方便地写 Markdown 格式的博客。</p>
+]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>博客搭建</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从零开始免费搭建自己的博客(二)——基于 GitHub pages 建站</title>
+    <url>/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/</url>
+    <content><![CDATA[<blockquote>
+<p>​    本文是博客搭建系列文章第二篇，其他文章链接：</p>
+<ol>
+<li>从零开始免费搭建自己的博客(一)——<a href="https://yushuaigee.gitee.io/2020/12/31/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%80-%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAhexo%E6%A1%86%E6%9E%B6/">本地搭建 Hexo 框架</a></li>
+<li><strong>从零开始免费搭建自己的博客(二)——<a href="https://yushuaigee.gitee.io/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/">基于 GitHub pages 建站</a></strong></li>
+<li>从零开始免费搭建自己的博客(三)——<a href="https://yushuaigee.gitee.io/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/">基于 Gitee pages 建站</a></li>
+<li>从零开始免费搭建自己的博客(四)——编写Markdown文章利器 Typora</li>
+<li>从零开始免费搭建自己的博客(五)——Typora + PicGo + GitHub/Gitee图床</li>
+<li>从零开始免费搭建自己的博客(六)——三个站点一键发布博客</li>
+<li>从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点</li>
+<li>从零开始免费搭建自己的博客(八)——博客网站个性化设置及优化</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在第一篇文章里，我们利用 Hexo 框架在本地搭建了一个精美的博客，可是只能本地访问，要想发布到互联网上，还需要将它部署在网站上。</p>
+<p>博客的功能只要能阅读文章就够了，因此可以考虑将其部署在提供静态网页托管服务的网站上，这样就省去了购买服务器(云主机)，购买域名，购买大网 IP 这些步骤，不仅省钱，更重要的是省事儿。</p>
+<p>当前云计算如此流行，许多平台都提供了静态网页托管服务，其中最方便的当然是 GitHub Pages，只需要注册一个账号就可以使用。GitHub Pages的服务器毕竟在国外，如果觉得访问太慢，也可以选择国内功能相似的 Gitee Pages。</p>
+<p>本篇文章介绍怎样利用 GitHub 提供的免费静态网页托管服务 GitHub Pages 建站。</p>
+<h2 id="一、-GitHub-Pages-简介"><a href="#一、-GitHub-Pages-简介" class="headerlink" title="一、 GitHub Pages 简介"></a>一、 GitHub Pages 简介</h2><p>GitHub 是世界上最流行的软件源代码托管服务平台，为什么要提供网页托管服务呢？</p>
+<p>这是因为一个项目的主页如果只有源码，对新接触的人很不友好，不知从何处下手。虽然已经有了 readme.md 文件，但毕竟不如一个直观的网页来的直接。于是 GitHub 就设计了 Pages 功能，允许用户设计一个图文并茂的网页作为项目首页。</p>
+<p>虽然 GitHub Pages 的初衷是提供自定义的项目首页，但是它的玩法不止这一个。因此许多博主都用这个功能来搭建自己的博客，因为它实在是太太方便了。</p>
+<p>去GitHub Pages 官网 <a href="https://pages.github.com/">pages.github</a> ，拉到最后，可以看到官方也推荐使用 GitHub Pages 搭建博客，并且提供了示例教程。</p>
+<h2 id="二、GitHub-Pages-准备"><a href="#二、GitHub-Pages-准备" class="headerlink" title="二、GitHub Pages 准备"></a>二、GitHub Pages 准备</h2><p>在发布之前，要先准备好自己的GitHub Pages 。</p>
+<h3 id="1-注册-GitHub-账号"><a href="#1-注册-GitHub-账号" class="headerlink" title="1. 注册 GitHub 账号"></a>1. 注册 GitHub 账号</h3><p>首先需要注册一个 GitHub 账号，如果已经有账号直接看下一步。</p>
+<p>打开 GitHub 官网：<a href="https://github.com/">github.com</a>。如果这里打开速度已经不容忍受了，建议直接看下一篇使用 Gitee 建站。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229223941265.png" alt="image-20201229223941265"></p>
+<p>点击右上角<kbd>Sign up</kbd>注册，填写用户名，邮箱，密码。注意，此处用户名是唯一ID，建议取个有意义的名字。点击注册后会发送一封验证邮件到填写的邮箱，登录自己的邮箱点击链接进行验证，GitHub 账号就注册好了。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224251159.png" alt="image-20201229224251159"></p>
+<h3 id="2-创建-GitHub-Pages-仓库"><a href="#2-创建-GitHub-Pages-仓库" class="headerlink" title="2. 创建 GitHub Pages 仓库"></a>2. 创建 GitHub Pages 仓库</h3><p>点击右上角<kbd>Sign in</kbd>登录后，点击左上角<kbd>New</kbd>新建仓库。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224505117.png" alt="image-20201229224505117"></p>
+<p>由于每个 GitHub 账户只能建立一个 GitHub Pages 页面，所以 Repository name 必须填<code>&lt;你的用户名&gt;.github.io</code>，否则就会建立一个普通仓库，GitHub Pages 功能不会生效。比如用户名是<code>jacksparrow</code>，Repository name 这里就填<code>jacksparrow.github.io</code>，不知道用户名是哪个，可以点击页面右上角头像，看到第一行“Signed in as <code>xxx</code>”字样， <code>xxx</code>即为这里的用户名。</p>
+<p>Description 填写仓库描述，比如 <code>jacksparrow&#39;s blog</code>等，可不填。</p>
+<p>注意勾选 <code>Public</code> ，否则 GitHub Pages 功能不会生效。建议勾选 <code>Add a README file</code>，会自动生成一个 <code>readme.md</code>文件。</p>
+<p>最后点击<kbd>Create repository</kbd>创建仓库。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229224741804.png" alt="image-20201229224741804"></p>
+<h3 id="3-测试-GitHub-Pages-页面"><a href="#3-测试-GitHub-Pages-页面" class="headerlink" title="3. 测试  GitHub Pages 页面"></a>3. 测试  GitHub Pages 页面</h3><p>创建 GitHub Pages 仓库后，为了测试能否访问 GitHub Pages 服务，我们给它添加一个静态网页。</p>
+<p>点击<kbd>Add file</kbd> – <kbd>Create new file</kbd>在仓库下新建文件。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225208056.png" alt="image-20201229225208056"></p>
+<p>输入文件名<code>index.html</code>，在下面输入内容<code>&lt;h1&gt;Hello My Blog!&lt;/h1&gt;</code>，这是 html 标记语言，表示一级标题。</p>
+<p>其他保持默认，点击最下面<kbd>Commit new file</kbd>提交文件到仓库。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225639083.png" alt="image-20201229225639083"></p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229225731351.png" alt="image-20201229225731351"></p>
+<p>然后在浏览器打开一个新的网页，输入网址<code>https://&lt;你的用户名&gt;.github.io</code>，就可以看见我们刚创建的网页，其中的内容就是刚才写的内容。说明 GitHub Pages 服务已经正常。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229230057034.png" alt="image-20201229230057034"></p>
+<h2 id="三、GitHub-Pages-发布"><a href="#三、GitHub-Pages-发布" class="headerlink" title="三、GitHub Pages 发布"></a>三、GitHub Pages 发布</h2><p>上一步 “测试  GitHub Pages 页面” 中，我们在 GitHub Pages 仓库目录下新建了一个<code>index.html</code>，就可以在自己的专属网址看到这个网页了。同理我们把自己的博客生成静态 html 网页，提交到这个仓库目录下，就可以在我们的网址看到博客页面了，这就是 Hexo 框架部署博客的原理。当然，对于 Hexo 来说，提交部署只需要几条命令。</p>
+<h3 id="1-配置-Git-参数"><a href="#1-配置-Git-参数" class="headerlink" title="1. 配置 Git 参数"></a>1. 配置 Git 参数</h3><p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
+<p>配置用户名和邮箱，这两个参数用于 Git 提交时的身份识别。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username 和 username@XXX.com 是你注册 GitHub 的用户名和邮箱</span></span><br><span class="line">git config --global user.name &quot;username&quot;</span><br><span class="line">git config --global user.email &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233907818.png" alt="image-20201229233907818"></p>
+<p>生成 SSH keys，主要用于Git 提交时的权限控制和加密，本地根据 RSA 算法生成公私密钥对，然后将公钥添加到 GitHub 上，本机就可以提交代码到自己的 GitHub 库了。这个是根据当前使用的电脑的一些信息生成的，所以换电脑提交时要重新生成并添加。</p>
+<p>输入下面命令，然后一直按<kbd>回车</kbd>，直到结束。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 其中 username@XXX.com 是你注册 GitHub 的邮箱</span></span><br><span class="line">ssh-keygen -t rsa -C &quot;username@XXX.com&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229233801498.png" alt="image-20201229233801498"></p>
+<p>输入下面的命令，查看公钥内容，应该是一个<code>ssh-rsa</code>开头，以<code>你的邮箱</code>结尾的长字符串。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat后面的路径就是上图中的公钥文件路径，直接复制过来就可以</span></span><br><span class="line">cat /c/Users/XXX/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229234452012.png" alt="image-20201229234452012"></p>
+<p>复制公钥内容（其实在<kbd>Git Bash</kbd>命令行里，默认选中文字松开鼠标就会自动把选中内容复制到剪贴板，默认鼠标中键是粘贴）。</p>
+<p>打开自己的 Github 主页，点击右上角的头像，点击<kbd>Settings</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235035462.png" alt="image-20201229235035462"></p>
+<p>点击<kbd>SSH and GPG keys</kbd>，然后点击<kbd>New SSH keys</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235220955.png" alt="image-20201229235220955"></p>
+<p>Title 可以随便起一个名字，Key 填写上一步复制的公钥内容，然后点击<kbd>Add SSH key</kbd>。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201229235704322.png" alt="image-20201229235704322"></p>
+<p>最后执行下面的命令，测试一下 Git 参数是否配置成功。出现<code>你的用户名</code>和<code>successfully</code>字样，说明配置成功。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下面的命令什么都不用改</span></span><br><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230000424483.png" alt="image-20201230000424483"></p>
+<h3 id="2-安装-Hexo-发布插件"><a href="#2-安装-Hexo-发布插件" class="headerlink" title="2. 安装 Hexo 发布插件"></a>2. 安装 Hexo 发布插件</h3><p>在博客根目录下，右键，打开<kbd>Git Bash Here</kbd>。</p>
+<p>输入下面的命令，安装<code>hexo-deployer-git</code>。（安装失败或者卡住，参考第一篇文章修改 npm 源。）</p>
+<p>这个插件用于把生成好的静态页面上传到 GitHub Pages 仓库。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230001107308.png" alt="image-20201230001107308"></p>
+<h3 id="3-发布"><a href="#3-发布" class="headerlink" title="3.  发布 ! ! !"></a>3.  发布 ! ! !</h3><p>从第一篇到现在这么多步骤过去了，可以说前面的所有操作都是在为最后的这一步<code>发布</code>做准备，现在终于到了见证奇迹的时刻了。</p>
+<p>先别着急激动，让我们完成最最后一步配置，我们需要告诉 hexo 发布到哪里去，也就是把文件上传到哪个仓库。</p>
+<p>打开博客<code>根目录配置文件</code>(<code>D:\MyBlog\_config.yaml</code>)，拉到文件最后一行，修改为下面的配置（没有的配置项自行添加），保存。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 其中 xxxxxx 是前面多次用到的你的GitHub用户名</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:xxxxxx/xxxxxx.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+<p>OK，现在万事俱备了，执行下面的命令。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 注意最后变成d了，原来的s表示服务起在本地，现在的d表示部署在远端</span></span><br><span class="line">hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>待命令执行完毕，打开浏览器，输入网址<code>https://你的用户名.github.io</code>，可以看到一个和第一篇中本地部署的一模一样的博客出现了。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230002849289.png" alt="image-20201230002849289"></p>
+<p>之前为了测试而发布的文章也在。<code>https://你的用户名.github.io</code>就是你的个人博客地址了，其他人都可以访问。</p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20201230003033418.png" alt="image-20201230003033418"></p>
+<h2 id="四、后续"><a href="#四、后续" class="headerlink" title="四、后续"></a>四、后续</h2><p>至此，我们从零开始搭建一个博客的任务初步完成了。</p>
+<p>本篇文章介绍了利用 GitHub Pages 发布个人博客的方法，如果觉得 GitHub 访问速度太慢，可以参考下面一篇文章，基于 Gitee Pages 搭建国内博客站点。如果觉得 GitHub Pages 很满意了，可以关注本系列后续文章，会继续介绍怎么更方便地写博客、老博客迁移到新站点以及主题个性化设置等内容。</p>
 ]]></content>
       <categories>
         <category>博客搭建</category>
