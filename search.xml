@@ -566,7 +566,7 @@
 <p>选择<kbd>设为默认图床</kbd>，点击<kbd>确定</kbd>保存配置。</p>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210112233928390.png" alt="image-20210112233928390"></p>
 <p>配置完成后，点击<code>上传区</code>，随便选择电脑上一张图片拖动到上传区，上传成功后会弹窗提示，将该 url 复制到浏览器打开就可以看到图片。可以在<code>PicGo设置</code>，打开<code>上传后自动复制URL</code>，这样上传成功后图片 url 会自动复制在剪贴板，可以直接粘贴到记事本。</p>
-<p><img src="https://raw.githubusercontent.com/yushuaige/myblog/master/img/image-20210113223506304.png" alt="image-20210113223506304"></p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210113223506305.png" alt="image-20210113223506305"></p>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210112235620646.png" alt="image-20210112235620646"></p>
 <h4 id="4-CDN-加速-jsDelivr"><a href="#4-CDN-加速-jsDelivr" class="headerlink" title="4. CDN 加速(jsDelivr)"></a>4. CDN 加速(jsDelivr)</h4><p>从上一步可以看到 GitHub 存储的图片地址是 <code>https://raw.githubusercontent.com</code> 开头的网址，这个域名在某些地方可能打不开或者很慢导致图片加载失败，所以我们需要对图片配置 CDN 加速。</p>
 <p>CDN的全称是(Content Delivery Network)，即内容分发网络。其目的是通过在现有的Internet中增加一层新的CACHE(缓存)层，将网站的内容发布到最接近用户的网络”边缘“的节点，使用户可以就近取得所需的内容，提高用户访问网站的响应速度。具体原理见<a href="https://www.jianshu.com/p/1dae6e1680ff">CDN加速原理</a>。通俗来讲，就是 CDN 服务商在全球各个地方建立服务器把要加速的站点进行缓存备份，当你访问站点时实际上是从离你最近的服务器访问缓存，速度自然就快了。</p>
@@ -641,7 +641,7 @@
 <p><strong>为了解决这个问题，我写了一个自动化脚本</strong>，双击启动就可以自动完成 Gitee Pages 部署，其实原理就是利用 pyppeteer 模拟用户登录，到部署页面模拟点击<code>更新</code>按钮，虽然还是需要启动一下脚本，但是也稍微省了点事儿，下一篇文章将自动部署 Hexo 和 自动部署 Gitee Pages  结合起来。</p>
 <p><strong>效果</strong></p>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210113233250172.png" alt="image-20210113233250172"></p>
-<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210113233443910.png" alt="image-20210113233443910"></p>
+<p><img src="https://yushuaigee.gitee.io/myblog/img/image-20210113233443911.png" alt="image-20210113233443911"></p>
 <p><strong>start.bat 源码</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">:: start.bat 源码</span><br><span class="line">:: python路径 + 空格 + 脚本路径</span><br><span class="line">C:\Python\Scripts\python.exe D:/scripts/post_my_blog.py</span><br><span class="line">pause</span><br></pre></td></tr></table></figure>
 <p><strong>post_my_blog.py 源码</strong></p>
