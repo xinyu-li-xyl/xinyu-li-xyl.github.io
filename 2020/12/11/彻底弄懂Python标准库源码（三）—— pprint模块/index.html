@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    彻底弄懂Python标准库源码（三）—— pprint模块 |  半亩方塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-彻底弄懂Python标准库源码（三）—— pprint模块"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  彻底弄懂Python标准库源码（三）—— pprint模块
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2020/12/11/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%20pprint%E6%A8%A1%E5%9D%97/" class="article-date">
+  <time datetime="2020-12-12T00:23:29.000Z" itemprop="datePublished">2020-12-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">4.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">20 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p> </p>
+<p><strong>目录</strong></p>
+<p><a href="#%E7%AC%AC1~22%E8%A1%8C%20%E6%A8%A1%E5%9D%97%E6%95%B4%E4%BD%93%E6%B3%A8%E9%87%8A%E3%80%81nt%E4%B8%8Eposix">模块整体注释</a></p>
+<p><a href="#%E7%AC%AC37~44%E8%A1%8C%20%E4%BE%9D%E8%B5%96%E6%A8%A1%E5%9D%97%E5%AF%BC%E5%85%A5%E3%80%81%E5%AF%B9%E5%A4%96%E6%9A%B4%E9%9C%B2%E6%8E%A5%E5%8F%A3">依赖模块导入、对外暴露接口</a></p>
+<p><a href="#saferepr%E5%87%BD%E6%95%B0%E2%80%94%E2%80%94%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A1%A8%E7%A4%BA%EF%BC%8C%E5%B9%B6%E4%B8%BA%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%8F%90%E4%BE%9B%E4%BF%9D%E6%8A%A4">saferepr函数——返回对象的字符串表示，并为无限递归数据结构提供保护</a></p>
+<p><a href="#isreadable%E5%87%BD%E6%95%B0%E2%80%94%E2%80%94%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%98%AF%E5%90%A6%E2%80%9C%E5%8F%AF%E8%AF%BB%E2%80%9D">isreadable函数——返回对象的是否“可读”</a></p>
+<p><a href="#isrecursive%E5%87%BD%E6%95%B0%E2%80%94%E2%80%94%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%98%AF%E5%90%A6%E6%98%AF%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92%E7%BB%93%E6%9E%84">isrecursive函数——返回对象的是否是无限递归结构</a></p>
+<p><a href="#PrettyPrinter%E2%80%94%E2%80%94%E4%BC%98%E9%9B%85%E6%A0%BC%E5%BC%8F%E5%8C%96Python%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB">PrettyPrinter——优雅格式化Python对象的类</a></p>
+<p><a href="#pprint%E2%80%94%E2%80%94%E6%9B%B4%E6%96%B9%E4%BE%BF%E6%9B%B4%E7%BE%8E%E8%A7%82%E5%9C%B0%E6%89%93%E5%8D%B0">pprint——更方便更美观地打印</a></p>
+<p><a href="#pformat%E2%80%94%E2%80%94%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9E%84%E9%80%A0%E5%99%A8">pformat——格式化字符串构造器</a></p>
+<p><a href="#pp%E2%80%94%E2%80%94%E5%90%8Cpprint">pp——同pprint</a></p>
+<p><code>print</code> 模块能够美观地对数据结构进行格式化。不仅可以由解释器正确地解析，而且便于人类阅读。输出尽可能地保持在一行，需要分拆到多行时会有缩进表示。 </p>
+<p>想象一下，你有下面这么一串 json (这个是我随机生成的)需要打印出来，或者调试程序的时候需要看一下 json 中某个字段的值。</p>
+<img alt="" height="769" src="https://img-blog.csdnimg.cn/20201015163424822.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="932">
+
+<p> 用 print() 打印出来回事这么一坨，根本没有可读性：</p>
+<blockquote>
+<p> {‘_id’: ‘5f8808d57ac946ae591e8929’, ‘index’: 0, ‘guid’: ‘b41b3b14-1ae2-4cc4-b443-105bda03f4f0’, ‘isActive’: True, ‘balance’: ‘$1,985.20’, ‘picture’: ‘<a target="_blank" rel="noopener" href="http://placehold.it/32x32&#39;">http://placehold.it/32x32&#39;</a>, ‘age’: 37, ‘eyeColor’: ‘brown’, ‘name’: ‘Alexandra Atkins’, ‘gender’: ‘female’, ‘company’: ‘COSMETEX’, ‘email’: ‘alexandraatkins@cosmetex.com’, ‘phone’: ‘+1 (999) 588-3661’, ‘address’: ‘779 Beayer Place, Belvoir, Washington, 5395’, ‘about’: ‘Laborum Lorem labore sint excepteur ad do esse veniam sunt cillum. Magna ipsum id aliqua consequat. Commodo enim occaecat pariatur ullamco irure incididunt et incididunt. Dolor aliqua eiusmod id laboris non laborum aliqua sunt occaecat eu commodo elit consequat. In mollit aute ullamco officia exercitation eiusmod ea labore id magna adipisicing.\r\n’, ‘registered’: ‘2018-12-29T09:52:41 -08:00’, ‘latitude’: 66.079339, ‘longitude’: 68.156168, ‘tags’: [‘mollit’, ‘velit’, ‘do’, ‘velit’, ‘Lorem’, ‘qui’, ‘irure’], ‘friends’: [{‘id’: 0, ‘name’: ‘Latonya Pena’}, {‘id’: 1, ‘name’: ‘Marion Ayers’}, {‘id’: 2, ‘name’: ‘Bishop Day’}], ‘greeting’: ‘Hello, Alexandra Atkins! You have 3 unread messages.’, ‘favoriteFruit’: ‘banana’} </p>
+</blockquote>
+<p> 在IDE中调试时，可能打印出来变成了一眼看不到头的一行，然后你就需要拖着进度条一个字段一个字段去找。</p>
+<img alt="" height="101" src="https://img-blog.csdnimg.cn/20201015164001778.png" width="1200">
+
+<p> 而用 pprint() 打印出来会自动变成这样美观可读的格式，这就是 pprint 库的作用：</p>
+<img alt="" height="602" src="https://img-blog.csdnimg.cn/20201015165529215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="948">
+
+<p> pprint 模块主要包含 “pprint”,”pformat”,”isreadable”,”isrecursive”,”saferepr”, “pp” 方法和一个类“PrettyPrinter”，其中核心是 PrettyPrinter 类，其他方法都是调用的这个类。以下文章中的行数是与我所用的3.8.4版本 pprint.py 文件真实的行数对应的。</p>
+<h3 id="模块整体注释"><a href="#模块整体注释" class="headerlink" title="模块整体注释"></a>模块整体注释</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  Author:      Fred L. Drake, Jr.</span></span><br><span class="line"><span class="comment">#               fdrake@acm.org</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  This is a simple little module I wrote to make life easier.  I didn&#x27;t</span></span><br><span class="line"><span class="comment">#  see anything quite like it in the library, though I may have overlooked</span></span><br><span class="line"><span class="comment">#  something.  I wrote this when I was trying to read some heavily nested</span></span><br><span class="line"><span class="comment">#  tuples with fairly non-descriptive content.  This is modeled very much</span></span><br><span class="line"><span class="comment">#  after Lisp/Scheme - style pretty-printing of lists.  If you find it</span></span><br><span class="line"><span class="comment">#  useful, thank small children who sleep at night.</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;Support to pretty-print lists, tuples, &amp;amp; dictionaries recursively.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Very simple, but useful, especially in debugging data structures.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Classes</span></span><br><span class="line"><span class="string">-------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">PrettyPrinter()</span></span><br><span class="line"><span class="string">    Handle pretty-printing operations onto a stream using a configured</span></span><br><span class="line"><span class="string">    set of formatting parameters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Functions</span></span><br><span class="line"><span class="string">---------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">pformat()</span></span><br><span class="line"><span class="string">    Format a Python object into a pretty-printed representation.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">pprint()</span></span><br><span class="line"><span class="string">    Pretty-print a Python object to a stream [default is sys.stdout].</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">saferepr()</span></span><br><span class="line"><span class="string">    Generate a &#x27;standard&#x27; repr()-like value, but protect against recursive</span></span><br><span class="line"><span class="string">    data structures.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>模块作者**Fred L. Drake, Jr.**是 PythonLabs 团队的成员，自1995年以来一直在为 Python 做出贡献，许多原始 Python 文档都是他贡献的。下面是他说的话：这是我为了让生活更容易写的一个简单的小模块。我之前没有在 Python 库中看到有类似功能的模块，可能有我没注意到吧。我写这篇文章时，我正在试图读一些嵌套很繁琐的元组，可读性非常差。这个模块仿效Lisp/Scheme（一种编程语言）风格将列表打印的更美观。如果你觉得有用，感谢那些晚上睡觉的孩子们吧（我估计作者的意思是他家孩子晚上睡觉很乖，没打扰他用晚上的业余时间写这个模块，hh）。</p>
+<p>支持递归地的将列表、元组、字典优雅地打印出来，非常简单好用，尤其是调试数据的时候。</p>
+<ul>
+<li>类 PrettyPrinter，作用是根据传入的参数将输入流优雅地打印出来。</li>
+<li>方法 format ，作用是将 Python 对象格式化成优雅的表现形式。</li>
+<li>方法 pprint，作用是将 Python 对象优雅地打印出来。（这个最常用，其实我写这篇博客之前只用过这个库这一个方法。。。）</li>
+<li>方法saferepr，作用是返回 object 的字符串表示，并为递归数据结构提供保护。这个怎么理解具体见后面**safe_repr()**分析。<h3 id="依赖模块导入、对外暴露接口"><a href="#依赖模块导入、对外暴露接口" class="headerlink" title="依赖模块导入、对外暴露接口"></a>依赖模块导入、对外暴露接口</h3></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections <span class="keyword">as</span> _collections</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> sys <span class="keyword">as</span> _sys</span><br><span class="line"><span class="keyword">import</span> types <span class="keyword">as</span> _types</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> StringIO <span class="keyword">as</span> _StringIO</span><br><span class="line"></span><br><span class="line">__all__ = [<span class="string">&quot;pprint&quot;</span>,<span class="string">&quot;pformat&quot;</span>,<span class="string">&quot;isreadable&quot;</span>,<span class="string">&quot;isrecursive&quot;</span>,<span class="string">&quot;saferepr&quot;</span>,</span><br><span class="line">           <span class="string">&quot;PrettyPrinter&quot;</span>, <span class="string">&quot;pp&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p> collections 是Python内建的一个集合模块，提供了许多有用的集合类，像 Deque、Counter等。re 是Python自带的标准库提供对正则表达式的支持。sys 是一个C实现的内置模块，主要是实现Python解释器、操作系统相关的操作。types 定义了一些工具函数，用于协助动态创建新的类型。io提供了 Python 用于处理各种 I/O 类型的主要工具。三种主要的 I/O类型分别为: <strong>文本 I/O</strong>, <strong>二进制 I/O</strong> 和 <strong>原始 I/O，</strong>此处引入的** **StringIO 即是文本 I/O。pprint 库对外暴露的只有pprint、pformat、isreadable、isrecursive、saferepr、PrettyPrinter、pp 这几个属性。</p>
+<h3 id="saferepr函数——返回对象的字符串表示，并为无限递归数据结构提供保护"><a href="#saferepr函数——返回对象的字符串表示，并为无限递归数据结构提供保护" class="headerlink" title="saferepr函数——返回对象的字符串表示，并为无限递归数据结构提供保护"></a>saferepr函数——返回对象的字符串表示，并为无限递归数据结构提供保护</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saferepr</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Version of repr() which can handle recursive data structures.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> _safe_repr(<span class="built_in">object</span>, &#123;&#125;, <span class="literal">None</span>, <span class="number">0</span>, <span class="literal">True</span>)[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<p>第 65 ~ 67 行， <strong>saferepr</strong> 函数，通过递归调用 _<strong>safe_repr</strong> 方法，返回传入对象的的字符串表示，类似 repr() 和 str() 方法（<a target="_blank" rel="noopener" href="https://blog.csdn.net/kongsuhongbaby/article/details/87398394">str()、repr()的区别</a>），不同的地方是这个函数对于无限递归的数据结构提供了保护。 如果传入的object包含一个无限递归的数据结构，该递归数据结构会被表示为 &lt;Recursion on typename with id=number&gt;。 </p>
+<p>什么是无限递归数据结构？类似下面这种，一个数组包含了它自己，你要是想将它完整打印出来肯定会有问题，下图中结果说明内置的 repr() 和 str() 方法对无限递归数据结构也做了保护，会转换成 **[…]**，而 saferepr 函数将其转化为了字符串 &lt;Recursion on typename with id=number&gt;，包含了对象的类型和id。</p>
+<img alt="" height="218" src="https://img-blog.csdnimg.cn/20201210185221469.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="604">
+
+<h3 id="isreadable函数——返回对象的是否“可读”"><a href="#isreadable函数——返回对象的是否“可读”" class="headerlink" title="isreadable函数——返回对象的是否“可读”"></a>isreadable函数——返回对象的是否“可读”</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isreadable</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Determine if saferepr(object) is readable by eval().&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> _safe_repr(<span class="built_in">object</span>, &#123;&#125;, <span class="literal">None</span>, <span class="number">0</span>, <span class="literal">True</span>)[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>第69~71行，这里的“可读”的意思是说，该对象是否可被用来通过 eval() 重新构建对象的值。一般是判断是否一个字符串是否可以用 eval() 转换成python对象，此函数对于递归对象总是返回 False。</p>
+<h3 id="isrecursive函数——返回对象的是否是无限递归结构"><a href="#isrecursive函数——返回对象的是否是无限递归结构" class="headerlink" title="isrecursive函数——返回对象的是否是无限递归结构"></a>isrecursive函数——返回对象的是否是无限递归结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isrecursive</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Determine if object requires a recursive representation.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> _safe_repr(<span class="built_in">object</span>, &#123;&#125;, <span class="literal">None</span>, <span class="number">0</span>, <span class="literal">True</span>)[<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<p>第 73~75行， 判断传入的对象是否是无限递归结构。</p>
+<h3 id="PrettyPrinter——优雅格式化Python对象的类"><a href="#PrettyPrinter——优雅格式化Python对象的类" class="headerlink" title="PrettyPrinter——优雅格式化Python对象的类"></a>PrettyPrinter——优雅格式化Python对象的类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrettyPrinter</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, indent=<span class="number">1</span>, width=<span class="number">80</span>, depth=<span class="literal">None</span>, stream=<span class="literal">None</span>, *,</span></span></span><br><span class="line"><span class="function"><span class="params">                 compact=<span class="literal">False</span>, sort_dicts=<span class="literal">True</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Handle pretty printing operations onto a stream using a set of</span></span><br><span class="line"><span class="string">        configured parameters.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        indent</span></span><br><span class="line"><span class="string">            Number of spaces to indent for each level of nesting.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        width</span></span><br><span class="line"><span class="string">            Attempted maximum number of columns in the output.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        depth</span></span><br><span class="line"><span class="string">            The maximum depth to print out nested structures.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        stream</span></span><br><span class="line"><span class="string">            The desired output stream.  If omitted (or false), the standard</span></span><br><span class="line"><span class="string">            output stream available at construction will be used.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        compact</span></span><br><span class="line"><span class="string">            If true, several items will be combined in one line.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        sort_dicts</span></span><br><span class="line"><span class="string">            If true, dict keys are sorted.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        indent = <span class="built_in">int</span>(indent)</span><br><span class="line">        width = <span class="built_in">int</span>(width)</span><br><span class="line">        <span class="keyword">if</span> indent &amp;lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;indent must be &amp;gt;= 0&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> depth <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> depth &amp;lt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;depth must be &amp;gt; 0&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> width:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&#x27;width must be != 0&#x27;</span>)</span><br><span class="line">        self._depth = depth</span><br><span class="line">        self._indent_per_level = indent</span><br><span class="line">        self._width = width</span><br><span class="line">        <span class="keyword">if</span> stream <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self._stream = stream</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self._stream = _sys.stdout</span><br><span class="line">        self._compact = <span class="built_in">bool</span>(compact)</span><br><span class="line">        self._sort_dicts = sort_dicts</span><br></pre></td></tr></table></figure>
+<p>第104~145行，初始化函数，入参的处理和解析。</p>
+<ul>
+<li><strong>indent：</strong>每个嵌套级别要缩进的空格数，即第 1 层缩进 *<em>indent **个字符，第 2 层缩进 2 *  *</em>indent **个字符，默认值 1。</li>
+<li><strong>width：</strong> 输出的字符的最大宽度，默认值 80。</li>
+<li><strong>depth：</strong> 打印嵌套结构的最大深度，超过这个深度不再换行，默认None表示不限制。</li>
+<li><strong>stream：**</strong> **所需的输出流。如果省略（或False），将使用标准输出流，即 sys.stdout ，这个和 print()一样。</li>
+<li>*** ：** keyword-only参数标志，不占参数位置，详见我的另一篇博客 <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/107567001">彻底弄懂 Python3中入参里的*号的作用</a> 第5节。</li>
+<li><strong>compact：</strong> 如果为True，则多个元素将合并为一行，不会打印换行符，**width **参数依然生效，默认为 False。</li>
+<li><strong>sort_dicts：</strong> 字典打印前是否排序，如果为 True，则打印前根据 key 进行排序。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pprint</span>(<span class="params">self, <span class="built_in">object</span></span>):</span></span><br><span class="line">    self._format(<span class="built_in">object</span>, self._stream, <span class="number">0</span>, <span class="number">0</span>, &#123;&#125;, <span class="number">0</span>)</span><br><span class="line">    self._stream.write(<span class="string">&quot;\n&quot;</span>)</span><br></pre></td></tr></table></figure>
+第147~149行，<strong>pprint(self, object) **函数，我们平时用的最多的 **from pprint import pprint</strong> 最终也是调用的这个方法。这个方法先调用 <strong>self._format()</strong> 方法，再调用对象的输出流输出一个换行。<strong>这里面的函数层层调用有点多，需要一步一步看。</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_format</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    objid = <span class="built_in">id</span>(<span class="built_in">object</span>)</span><br><span class="line">    <span class="keyword">if</span> objid <span class="keyword">in</span> context:</span><br><span class="line">        stream.write(_recursion(<span class="built_in">object</span>))</span><br><span class="line">        self._recursive = <span class="literal">True</span></span><br><span class="line">        self._readable = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    rep = self._repr(<span class="built_in">object</span>, context, level)</span><br><span class="line">    max_width = self._width - indent - allowance</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(rep) &amp;gt; max_width:</span><br><span class="line">        p = self._dispatch.get(<span class="built_in">type</span>(<span class="built_in">object</span>).__repr__, <span class="literal">None</span>)</span><br><span class="line">        <span class="keyword">if</span> p <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            context[objid] = <span class="number">1</span></span><br><span class="line">            p(self, <span class="built_in">object</span>, stream, indent, allowance, context, level + <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">del</span> context[objid]</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">elif</span> <span class="built_in">isinstance</span>(<span class="built_in">object</span>, <span class="built_in">dict</span>):</span><br><span class="line">            context[objid] = <span class="number">1</span></span><br><span class="line">            self._pprint_dict(<span class="built_in">object</span>, stream, indent, allowance,</span><br><span class="line">                              context, level + <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">del</span> context[objid]</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">    stream.write(rep)</span><br></pre></td></tr></table></figure>
+<p>第163~185行的 <strong>self._format()</strong> 方法，这是 <strong>PrettyPrinter</strong> 这个类一个比较核心的递归调用方法。 </p>
+<p>入参解析：</p>
+<ul>
+<li>**object： **需要被格式化的对象。就是要打印的对象。</li>
+<li><strong>stream：</strong>所需的输出流。。</li>
+<li><strong>indent：</strong>每个嵌套级别要缩进的空格数。</li>
+<li><strong>allowance：</strong>额外补偿的缩进空格数。会根据前面的 **width **和这里的 **allowance，indent **决定什么时候换行。</li>
+<li><strong>context：</strong>以对象的id为键的字典，这些对象是当前表示上下文的一部分。</li>
+<li><strong>level：</strong>打印嵌套结构的最大深度，超过这个深度不再换行。<br>第164<del>169行，获取对象的 <strong>id</strong>，如果<strong>object</strong>的 <strong>id **在 **context **中，就打印 **_recursion(object)</strong> ，**_recursion() **在文件第575</del>577行，是个类外的函数，作用是返回对象的类型名字和 id：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_recursion</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="keyword">return</span> (<span class="string">&quot;&amp;lt;Recursion on %s with id=%s&amp;gt;&quot;</span></span><br><span class="line">            % (<span class="built_in">type</span>(<span class="built_in">object</span>).__name__, <span class="built_in">id</span>(<span class="built_in">object</span>)))</span><br></pre></td></tr></table></figure>
+<p>第170行，<strong>self._repr() **函数在 **PrettyPrinter</strong> 类内的第403~410行，这里又调用了 <strong>self.format()</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_repr</span>(<span class="params">self, <span class="built_in">object</span>, context, level</span>):</span></span><br><span class="line">    <span class="built_in">repr</span>, readable, recursive = self.<span class="built_in">format</span>(<span class="built_in">object</span>, context.copy(),</span><br><span class="line">                                            self._depth, level)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> readable:</span><br><span class="line">        self._readable = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> recursive:</span><br><span class="line">        self._recursive = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">repr</span></span><br></pre></td></tr></table></figure>
+<p>**self.format() **在类内的第412~417行，这里又调用了 **_safe_repr()**。注释是说本方法将对象格式化为一个具体的文本，返回一个字符串、是否“可读”、是否无限递归结构。和前面的saferepr函数是一样的，只是saferepr函数只取了第一个返回值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">format</span>(<span class="params">self, <span class="built_in">object</span>, context, maxlevels, level</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format object for a specific context, returning a string</span></span><br><span class="line"><span class="string">    and flags indicating whether the representation is &#x27;readable&#x27;</span></span><br><span class="line"><span class="string">    and whether the object represents a recursive construct.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> _safe_repr(<span class="built_in">object</span>, context, maxlevels, level, self._sort_dicts)</span><br></pre></td></tr></table></figure>
+<p>所以经过 <strong>rep = self._repr(object, context, level)</strong> 的层层调用，这一步已经获取到了对象的字符串形式，下一步就是按照预定的格式将它美观地打印出来。<strong>self._dispatch **是一个函数映射字典，以对象类型为键，对应的处理方法为值。</strong>p = self._dispatch.get(type(object).<strong>repr</strong>, None) **就是根据对象类型不同获取不同的处理函数。</p>
+<p>下面就是各种类型的对象的具体处理函数。可以看出它不是一次性输出的，而是用 write 方法一块一块的输出，例如字典，先输出 “{”，然后递归调用fomat方法解析每一个键值对，每一个键值对先解析key输出，再解析value，最后再输出“”。这个debug一下就能直观地看出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br></pre></td><td class="code"><pre><span class="line">_dispatch = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_dict</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    write = stream.write</span><br><span class="line">    write(<span class="string">&#x27;&#123;&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> self._indent_per_level &amp;gt; <span class="number">1</span>:</span><br><span class="line">        write((self._indent_per_level - <span class="number">1</span>) * <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">    length = <span class="built_in">len</span>(<span class="built_in">object</span>)</span><br><span class="line">    <span class="keyword">if</span> length:</span><br><span class="line">        <span class="keyword">if</span> self._sort_dicts:</span><br><span class="line">            items = <span class="built_in">sorted</span>(<span class="built_in">object</span>.items(), key=_safe_tuple)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            items = <span class="built_in">object</span>.items()</span><br><span class="line">        self._format_dict_items(items, stream, indent, allowance + <span class="number">1</span>,</span><br><span class="line">                                context, level)</span><br><span class="line">    write(<span class="string">&#x27;&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">dict</span>.__repr__] = _pprint_dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_ordered_dict</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    cls = <span class="built_in">object</span>.__class__</span><br><span class="line">    stream.write(cls.__name__ + <span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    self._format(<span class="built_in">list</span>(<span class="built_in">object</span>.items()), stream,</span><br><span class="line">                 indent + <span class="built_in">len</span>(cls.__name__) + <span class="number">1</span>, allowance + <span class="number">1</span>,</span><br><span class="line">                 context, level)</span><br><span class="line">    stream.write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.OrderedDict.__repr__] = _pprint_ordered_dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_list</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    stream.write(<span class="string">&#x27;[&#x27;</span>)</span><br><span class="line">    self._format_items(<span class="built_in">object</span>, stream, indent, allowance + <span class="number">1</span>,</span><br><span class="line">                       context, level)</span><br><span class="line">    stream.write(<span class="string">&#x27;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">list</span>.__repr__] = _pprint_list</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_tuple</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    stream.write(<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    endchar = <span class="string">&#x27;,)&#x27;</span> <span class="keyword">if</span> <span class="built_in">len</span>(<span class="built_in">object</span>) == <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;)&#x27;</span></span><br><span class="line">    self._format_items(<span class="built_in">object</span>, stream, indent, allowance + <span class="built_in">len</span>(endchar),</span><br><span class="line">                       context, level)</span><br><span class="line">    stream.write(endchar)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">tuple</span>.__repr__] = _pprint_tuple</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_set</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    typ = <span class="built_in">object</span>.__class__</span><br><span class="line">    <span class="keyword">if</span> typ <span class="keyword">is</span> <span class="built_in">set</span>:</span><br><span class="line">        stream.write(<span class="string">&#x27;&#123;&#x27;</span>)</span><br><span class="line">        endchar = <span class="string">&#x27;&#125;&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        stream.write(typ.__name__ + <span class="string">&#x27;(&#123;&#x27;</span>)</span><br><span class="line">        endchar = <span class="string">&#x27;&#125;)&#x27;</span></span><br><span class="line">        indent += <span class="built_in">len</span>(typ.__name__) + <span class="number">1</span></span><br><span class="line">    <span class="built_in">object</span> = <span class="built_in">sorted</span>(<span class="built_in">object</span>, key=_safe_key)</span><br><span class="line">    self._format_items(<span class="built_in">object</span>, stream, indent, allowance + <span class="built_in">len</span>(endchar),</span><br><span class="line">                       context, level)</span><br><span class="line">    stream.write(endchar)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">set</span>.__repr__] = _pprint_set</span><br><span class="line">_dispatch[<span class="built_in">frozenset</span>.__repr__] = _pprint_set</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_str</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    write = stream.write</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    chunks = []</span><br><span class="line">    lines = <span class="built_in">object</span>.splitlines(<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">if</span> level == <span class="number">1</span>:</span><br><span class="line">        indent += <span class="number">1</span></span><br><span class="line">        allowance += <span class="number">1</span></span><br><span class="line">    max_width1 = max_width = self._width - indent</span><br><span class="line">    <span class="keyword">for</span> i, line <span class="keyword">in</span> <span class="built_in">enumerate</span>(lines):</span><br><span class="line">        rep = <span class="built_in">repr</span>(line)</span><br><span class="line">        <span class="keyword">if</span> i == <span class="built_in">len</span>(lines) - <span class="number">1</span>:</span><br><span class="line">            max_width1 -= allowance</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(rep) &amp;lt;= max_width1:</span><br><span class="line">            chunks.append(rep)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># A list of alternating (non-space, space) strings</span></span><br><span class="line">            parts = re.findall(<span class="string">r&#x27;\S*\s*&#x27;</span>, line)</span><br><span class="line">            <span class="keyword">assert</span> parts</span><br><span class="line">            <span class="keyword">assert</span> <span class="keyword">not</span> parts[-<span class="number">1</span>]</span><br><span class="line">            parts.pop()  <span class="comment"># drop empty last part</span></span><br><span class="line">            max_width2 = max_width</span><br><span class="line">            current = <span class="string">&#x27;&#x27;</span></span><br><span class="line">            <span class="keyword">for</span> j, part <span class="keyword">in</span> <span class="built_in">enumerate</span>(parts):</span><br><span class="line">                candidate = current + part</span><br><span class="line">                <span class="keyword">if</span> j == <span class="built_in">len</span>(parts) - <span class="number">1</span> <span class="keyword">and</span> i == <span class="built_in">len</span>(lines) - <span class="number">1</span>:</span><br><span class="line">                    max_width2 -= allowance</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(<span class="built_in">repr</span>(candidate)) &amp;gt; max_width2:</span><br><span class="line">                    <span class="keyword">if</span> current:</span><br><span class="line">                        chunks.append(<span class="built_in">repr</span>(current))</span><br><span class="line">                    current = part</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    current = candidate</span><br><span class="line">            <span class="keyword">if</span> current:</span><br><span class="line">                chunks.append(<span class="built_in">repr</span>(current))</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(chunks) == <span class="number">1</span>:</span><br><span class="line">        write(rep)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">if</span> level == <span class="number">1</span>:</span><br><span class="line">        write(<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i, rep <span class="keyword">in</span> <span class="built_in">enumerate</span>(chunks):</span><br><span class="line">        <span class="keyword">if</span> i &amp;gt; <span class="number">0</span>:</span><br><span class="line">            write(<span class="string">&#x27;\n&#x27;</span> + <span class="string">&#x27; &#x27;</span>*indent)</span><br><span class="line">        write(rep)</span><br><span class="line">    <span class="keyword">if</span> level == <span class="number">1</span>:</span><br><span class="line">        write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">str</span>.__repr__] = _pprint_str</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_bytes</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    write = stream.write</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(<span class="built_in">object</span>) &amp;lt;= <span class="number">4</span>:</span><br><span class="line">        write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    parens = level == <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> parens:</span><br><span class="line">        indent += <span class="number">1</span></span><br><span class="line">        allowance += <span class="number">1</span></span><br><span class="line">        write(<span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    delim = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> rep <span class="keyword">in</span> _wrap_bytes_repr(<span class="built_in">object</span>, self._width - indent, allowance):</span><br><span class="line">        write(delim)</span><br><span class="line">        write(rep)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> delim:</span><br><span class="line">            delim = <span class="string">&#x27;\n&#x27;</span> + <span class="string">&#x27; &#x27;</span>*indent</span><br><span class="line">    <span class="keyword">if</span> parens:</span><br><span class="line">        write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">bytes</span>.__repr__] = _pprint_bytes</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_bytearray</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    write = stream.write</span><br><span class="line">    write(<span class="string">&#x27;bytearray(&#x27;</span>)</span><br><span class="line">    self._pprint_bytes(<span class="built_in">bytes</span>(<span class="built_in">object</span>), stream, indent + <span class="number">10</span>,</span><br><span class="line">                       allowance + <span class="number">1</span>, context, level + <span class="number">1</span>)</span><br><span class="line">    write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[<span class="built_in">bytearray</span>.__repr__] = _pprint_bytearray</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_mappingproxy</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    stream.write(<span class="string">&#x27;mappingproxy(&#x27;</span>)</span><br><span class="line">    self._format(<span class="built_in">object</span>.copy(), stream, indent + <span class="number">13</span>, allowance + <span class="number">1</span>,</span><br><span class="line">                 context, level)</span><br><span class="line">    stream.write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_types.MappingProxyType.__repr__] = _pprint_mappingproxy</span><br><span class="line"></span><br><span class="line"><span class="comment">#......</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_default_dict</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    rdf = self._repr(<span class="built_in">object</span>.default_factory, context, level)</span><br><span class="line">    cls = <span class="built_in">object</span>.__class__</span><br><span class="line">    indent += <span class="built_in">len</span>(cls.__name__) + <span class="number">1</span></span><br><span class="line">    stream.write(<span class="string">&#x27;%s(%s,\n%s&#x27;</span> % (cls.__name__, rdf, <span class="string">&#x27; &#x27;</span> * indent))</span><br><span class="line">    self._pprint_dict(<span class="built_in">object</span>, stream, indent, allowance + <span class="number">1</span>, context, level)</span><br><span class="line">    stream.write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.defaultdict.__repr__] = _pprint_default_dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_counter</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    cls = <span class="built_in">object</span>.__class__</span><br><span class="line">    stream.write(cls.__name__ + <span class="string">&#x27;(&#123;&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> self._indent_per_level &amp;gt; <span class="number">1</span>:</span><br><span class="line">        stream.write((self._indent_per_level - <span class="number">1</span>) * <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">    items = <span class="built_in">object</span>.most_common()</span><br><span class="line">    self._format_dict_items(items, stream,</span><br><span class="line">                            indent + <span class="built_in">len</span>(cls.__name__) + <span class="number">1</span>, allowance + <span class="number">2</span>,</span><br><span class="line">                            context, level)</span><br><span class="line">    stream.write(<span class="string">&#x27;&#125;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.Counter.__repr__] = _pprint_counter</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_chain_map</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>.maps):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    cls = <span class="built_in">object</span>.__class__</span><br><span class="line">    stream.write(cls.__name__ + <span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    indent += <span class="built_in">len</span>(cls.__name__) + <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i, m <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">object</span>.maps):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="built_in">len</span>(<span class="built_in">object</span>.maps) - <span class="number">1</span>:</span><br><span class="line">            self._format(m, stream, indent, allowance + <span class="number">1</span>, context, level)</span><br><span class="line">            stream.write(<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self._format(m, stream, indent, <span class="number">1</span>, context, level)</span><br><span class="line">            stream.write(<span class="string">&#x27;,\n&#x27;</span> + <span class="string">&#x27; &#x27;</span> * indent)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.ChainMap.__repr__] = _pprint_chain_map</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_deque</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">len</span>(<span class="built_in">object</span>):</span><br><span class="line">        stream.write(<span class="built_in">repr</span>(<span class="built_in">object</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    cls = <span class="built_in">object</span>.__class__</span><br><span class="line">    stream.write(cls.__name__ + <span class="string">&#x27;(&#x27;</span>)</span><br><span class="line">    indent += <span class="built_in">len</span>(cls.__name__) + <span class="number">1</span></span><br><span class="line">    stream.write(<span class="string">&#x27;[&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">object</span>.maxlen <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        self._format_items(<span class="built_in">object</span>, stream, indent, allowance + <span class="number">2</span>,</span><br><span class="line">                           context, level)</span><br><span class="line">        stream.write(<span class="string">&#x27;])&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self._format_items(<span class="built_in">object</span>, stream, indent, <span class="number">2</span>,</span><br><span class="line">                           context, level)</span><br><span class="line">        rml = self._repr(<span class="built_in">object</span>.maxlen, context, level)</span><br><span class="line">        stream.write(<span class="string">&#x27;],\n%smaxlen=%s)&#x27;</span> % (<span class="string">&#x27; &#x27;</span> * indent, rml))</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.deque.__repr__] = _pprint_deque</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_user_dict</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    self._format(<span class="built_in">object</span>.data, stream, indent, allowance, context, level - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.UserDict.__repr__] = _pprint_user_dict</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_user_list</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    self._format(<span class="built_in">object</span>.data, stream, indent, allowance, context, level - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.UserList.__repr__] = _pprint_user_list</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_pprint_user_string</span>(<span class="params">self, <span class="built_in">object</span>, stream, indent, allowance, context, level</span>):</span></span><br><span class="line">    self._format(<span class="built_in">object</span>.data, stream, indent, allowance, context, level - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">_dispatch[_collections.UserString.__repr__] = _pprint_user_string</span><br></pre></td></tr></table></figure>
+<h3 id="pprint——更方便更美观地打印"><a href="#pprint——更方便更美观地打印" class="headerlink" title="pprint——更方便更美观地打印"></a>pprint——更方便更美观地打印</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pprint</span>(<span class="params"><span class="built_in">object</span>, stream=<span class="literal">None</span>, indent=<span class="number">1</span>, width=<span class="number">80</span>, depth=<span class="literal">None</span>, *,</span></span></span><br><span class="line"><span class="function"><span class="params">           compact=<span class="literal">False</span>, sort_dicts=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Pretty-print a Python object to a stream [default is sys.stdout].&quot;&quot;&quot;</span></span><br><span class="line">    printer = PrettyPrinter(</span><br><span class="line">        stream=stream, indent=indent, width=width, depth=depth,</span><br><span class="line">        compact=compact, sort_dicts=sort_dicts)</span><br><span class="line">    printer.pprint(<span class="built_in">object</span>)</span><br></pre></td></tr></table></figure>
+<p>看明白了 PrettyPrinter 类和它的 pprint 方法，后面这些就很好理解了。这个pprint方法是实例化一个PrettyPrinter对象并调用对象的pprint方法。这样我们在使用时只需要 from pprint import pprint，然后pprint(xxx)就行了，不必每次初始化一个对象再调用pprint方法。</p>
+<h3 id="pformat——格式化字符串构造器"><a href="#pformat——格式化字符串构造器" class="headerlink" title="pformat——格式化字符串构造器"></a>pformat——格式化字符串构造器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pformat</span>(<span class="params"><span class="built_in">object</span>, indent=<span class="number">1</span>, width=<span class="number">80</span>, depth=<span class="literal">None</span>, *,</span></span></span><br><span class="line"><span class="function"><span class="params">            compact=<span class="literal">False</span>, sort_dicts=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format a Python object into a pretty-printed representation.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> PrettyPrinter(indent=indent, width=width, depth=depth,</span><br><span class="line">                         compact=compact, sort_dicts=sort_dicts).pformat(<span class="built_in">object</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pformat</span>(<span class="params">self, <span class="built_in">object</span></span>):</span></span><br><span class="line">    sio = _StringIO()</span><br><span class="line">    self._format(<span class="built_in">object</span>, sio, <span class="number">0</span>, <span class="number">0</span>, &#123;&#125;, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> sio.getvalue()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个也是为了方便调用，实例化一个PrettyPrinter对象并返回对象的 pformat 方法。pprint 是直接将格式化后的字符串打印出来，pformat是构造好字符串但是不打印出来。也就是说 pprint(test_data) 和 print(pformat(test_data)) 是等效的。</p>
+<h3 id="pp——同pprint"><a href="#pp——同pprint" class="headerlink" title="pp——同pprint"></a>pp——同pprint</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pp</span>(<span class="params"><span class="built_in">object</span>, *args, sort_dicts=<span class="literal">False</span>, **kwargs</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Pretty-print a Python object&quot;&quot;&quot;</span></span><br><span class="line">    pprint(<span class="built_in">object</span>, *args, sort_dicts=sort_dicts, **kwargs)</span><br></pre></td></tr></table></figure>
+<p>原来和pprint是一样的，看来以后只需要 from pprint import pp 了。欧耶，没白看。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2020/12/11/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%20pprint%E6%A8%A1%E5%9D%97/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python%E6%A0%87%E5%87%86%E5%BA%93/" rel="tag">Python标准库</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pprint/" rel="tag">pprint</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2020/12/31/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E4%B8%80)%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAhexo%E6%A1%86%E6%9E%B6/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            从零开始免费搭建自己的博客(一)——本地搭建hexo框架
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/09/09/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%20os%E6%A8%A1%E5%9D%97%EF%BC%88%E7%BB%AD%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">彻底弄懂Python标准库源码（二）—— os模块（续）</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "zy6yBRj9KkWO2XxsT94n1DIW-gzGzoHsz",
+    app_key: "auroBE2PQXkQ05CLi30SFv92",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="半亩方塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+<script type="text/javascript">
+if(!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+  document.write('<script type="text/javascript" src="/js/FunnyTitle.js"><\/script>');
+  document.write('<script type="text/javascript" src="/js/snow.js"><\/script>');
+}
+</script>
+</html>

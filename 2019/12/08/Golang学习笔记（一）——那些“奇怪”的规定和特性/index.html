@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Golang学习笔记（一）——那些“奇怪”的规定和特性 |  半亩方塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Golang学习笔记（一）——那些“奇怪”的规定和特性"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Golang学习笔记（一）——那些“奇怪”的规定和特性
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2019/12/08/Golang%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E8%A7%84%E5%AE%9A%E5%92%8C%E7%89%B9%E6%80%A7/" class="article-date">
+  <time datetime="2019-12-09T00:51:02.000Z" itemprop="datePublished">2019-12-08</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Go/">Go</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">4 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>这几天看了一下Go语言的基础知识，还没有在项目中使用，所以还没体会到它的性能优势。而在学习基础用法部分时我最大的感受就是它的一些特性和规定很“奇怪”。以前听说Go语言声明变量时，类型关键字在变量名称后面就感觉怪怪的，没想到还有许多这样奇怪的地方（主要是和C、Python相比），在这里将这几周的学习内容和感受记录一下以备查阅。</p>
+<h3 id="1-去掉循环冗余括号"><a href="#1-去掉循环冗余括号" class="headerlink" title="1. 去掉循环冗余括号"></a>1. 去掉循环冗余括号</h3><p>C语言的数值循环：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">&lt;pre class=<span class="string">&quot;has&quot;</span>&gt;&lt;code class=<span class="string">&quot;language-Go&quot;</span>&gt;<span class="keyword">for</span> a := <span class="number">0</span>;a&amp;lt;<span class="number">10</span>;a++&#123;</span><br><span class="line">    <span class="comment">// 循环代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">&lt;h3&gt;3.强制的代码风格&lt;/h3&gt; </span><br><span class="line">Go语言中，左括号必须紧接着语句不换行。其他样式的括号将被视为代码编译错误。 </span><br><span class="line">也就是说代码中，用到大括号的地方，必须写成这样： </span><br><span class="line">&lt;pre class=&quot;has&quot;&gt;&lt;code class=&quot;language-Go&quot;&gt;func main()&#123;</span><br><span class="line">    //代码片段</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i:=<span class="number">0</span>;i&amp;lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">    //循环代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-强制的代码风格"><a href="#3-强制的代码风格" class="headerlink" title="3.强制的代码风格"></a>3.强制的代码风格</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//代码片段</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i:=<span class="number">0</span>;i&amp;lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">    <span class="comment">//循环代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不能写成这样：（不然连编译都通不过）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//代码片段</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i:=<span class="number">0</span>;i&amp;lt;<span class="number">10</span>;i++</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//循环代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import”，这样确实少写了很多个单词，但是总是觉得不太习惯。&lt;/p&gt; </span><br><span class="line">&lt;h3&gt; 7.Go语言变量的声明——简短格式&lt;/h3&gt; </span><br><span class="line">Go语言中还可以使用海象操作符：=，这样声明变量：名字 := 表达式  </span><br><span class="line">&lt;pre class=&quot;has&quot;&gt;&lt;code class=&quot;language-Go&quot;&gt;a := 1</span><br><span class="line">i, j := <span class="number">1</span>, <span class="number">2</span></span><br><span class="line"><span class="built_in">str</span> := <span class="string">&quot;abcd&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-Go语言变量的声明——标准格式"><a href="#5-Go语言变量的声明——标准格式" class="headerlink" title="5.Go语言变量的声明——标准格式"></a>5.Go语言变量的声明——标准格式</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i <span class="keyword">int</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;image&quot;</span></span><br><span class="line">    <span class="string">&quot;image/color&quot;</span></span><br><span class="line">    <span class="string">&quot;image/png&quot;</span></span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line">    <span class="string">&quot;math&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="7-Go语言变量的声明——简短格式"><a href="#7-Go语言变量的声明——简短格式" class="headerlink" title="7.Go语言变量的声明——简短格式"></a>7.Go语言变量的声明——简短格式</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="number">1</span></span><br><span class="line">i, j := <span class="number">1</span>, <span class="number">2</span></span><br><span class="line">str := <span class="string">&quot;abcd&quot;</span></span><br></pre></td></tr></table></figure>
+<p> 乍一看，好像和Python中的等号效果一样，但是这个：= 在循环的时候使用是真的香，主要是可以省掉前面声明的那一句。现在新发布的Python3.8版本也加入了海象操作符。</p>
+<h3 id="8-Go语言匿名变量"><a href="#8-Go语言匿名变量" class="headerlink" title="8.Go语言匿名变量"></a>8.Go语言匿名变量</h3><p>编码过程中，可能会遇到没有名称的变量、类型或方法。虽然这不是必须的，但有时候这样做可以极大地增强代码的灵活性，这些变量被统称为匿名变量。匿名变量的特点是一个下画线“_”，“_”本身就是一个特殊的标识符，被称为空白标识符。它可以像其他标识符那样用于变量的声明或赋值（任何类型都可以赋值给它），但任何赋给这个标识符的值都将被抛弃，因此这些值不能在后续的代码中使用，也不可以使用这个标识符作为变量对其它变量进行赋值或运算。使用匿名变量时，只需要在变量声明的地方使用下画线替换即可。</p>
+<p>匿名变量不占用内存空间，不会分配内存。匿名变量与匿名变量之间也不会因为多次声明而无法使用。在 Lua 等编程语言里，匿名变量也被叫做哑元变量。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetData</span><span class="params">()</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span>, <span class="number">200</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    a, _ := GetData()</span><br><span class="line">    _, b := GetData()</span><br><span class="line">    fmt.Println(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<blockquote>
+<p> 100 200 </p>
+</blockquote>
+<p>这个特性给我的直观感受比较有用。</p>
+<h3 id="9-Go语言bool类型"><a href="#9-Go语言bool类型" class="headerlink" title="9.Go语言bool类型"></a>9.Go语言bool类型</h3><p>这里需要注意的地方就是，Go语言中的布尔值并不会隐式转换为数字值 0 或 1，反之亦然。</p>
+<p>也就是说有些语言默认 true==1，false==0，这在Go语言中是不成立的，如果必须要这么用，需要手动转化一下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//b为bool型变量</span></span><br><span class="line">i := <span class="number">0</span></span><br><span class="line"><span class="keyword">if</span> b &#123;</span><br><span class="line">   i = <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> </p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/golang/">Go语言入门教程——C语言中文网</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2019/12/08/Golang%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E8%A7%84%E5%AE%9A%E5%92%8C%E7%89%B9%E6%80%A7/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/go/" rel="tag">go</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" rel="tag">go语言学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/go%E8%AF%AD%E8%A8%80%E7%89%B9%E7%82%B9/" rel="tag">go语言特点</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2020/01/17/Golang%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6%20len()%E5%92%8CRuneCountInString()/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Golang学习笔记（二）——计算字符串长度 len()和RuneCountInString()
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88%20/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">彻底理解Python中的&#34;指针&#34;</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "zy6yBRj9KkWO2XxsT94n1DIW-gzGzoHsz",
+    app_key: "auroBE2PQXkQ05CLi30SFv92",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="半亩方塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+<script type="text/javascript">
+if(!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+  document.write('<script type="text/javascript" src="/js/FunnyTitle.js"><\/script>');
+  document.write('<script type="text/javascript" src="/js/snow.js"><\/script>');
+}
+</script>
+</html>

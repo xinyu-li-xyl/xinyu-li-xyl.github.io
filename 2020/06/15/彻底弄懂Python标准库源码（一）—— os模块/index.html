@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    彻底弄懂Python标准库源码（一）—— os模块 |  半亩方塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-彻底弄懂Python标准库源码（一）—— os模块"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  彻底弄懂Python标准库源码（一）—— os模块
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2020/06/15/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%20os%E6%A8%A1%E5%9D%97/" class="article-date">
+  <time datetime="2020-06-15T09:23:15.000Z" itemprop="datePublished">2020-06-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">6.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">28 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><strong>目录</strong></p>
+<p><a href="#%E7%AC%AC1~22%E8%A1%8C%20%E6%A8%A1%E5%9D%97%E6%95%B4%E4%BD%93%E6%B3%A8%E9%87%8A%E3%80%81nt%E4%B8%8Eposix">第1~22行 模块整体注释、nt与posix</a></p>
+<p><a href="#%E7%AC%AC24~46%E8%A1%8C%20%E6%A8%A1%E5%9D%97%E5%BC%95%E5%85%A5%E3%80%81_exists%E6%96%B9%E6%B3%95%E3%80%81_get_exports_list%E6%96%B9%E6%B3%95">第24~46行 模块引入、_exists方法、_get_exports_list方法</a></p>
+<p><a href="#%E7%AC%AC48~97%E8%A1%8C%20%E6%A0%B9%E6%8D%AE%E7%B3%BB%E7%BB%9F%E4%B8%8D%E5%90%8C%E5%AF%BC%E5%85%A5%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E5%B1%9E%E6%80%A7">第48~97行 根据系统不同导入不同的方法和属性</a></p>
+<p><a href="#%E7%AC%AC100~185%E8%A1%8C%20?%5B1%5D">第100~185行 ?[1]</a></p>
+<p><a href="#%E7%AC%AC188~193%E8%A1%8C%C2%A0%E5%AE%9A%E4%B9%89%E4%B8%89%E4%B8%AA%E6%9E%9A%E4%B8%BE%E5%8F%98%E9%87%8F">第188~193行 定义三个枚举变量</a></p>
+<p><a href="#%E7%AC%AC195~228%E8%A1%8C%20makedirs%E2%80%94%E2%80%94%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%A7%E7%9B%AE%E5%BD%95">第195~228行 makedirs——创建多级目录</a></p>
+<p><a href="#%E7%AC%AC230~250%E8%A1%8C%20removedirs%E2%80%94%E2%80%94%E5%88%A0%E9%99%A4%E5%A4%9A%E7%BA%A7%E7%9B%AE%E5%BD%95">第230~250行 removedirs——删除多级目录</a></p>
+<p><a href="#%E7%AC%AC252~278%E8%A1%8C%20renames%E2%80%94%E2%80%94%E9%87%8D%E5%91%BD%E5%90%8D%E7%9B%AE%E5%BD%95%E6%88%96%E6%96%87%E4%BB%B6">第252~278行 renames——重命名目录或文件</a></p>
+<p><a href="#%E7%AC%AC280~421%E8%A1%8C%20walk%E2%80%94%E2%80%94%E7%9B%AE%E5%BD%95%E6%A0%91%E7%94%9F%E6%88%90%E5%99%A8">第280~421行 walk——目录树生成器</a></p>
+<p><a href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%E2%80%A6%E2%80%A6">未完待续……</a></p>
+<p>os模块包含了一些与操作系统相关的函数接口，而且它是支持跨平台的，它封装了 nt.py(windows) 和 posix.py (类Unix)两个模块的接口，而后面两个模块是由C语言实现的、直接和系统交互的底层接口。也就是说os模块能够处理平台间的差异问题，使得编写好的程序无需做任何改动就能在不同的平台上运行。如果想要查看os模块的所有内容，可以使用<code>dir(os)</code>方法查看。</p>
+<img alt="" height="260" src="https://img-blog.csdnimg.cn/20200529172306851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="923">
+
+<p>可以看到os模块中有这么多属性和方法，这些都是可以通过“os.”访问的。因为os模块是使用纯Python实现的标准库，所以在Python安装目录中也可以找到os模块的源码。打开Python安装目录下 \Lib\os.py 文件，或者源码目录下 \Lib\os.py 文件，就可以查看os模块的源码了。整个代码看下来，os.py 主要是将底层接口进行了一层封装，不知道其他标准库是不是也是这样。</p>
+<p>以下标题中的行数是与我所用的3.8.4版本os.py文件真实的行数对应的，而分析文字部分所说的行数，是对应截取的代码段的行数，这样比较方便看。</p>
+<h3 id="第1-22行-模块整体注释、nt与posix"><a href="#第1-22行-模块整体注释、nt与posix" class="headerlink" title="第1~22行 模块整体注释、nt与posix"></a>第1~22行 模块整体注释、nt与posix</h3><p>首先是第1行到第22行，这是一段整个模块的注释。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;/pre&gt; </span><br><span class="line">这段代码的意思看懂了，但是没有明白它的作用。将一些 globals 里和 _have_functions 同时出现的方法名加到 一个set里，并重新赋值给supports_dir_fd、supports_effective_ids、supports_fd、supports_follow_symlinks四个集合。但是只有supports_dir_fd和supports_fd在后面的代码中用到了，另外两个集合整个代码里都没有用过，不知道是什么作用，先跳过，保留疑问[<span class="number">1</span>]。 </span><br><span class="line">&lt;h3 id=&quot;%E7%AC%AC188~193%E8%A1%8C%C2%A0%E5%AE%9A%E4%B9%89%E4%B8%89%E4%B8%AA%E6%9E%9A%E4%B8%BE%E5%8F%98%E9%87%8F&quot;&gt;第188~193行 定义三个枚举变量&lt;/h3&gt; </span><br><span class="line">&lt;pre&gt;&lt;code class=<span class="string">&quot;language-python&quot;</span>&gt;# Python uses fixed values <span class="keyword">for</span> the SEEK_ constants; they are mapped</span><br><span class="line"># to native constants <span class="keyword">if</span> necessary in posixmodule.c</span><br><span class="line"># Other possible SEEK values are directly imported from posixmodule.c</span><br><span class="line">SEEK_SET = <span class="number">0</span></span><br><span class="line">SEEK_CUR = <span class="number">1</span></span><br><span class="line">SEEK_END = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">r&quot;&quot;&quot;OS routines for NT or Posix depending on what system we&#x27;re on.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">This exports:</span></span><br><span class="line"><span class="string">  - all functions from posix or nt, e.g. unlink, stat, etc.</span></span><br><span class="line"><span class="string">  - os.path is either posixpath or ntpath</span></span><br><span class="line"><span class="string">  - os.name is either &#x27;posix&#x27; or &#x27;nt&#x27;</span></span><br><span class="line"><span class="string">  - os.curdir is a string representing the current directory (always &#x27;.&#x27;)</span></span><br><span class="line"><span class="string">  - os.pardir is a string representing the parent directory (always &#x27;..&#x27;)</span></span><br><span class="line"><span class="string">  - os.sep is the (or a most common) pathname separator (&#x27;/&#x27; or &#x27;\\&#x27;)</span></span><br><span class="line"><span class="string">  - os.extsep is the extension separator (always &#x27;.&#x27;)</span></span><br><span class="line"><span class="string">  - os.altsep is the alternate pathname separator (None or &#x27;/&#x27;)</span></span><br><span class="line"><span class="string">  - os.pathsep is the component separator used in $PATH etc</span></span><br><span class="line"><span class="string">  - os.linesep is the line separator in text files (&#x27;\r&#x27; or &#x27;\n&#x27; or &#x27;\r\n&#x27;)</span></span><br><span class="line"><span class="string">  - os.defpath is the default search path for executables</span></span><br><span class="line"><span class="string">  - os.devnull is the file path of the null device (&#x27;/dev/null&#x27;, etc.)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Programs that import and use &#x27;os&#x27; stand a better chance of being</span></span><br><span class="line"><span class="string">portable between different platforms.  Of course, they must then</span></span><br><span class="line"><span class="string">only use functions that are defined by all platforms (e.g., unlink</span></span><br><span class="line"><span class="string">and opendir), and leave all pathname manipulation to os.path</span></span><br><span class="line"><span class="string">(e.g., split and join).</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">第<span class="number">3</span>行引入sys模块，这是一个C实现的内置模块，主要是实现Python解释器、操作系统相关的操作。 </span><br><span class="line">第<span class="number">4</span>行引入stat模块，这个模块主要实现文件状态检查之类的操作，也属于一个标准库，在os这里只是用到了 st.S_ISDIR 这个方法，判断是否是目录。 </span><br><span class="line">第<span class="number">6</span>行引入_collections_abc模块的_check_methods方法，这个模块是用于集合的抽象基类，也属于一个标准库，_check_methods用来判断一个对象是否含有某个属性。 </span><br><span class="line">第<span class="number">8</span>行 sys.builtin_module_names 返回一个包含内建模块名字的元组，包含所有已经编译到Python解释器的模块名字。这里就可以解释os模块怎么根据‘nt’和‘posix’两个字符串实现区分不同系统的：Window系统的Python会安装nt模块，这个返回的元组中就会包含‘nt’，而其他系统的Python在安装时不安装nt模块，而是安装posix模块，这个返回的元组中就会包含‘posix’。 </span><br><span class="line">下面一行是一个注释，提示：更多的名称会在后面慢慢加入到__all__中。 </span><br><span class="line">第<span class="number">11</span>行，__all__ 是针对模块公开接口的一种约定，以提供了”白名单“的形式暴露接口。如果定义了__all__，其他文件中使用from xxx <span class="keyword">import</span> *导入该文件时，只会导入 __all__ 列出的成员，其他成员都被排除在外。若没定义，则导入模块内的所有公有属性/方法和类 。因为只是一种约定，就像用__前缀表示私有成员一样，它只对<span class="keyword">import</span> `*`起作用，对from xxx <span class="keyword">import</span> xxx不起作用。  </span><br><span class="line">下面定义了_exists方法，用于通过名字获得全局变量中的对象。其中global()方法是解释器内置方法，不需要导入就可以直接用，会以字典类型返回当前位置的全部全局变量。类似的还有locals()方法，后者以字典类型返回当前位置的局部变量。 </span><br><span class="line">再下面是_get_exports_list方法，这个了解了上面的__all__就很好理解，就是通过模块名获得对应模块对外暴露的接口，如果该模块没有定义__all__，即发生了AttributeError，就返回模块所有接口里面不是以_前缀开头的接口。可以看出这是在遵守约定。 </span><br><span class="line">&lt;h3 id=&quot;%E7%AC%AC48~97%E8%A1%8C%20%E6%A0%B9%E6%8D%AE%E7%B3%BB%E7%BB%9F%E4%B8%8D%E5%90%8C%E5%AF%BC%E5%85%A5%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E5%B1%9E%E6%80%A7&quot;&gt;第48~97行 根据系统不同导入不同的方法和属性&lt;/h3&gt; </span><br><span class="line">&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;# Any new dependencies of the os module and/or changes in path separator</span><br><span class="line"># requires updating importlib as well.</span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;posix&#x27;</span> in _names:</span><br><span class="line">    name = <span class="string">&#x27;posix&#x27;</span></span><br><span class="line">    linesep = <span class="string">&#x27;\n&#x27;</span></span><br><span class="line">    from posix <span class="keyword">import</span> *</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        from posix <span class="keyword">import</span> _exit</span><br><span class="line">        __all__.append(<span class="string">&#x27;_exit&#x27;</span>)</span><br><span class="line">    except ImportError:</span><br><span class="line">        pass</span><br><span class="line">    <span class="keyword">import</span> posixpath as path</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        from posix <span class="keyword">import</span> _have_functions</span><br><span class="line">    except ImportError:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    <span class="keyword">import</span> posix</span><br><span class="line">    __all__.extend(_get_exports_list(posix))</span><br><span class="line">    del posix</span><br><span class="line"></span><br><span class="line">elif <span class="string">&#x27;nt&#x27;</span> in _names:</span><br><span class="line">    name = <span class="string">&#x27;nt&#x27;</span></span><br><span class="line">    linesep = <span class="string">&#x27;\r\n&#x27;</span></span><br><span class="line">    from nt <span class="keyword">import</span> *</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        from nt <span class="keyword">import</span> _exit</span><br><span class="line">        __all__.append(<span class="string">&#x27;_exit&#x27;</span>)</span><br><span class="line">    except ImportError:</span><br><span class="line">        pass</span><br><span class="line">    <span class="keyword">import</span> ntpath as path</span><br><span class="line"></span><br><span class="line">    <span class="keyword">import</span> nt</span><br><span class="line">    __all__.extend(_get_exports_list(nt))</span><br><span class="line">    del nt</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        from nt <span class="keyword">import</span> _have_functions</span><br><span class="line">    except ImportError:</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="function">raise <span class="title">ImportError</span><span class="params">(<span class="string">&#x27;no os specific module found&#x27;</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">sys.modules[&#x27;os.path&#x27;] </span>= path</span><br><span class="line">from os.<span class="function">path <span class="title">import</span> <span class="params">(curdir, pardir, sep, pathsep, defpath, extsep, altsep,</span></span></span><br><span class="line"><span class="function"><span class="params">    devnull)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">del _names</span></span><br></pre></td></tr></table></figure>
+<h3 id="第188-193行-定义三个枚举变量"><a href="#第188-193行-定义三个枚举变量" class="headerlink" title="第188~193行 定义三个枚举变量"></a>第188~193行 定义三个枚举变量</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python uses fixed values for the SEEK_ constants; they are mapped</span></span><br><span class="line"><span class="comment"># to native constants if necessary in posixmodule.c</span></span><br><span class="line"><span class="comment"># Other possible SEEK values are directly imported from posixmodule.c</span></span><br><span class="line">SEEK_SET = <span class="number">0</span></span><br><span class="line">SEEK_CUR = <span class="number">1</span></span><br><span class="line">SEEK_END = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>注释的意思是: Python对SEEK_常量使用固定值，如果需要，它们在 posixmodule.c 中被映射到本机常量。其他可能的SEEK_常量值直接从posixmodule.c 导入。</p>
+<p>这三个常量一般用作fseek函数的一个入参。fseek函数是C语言中用于二进制方式打开的文件时，移动文件读写指针位置。原型是int fseek(FILE *stream, long offset, int fromwhere);  第一个参数stream为文件指针第，第二个参数offset为偏移量，整数表示正向偏移，负数表示负向偏移， 第三个参数设定从文件的哪里开始偏移,可能取值为：SEEK_SET： 文件开头；SEEK_CUR： 当前位置；EEK_END： 文件结尾。这三个变量我觉得不用深究，鉴于模块开头的 <strong>all</strong> 里也加入了这三个变量名，应该是在模块外面调用别的函数的时候作为入参使用的，这里定义一下可以起到枚举的作用。</p>
+<h3 id="第195-228行-makedirs——创建多级目录"><a href="#第195-228行-makedirs——创建多级目录" class="headerlink" title="第195~228行 makedirs——创建多级目录"></a>第195~228行 makedirs——创建多级目录</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">&lt;/pre&gt; </span><br><span class="line">注释是说: 创建必要的目录，并删除所有空的。类似于重命名，不同的是本函数会首先尝试创建使新路径名有效所需的中间目录。在重命名之后，与旧名称最右边路径段对应的目录将被删除，直到把旧的路径都删完或找到一个非空目录。注意:如果您缺乏断开子目录或文件链接所需的权限，那么在创建新目录结构时，此函数可能会失败。 </span><br><span class="line">还是直接看代码好理解一点，第<span class="number">16</span>~<span class="number">18</span>行，先判断新目录的倒数第二层路径是否存在，如果不存在就创建。所以这个函数不仅支持<span class="string">&quot;D:/ttt/eee/ --&amp;gt; D:/ttt/sss&quot;</span> 这种只改最后一层子目录的形式，也支持 <span class="string">&quot;D:/ttt/eee/ --&amp;gt; D:/111/222&quot;</span> 这种同时重命名多级目录的形式，要不说是超级版本呢。只是要注意，不管哪种形式，原来的目录为空的话会被删除，所以这个函数不能用于新建目录，新建目录还是用makedirs吧。  </span><br><span class="line">下面还是调用 <span class="string">&quot;nt&quot;</span>或<span class="string">&quot;posix&quot;</span>里的方法，进行重命名，前面已经把新目录的上一层目录创建好了。再后面就是删除旧路径的过程，从最底层的目录开始，一层一层删过去，出现异常忽略。可以看出好多你自以为优雅的写法，只是标准库帮你把异常报错pass了而已。 </span><br><span class="line">最后把刚定义的三个函数加入到__all__里，前面说过__all__会不断进行扩充。 </span><br><span class="line">&lt;h3 id=&quot;%E7%AC%AC280~421%E8%A1%8C%20walk%E2%80%94%E2%80%94%E7%9B%AE%E5%BD%95%E6%A0%91%E7%94%9F%E6%88%90%E5%99%A8&quot;&gt;第280~421行 walk——目录树生成器&lt;/h3&gt; </span><br><span class="line">&lt;pre&gt;&lt;code class=<span class="string">&quot;language-python&quot;</span>&gt;def walk(top, topdown=True, onerror=None, followlinks=False):</span><br><span class="line">    <span class="string">&quot;&quot;</span><span class="string">&quot;Directory tree generator.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    For each directory in the directory tree rooted at top (including top</span></span><br><span class="line"><span class="string">    itself, but excluding &#x27;.&#x27; and &#x27;..&#x27;), yields a 3-tuple</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        dirpath, dirnames, filenames</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    dirpath is a string, the path to the directory.  dirnames is a list of</span></span><br><span class="line"><span class="string">    the names of the subdirectories in dirpath (excluding &#x27;.&#x27; and &#x27;..&#x27;).</span></span><br><span class="line"><span class="string">    filenames is a list of the names of the non-directory files in dirpath.</span></span><br><span class="line"><span class="string">    Note that the names in the lists are just names, with no path components.</span></span><br><span class="line"><span class="string">    To get a full path (which begins with top) to a file or directory in</span></span><br><span class="line"><span class="string">    dirpath, do os.path.join(dirpath, name).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    If optional arg &#x27;topdown&#x27; is true or not specified, the triple for a</span></span><br><span class="line"><span class="string">    directory is generated before the triples for any of its subdirectories</span></span><br><span class="line"><span class="string">    (directories are generated top down).  If topdown is false, the triple</span></span><br><span class="line"><span class="string">    for a directory is generated after the triples for all of its</span></span><br><span class="line"><span class="string">    subdirectories (directories are generated bottom up).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    When topdown is true, the caller can modify the dirnames list in-place</span></span><br><span class="line"><span class="string">    (e.g., via del or slice assignment), and walk will only recurse into the</span></span><br><span class="line"><span class="string">    subdirectories whose names remain in dirnames; this can be used to prune the</span></span><br><span class="line"><span class="string">    search, or to impose a specific order of visiting.  Modifying dirnames when</span></span><br><span class="line"><span class="string">    topdown is false has no effect on the behavior of os.walk(), since the</span></span><br><span class="line"><span class="string">    directories in dirnames have already been generated by the time dirnames</span></span><br><span class="line"><span class="string">    itself is generated. No matter the value of topdown, the list of</span></span><br><span class="line"><span class="string">    subdirectories is retrieved before the tuples for the directory and its</span></span><br><span class="line"><span class="string">    subdirectories are generated.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    By default errors from the os.scandir() call are ignored.  If</span></span><br><span class="line"><span class="string">    optional arg &#x27;onerror&#x27; is specified, it should be a function; it</span></span><br><span class="line"><span class="string">    will be called with one argument, an OSError instance.  It can</span></span><br><span class="line"><span class="string">    report the error to continue with the walk, or raise the exception</span></span><br><span class="line"><span class="string">    to abort the walk.  Note that the filename is available as the</span></span><br><span class="line"><span class="string">    filename attribute of the exception object.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    By default, os.walk does not follow symbolic links to subdirectories on</span></span><br><span class="line"><span class="string">    systems that support them.  In order to get this functionality, set the</span></span><br><span class="line"><span class="string">    optional argument &#x27;followlinks&#x27; to true.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Caution:  if you pass a relative pathname for top, don&#x27;t change the</span></span><br><span class="line"><span class="string">    current working directory between resumptions of walk.  walk never</span></span><br><span class="line"><span class="string">    changes the current directory, and assumes that the client doesn&#x27;t</span></span><br><span class="line"><span class="string">    either.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    import os</span></span><br><span class="line"><span class="string">    from os.path import join, getsize</span></span><br><span class="line"><span class="string">    for root, dirs, files in os.walk(&#x27;python/Lib/email&#x27;):</span></span><br><span class="line"><span class="string">        print(root, &quot;</span>consumes<span class="string">&quot;, end=&quot;</span><span class="string">&quot;)</span></span><br><span class="line"><span class="string">        print(sum(getsize(join(root, name)) for name in files), end=&quot;</span><span class="string">&quot;)</span></span><br><span class="line"><span class="string">        print(&quot;</span>bytes in<span class="string">&quot;, len(files), &quot;</span>non-directory files<span class="string">&quot;)</span></span><br><span class="line"><span class="string">        if &#x27;CVS&#x27; in dirs:</span></span><br><span class="line"><span class="string">            dirs.remove(&#x27;CVS&#x27;)  # don&#x27;t visit CVS directories</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">    top = fspath(top)</span><br><span class="line">    dirs = []</span><br><span class="line">    nondirs = []</span><br><span class="line">    walk_dirs = []</span><br><span class="line"></span><br><span class="line">    # We may not have read permission <span class="keyword">for</span> top, in which <span class="keyword">case</span> we can<span class="string">&#x27;t</span></span><br><span class="line"><span class="string">    # get a list of the files the directory contains.  os.walk</span></span><br><span class="line"><span class="string">    # always suppressed the exception then, rather than blow up for a</span></span><br><span class="line"><span class="string">    # minor reason when (say) a thousand readable directories are still</span></span><br><span class="line"><span class="string">    # left to visit.  That logic is copied here.</span></span><br><span class="line"><span class="string">    try:</span></span><br><span class="line"><span class="string">        # Note that scandir is global in this module due</span></span><br><span class="line"><span class="string">        # to earlier import-*.</span></span><br><span class="line"><span class="string">        scandir_it = scandir(top)</span></span><br><span class="line"><span class="string">    except OSError as error:</span></span><br><span class="line"><span class="string">        if onerror is not None:</span></span><br><span class="line"><span class="string">            onerror(error)</span></span><br><span class="line"><span class="string">        return</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    with scandir_it:</span></span><br><span class="line"><span class="string">        while True:</span></span><br><span class="line"><span class="string">            try:</span></span><br><span class="line"><span class="string">                try:</span></span><br><span class="line"><span class="string">                    entry = next(scandir_it)</span></span><br><span class="line"><span class="string">                except StopIteration:</span></span><br><span class="line"><span class="string">                    break</span></span><br><span class="line"><span class="string">            except OSError as error:</span></span><br><span class="line"><span class="string">                if onerror is not None:</span></span><br><span class="line"><span class="string">                    onerror(error)</span></span><br><span class="line"><span class="string">                return</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            try:</span></span><br><span class="line"><span class="string">                is_dir = entry.is_dir()</span></span><br><span class="line"><span class="string">            except OSError:</span></span><br><span class="line"><span class="string">                # If is_dir() raises an OSError, consider that the entry is not</span></span><br><span class="line"><span class="string">                # a directory, same behaviour than os.path.isdir().</span></span><br><span class="line"><span class="string">                is_dir = False</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            if is_dir:</span></span><br><span class="line"><span class="string">                dirs.append(entry.name)</span></span><br><span class="line"><span class="string">            else:</span></span><br><span class="line"><span class="string">                nondirs.append(entry.name)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            if not topdown and is_dir:</span></span><br><span class="line"><span class="string">                # Bottom-up: recurse into sub-directory, but exclude symlinks to</span></span><br><span class="line"><span class="string">                # directories if followlinks is False</span></span><br><span class="line"><span class="string">                if followlinks:</span></span><br><span class="line"><span class="string">                    walk_into = True</span></span><br><span class="line"><span class="string">                else:</span></span><br><span class="line"><span class="string">                    try:</span></span><br><span class="line"><span class="string">                        is_symlink = entry.is_symlink()</span></span><br><span class="line"><span class="string">                    except OSError:</span></span><br><span class="line"><span class="string">                        # If is_symlink() raises an OSError, consider that the</span></span><br><span class="line"><span class="string">                        # entry is not a symbolic link, same behaviour than</span></span><br><span class="line"><span class="string">                        # os.path.islink().</span></span><br><span class="line"><span class="string">                        is_symlink = False</span></span><br><span class="line"><span class="string">                    walk_into = not is_symlink</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                if walk_into:</span></span><br><span class="line"><span class="string">                    walk_dirs.append(entry.path)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # Yield before recursion if going top down</span></span><br><span class="line"><span class="string">    if topdown:</span></span><br><span class="line"><span class="string">        yield top, dirs, nondirs</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        # Recurse into sub-directories</span></span><br><span class="line"><span class="string">        islink, join = path.islink, path.join</span></span><br><span class="line"><span class="string">        for dirname in dirs:</span></span><br><span class="line"><span class="string">            new_path = join(top, dirname)</span></span><br><span class="line"><span class="string">            # Issue #23605: os.path.islink() is used instead of caching</span></span><br><span class="line"><span class="string">            # entry.is_symlink() result during the loop on os.scandir() because</span></span><br><span class="line"><span class="string">            # the caller can replace the directory entry during the &quot;yield&quot;</span></span><br><span class="line"><span class="string">            # above.</span></span><br><span class="line"><span class="string">            if followlinks or not islink(new_path):</span></span><br><span class="line"><span class="string">                yield from walk(new_path, topdown, onerror, followlinks)</span></span><br><span class="line"><span class="string">    else:</span></span><br><span class="line"><span class="string">        # Recurse into sub-directories</span></span><br><span class="line"><span class="string">        for new_path in walk_dirs:</span></span><br><span class="line"><span class="string">            yield from walk(new_path, topdown, onerror, followlinks)</span></span><br><span class="line"><span class="string">        # Yield after recursion if going bottom up</span></span><br><span class="line"><span class="string">        yield top, dirs, nondirs</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">__all__.append(&quot;walk&quot;)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Super directory utilities.</span></span><br><span class="line"><span class="comment"># (Inspired by Eric Raymond; the doc strings are mostly his)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makedirs</span>(<span class="params">name, mode=<span class="number">0o777</span>, exist_ok=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;makedirs(name [, mode=0o777][, exist_ok=False])</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Super-mkdir; create a leaf directory and all intermediate ones.  Works like</span></span><br><span class="line"><span class="string">    mkdir, except that any intermediate path segment (not just the rightmost)</span></span><br><span class="line"><span class="string">    will be created if it does not exist. If the target directory already</span></span><br><span class="line"><span class="string">    exists, raise an OSError if exist_ok is False. Otherwise no exception is</span></span><br><span class="line"><span class="string">    raised.  This is recursive.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    head, tail = path.split(name)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> tail:</span><br><span class="line">        head, tail = path.split(head)</span><br><span class="line">    <span class="keyword">if</span> head <span class="keyword">and</span> tail <span class="keyword">and</span> <span class="keyword">not</span> path.exists(head):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            makedirs(head, exist_ok=exist_ok)</span><br><span class="line">        <span class="keyword">except</span> FileExistsError:</span><br><span class="line">            <span class="comment"># Defeats race condition when another thread created the path</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        cdir = curdir</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(tail, <span class="built_in">bytes</span>):</span><br><span class="line">            cdir = <span class="built_in">bytes</span>(curdir, <span class="string">&#x27;ASCII&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> tail == cdir:           <span class="comment"># xxx/newdir/. exists if xxx/newdir exists</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        mkdir(name, mode)</span><br><span class="line">    <span class="keyword">except</span> OSError:</span><br><span class="line">        <span class="comment"># Cannot rely on checking for EEXIST, since the operating system</span></span><br><span class="line">        <span class="comment"># could give priority to other errors like EACCES or EROFS</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> exist_ok <span class="keyword">or</span> <span class="keyword">not</span> path.isdir(name):</span><br><span class="line">            <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<h3 id="第252-278行-renames——重命名目录或文件"><a href="#第252-278行-renames——重命名目录或文件" class="headerlink" title="第252~278行 renames——重命名目录或文件"></a>第252~278行 renames——重命名目录或文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">walk</span>(<span class="params">top, topdown=<span class="literal">True</span>, onerror=<span class="literal">None</span>, followlinks=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Directory tree generator.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    For each directory in the directory tree rooted at top (including top</span></span><br><span class="line"><span class="string">    itself, but excluding &#x27;.&#x27; and &#x27;..&#x27;), yields a 3-tuple</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        dirpath, dirnames, filenames</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    dirpath is a string, the path to the directory.  dirnames is a list of</span></span><br><span class="line"><span class="string">    the names of the subdirectories in dirpath (excluding &#x27;.&#x27; and &#x27;..&#x27;).</span></span><br><span class="line"><span class="string">    filenames is a list of the names of the non-directory files in dirpath.</span></span><br><span class="line"><span class="string">    Note that the names in the lists are just names, with no path components.</span></span><br><span class="line"><span class="string">    To get a full path (which begins with top) to a file or directory in</span></span><br><span class="line"><span class="string">    dirpath, do os.path.join(dirpath, name).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    If optional arg &#x27;topdown&#x27; is true or not specified, the triple for a</span></span><br><span class="line"><span class="string">    directory is generated before the triples for any of its subdirectories</span></span><br><span class="line"><span class="string">    (directories are generated top down).  If topdown is false, the triple</span></span><br><span class="line"><span class="string">    for a directory is generated after the triples for all of its</span></span><br><span class="line"><span class="string">    subdirectories (directories are generated bottom up).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    When topdown is true, the caller can modify the dirnames list in-place</span></span><br><span class="line"><span class="string">    (e.g., via del or slice assignment), and walk will only recurse into the</span></span><br><span class="line"><span class="string">    subdirectories whose names remain in dirnames; this can be used to prune the</span></span><br><span class="line"><span class="string">    search, or to impose a specific order of visiting.  Modifying dirnames when</span></span><br><span class="line"><span class="string">    topdown is false has no effect on the behavior of os.walk(), since the</span></span><br><span class="line"><span class="string">    directories in dirnames have already been generated by the time dirnames</span></span><br><span class="line"><span class="string">    itself is generated. No matter the value of topdown, the list of</span></span><br><span class="line"><span class="string">    subdirectories is retrieved before the tuples for the directory and its</span></span><br><span class="line"><span class="string">    subdirectories are generated.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    By default errors from the os.scandir() call are ignored.  If</span></span><br><span class="line"><span class="string">    optional arg &#x27;onerror&#x27; is specified, it should be a function; it</span></span><br><span class="line"><span class="string">    will be called with one argument, an OSError instance.  It can</span></span><br><span class="line"><span class="string">    report the error to continue with the walk, or raise the exception</span></span><br><span class="line"><span class="string">    to abort the walk.  Note that the filename is available as the</span></span><br><span class="line"><span class="string">    filename attribute of the exception object.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    By default, os.walk does not follow symbolic links to subdirectories on</span></span><br><span class="line"><span class="string">    systems that support them.  In order to get this functionality, set the</span></span><br><span class="line"><span class="string">    optional argument &#x27;followlinks&#x27; to true.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Caution:  if you pass a relative pathname for top, don&#x27;t change the</span></span><br><span class="line"><span class="string">    current working directory between resumptions of walk.  walk never</span></span><br><span class="line"><span class="string">    changes the current directory, and assumes that the client doesn&#x27;t</span></span><br><span class="line"><span class="string">    either.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    import os</span></span><br><span class="line"><span class="string">    from os.path import join, getsize</span></span><br><span class="line"><span class="string">    for root, dirs, files in os.walk(&#x27;python/Lib/email&#x27;):</span></span><br><span class="line"><span class="string">        print(root, &quot;consumes&quot;, end=&quot;&quot;)</span></span><br><span class="line"><span class="string">        print(sum(getsize(join(root, name)) for name in files), end=&quot;&quot;)</span></span><br><span class="line"><span class="string">        print(&quot;bytes in&quot;, len(files), &quot;non-directory files&quot;)</span></span><br><span class="line"><span class="string">        if &#x27;CVS&#x27; in dirs:</span></span><br><span class="line"><span class="string">            dirs.remove(&#x27;CVS&#x27;)  # don&#x27;t visit CVS directories</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    top = fspath(top)</span><br><span class="line">    dirs = []</span><br><span class="line">    nondirs = []</span><br><span class="line">    walk_dirs = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># We may not have read permission for top, in which case we can&#x27;t</span></span><br><span class="line">    <span class="comment"># get a list of the files the directory contains.  os.walk</span></span><br><span class="line">    <span class="comment"># always suppressed the exception then, rather than blow up for a</span></span><br><span class="line">    <span class="comment"># minor reason when (say) a thousand readable directories are still</span></span><br><span class="line">    <span class="comment"># left to visit.  That logic is copied here.</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Note that scandir is global in this module due</span></span><br><span class="line">        <span class="comment"># to earlier import-*.</span></span><br><span class="line">        scandir_it = scandir(top)</span><br><span class="line">    <span class="keyword">except</span> OSError <span class="keyword">as</span> error:</span><br><span class="line">        <span class="keyword">if</span> onerror <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            onerror(error)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> scandir_it:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    entry = <span class="built_in">next</span>(scandir_it)</span><br><span class="line">                <span class="keyword">except</span> StopIteration:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> OSError <span class="keyword">as</span> error:</span><br><span class="line">                <span class="keyword">if</span> onerror <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    onerror(error)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                is_dir = entry.is_dir()</span><br><span class="line">            <span class="keyword">except</span> OSError:</span><br><span class="line">                <span class="comment"># If is_dir() raises an OSError, consider that the entry is not</span></span><br><span class="line">                <span class="comment"># a directory, same behaviour than os.path.isdir().</span></span><br><span class="line">                is_dir = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> is_dir:</span><br><span class="line">                dirs.append(entry.name)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                nondirs.append(entry.name)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> topdown <span class="keyword">and</span> is_dir:</span><br><span class="line">                <span class="comment"># Bottom-up: recurse into sub-directory, but exclude symlinks to</span></span><br><span class="line">                <span class="comment"># directories if followlinks is False</span></span><br><span class="line">                <span class="keyword">if</span> followlinks:</span><br><span class="line">                    walk_into = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        is_symlink = entry.is_symlink()</span><br><span class="line">                    <span class="keyword">except</span> OSError:</span><br><span class="line">                        <span class="comment"># If is_symlink() raises an OSError, consider that the</span></span><br><span class="line">                        <span class="comment"># entry is not a symbolic link, same behaviour than</span></span><br><span class="line">                        <span class="comment"># os.path.islink().</span></span><br><span class="line">                        is_symlink = <span class="literal">False</span></span><br><span class="line">                    walk_into = <span class="keyword">not</span> is_symlink</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> walk_into:</span><br><span class="line">                    walk_dirs.append(entry.path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Yield before recursion if going top down</span></span><br><span class="line">    <span class="keyword">if</span> topdown:</span><br><span class="line">        <span class="keyword">yield</span> top, dirs, nondirs</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Recurse into sub-directories</span></span><br><span class="line">        islink, join = path.islink, path.join</span><br><span class="line">        <span class="keyword">for</span> dirname <span class="keyword">in</span> dirs:</span><br><span class="line">            new_path = join(top, dirname)</span><br><span class="line">            <span class="comment"># Issue #23605: os.path.islink() is used instead of caching</span></span><br><span class="line">            <span class="comment"># entry.is_symlink() result during the loop on os.scandir() because</span></span><br><span class="line">            <span class="comment"># the caller can replace the directory entry during the &quot;yield&quot;</span></span><br><span class="line">            <span class="comment"># above.</span></span><br><span class="line">            <span class="keyword">if</span> followlinks <span class="keyword">or</span> <span class="keyword">not</span> islink(new_path):</span><br><span class="line">                <span class="keyword">yield</span> <span class="keyword">from</span> walk(new_path, topdown, onerror, followlinks)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># Recurse into sub-directories</span></span><br><span class="line">        <span class="keyword">for</span> new_path <span class="keyword">in</span> walk_dirs:</span><br><span class="line">            <span class="keyword">yield</span> <span class="keyword">from</span> walk(new_path, topdown, onerror, followlinks)</span><br><span class="line">        <span class="comment"># Yield after recursion if going bottom up</span></span><br><span class="line">        <span class="keyword">yield</span> top, dirs, nondirs</span><br><span class="line"></span><br><span class="line">__all__.append(<span class="string">&quot;walk&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>我觉得 walk 函数是这个模块看到现在最符合Python特点的方法，强大，方便，优雅。</p>
+<p>首先一段很长的注释，主要介绍了出参和入参。该方法返回一个迭代器，包含一个三元元组，dirpath, dirnames, filenames。</p>
+<p>dirpath 是当前遍历的目录的名字，从入参top开始(如果topdown为False的话)，字符串类型；</p>
+<p>dirnames 是dirpath中的子目录的名字(路径名字)的列表，list类型；</p>
+<p>filenames 是dirpath中的非目录的文件的名字(只有名字)的列表，list类型；</p>
+<p>第一个入参 top 就是要遍历的文件夹，字符串类型。如果第二个可选入参 topdown 为 True 或未指定，目录是自顶向下生成的。如果 topdown 为 False ，则目录是自底向上生成的。举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前目录结构：</span></span><br><span class="line"><span class="comment"># ttt</span></span><br><span class="line"><span class="comment">#  ├── sss</span></span><br><span class="line"><span class="comment">#  ├    └──333.txt</span></span><br><span class="line"><span class="comment">#  ├── 111.txt</span></span><br><span class="line"><span class="comment">#  └── 222.txt</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a, b, c <span class="keyword">in</span> os.walk(<span class="string">&#x27;ttt&#x27;</span>):</span><br><span class="line">    print(a, b, c)</span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line"><span class="comment"># ttt [&#x27;sss&#x27;] [&#x27;111.txt&#x27;, &#x27;222.txt&#x27;]</span></span><br><span class="line"><span class="comment"># ttt\sss [] [&#x27;333.txt&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a, b, c <span class="keyword">in</span> os.walk(<span class="string">&#x27;ttt&#x27;</span>, topdown=<span class="literal">True</span>):</span><br><span class="line">    print(a, b, c)</span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line"><span class="comment"># ttt\sss [] [&#x27;333.txt&#x27;].</span></span><br><span class="line"><span class="comment"># ttt [&#x27;sss&#x27;] [&#x27;111.txt&#x27;, &#x27;222.txt&#x27;]</span></span><br></pre></td></tr></table></figure>
+<p>第三个入参 onerror 是一个回调函数，默认情况下，onerror 参数未指定，此时调用 scandir 方法时，出现的错误将被忽略 (scandir 方法就是 nt 或 posix模块里的底层遍历目录的方法，这个内置方法只能遍历一层目录，所以像前面几个函数一样，walk 方法其实可以看做 scandir 方法的超级版本)。如果可选参数 onerror 被指定，它必须是一个包含一个入参的函数，因为后面的循环中如果出现OSError异常，会将OSError类型实例作为参数传给它。</p>
+<p>默认情况下，walk方法不遵循符号链接跳转到它们指向的子目录。为了获得此功能，将可选参数 followlinks 设置为True。这里应该是说类似Linux系统的软连接硬连接那种，该参数用来选择是否迭代它们所指向的目录。我在Windows测试，快捷方式文件是不生效的，它会把快捷方式当成一个普通文件。</p>
+<p>注意：如果为top传递的是相对路径名，不要在 walk 函数执行期间之间更改当前工作目录。walk 从不更改当前目录，并假设客户机也不更改当前目录。</p>
+<p>看看代码部分：第60行将 top 参数传到 fspath 转换了一下，这个方法是在本模块后面1060行定义的，主要作用是判断传入的参数是不是字符串类型的目录名，如果不是，直接报错。fspath 实现细节后面再具体看。在一些其他语言比如C语言中，要调用一个方法和属性必须在调用出现之前进行定义，在Python这里对这个顺序要求不是很在意。</p>
+<p>第61~63行，定义了三个列表，dirs用来存放遍历过程中的目录名，nondirs用来存放遍历过程中的文件的名字，walk_dirs 用来存放要遍历的子目录，用于后面继续迭代它们的子目录。</p>
+<p>第65~69行注释，在没有top目录的读权限的情况下，无法获得目录中包含的文件列表。大部分情况下walk总是忽略一些异常，这样避免(比方说)在还有1000个可读目录需要访问时，因为一个小原因而崩溃。这个逻辑复制到这里。</p>
+<p>第71~73行，这里是walk函数的核心部分，调用 scandir (nt或posix里的)，这个方法返回一个迭代器，包含入参目录下的所有DirEntry类型的子目录和文件，DirEntry是nt(或posix)模块定义的一个类，包含一个目录或文件的基本信息。这里将其返回的迭代器赋值给scandir_it。这里的注释是提醒scandir是在前面对 nt 模块或者 posix 模块 import * 时引入的。我怀疑os模块不是一个人完成的，因为上面几个函数在调用别的模块的方法时，就没有这种提示，还需要自己去找一些方法或属性的出处。</p>
+<p>第74~77行，如果第一级目录再进行遍历的时候就出现了 OSError 类型的异常，就调用回调函数 onerror 方法处理(如果有定义的话)，然后直接返回。</p>
+<p>79行开始进入循环。第81~89行取出迭代器 scandir_it 的下一个元素，也就是 top 目录下的第一个子目录或者文件，如果迭代器被迭代完了，就pass。这里同遇到异常，会和74到77行的处理方法一样。</p>
+<p>第91~101行，判断取出的第一个元素是不是目录，is_dir 方法是DirEntry类型实例的一个方法。（还记得吗，73行scandir_it = scandir(top)返回的迭代器，里面包含的实例是DirEntry类型的，在83行entry = next(scandir_it)取出）。如果该元素是目录就加到列表 dirs 里，否则加到列表 nondirs 里。</p>
+<p>此时，如果 topdown 为True 或未指定，循环体就执行完了。接下来继续遍历，直到把第一层目录下的子目录和文件都分类保存在两个列表里（这里应该想到后面肯定会有递归）。如果topdown 参数为False，而且当前元素是个目录(这里来看链接也算目录)，第103~119行，这里又要考虑followlinks参数，如果为True，就将当前元素的路径加入到列表 walk_dirs 里，如果为Flase或者未指定，当前元素是链接的话就不加入待迭代目录列表walk_dirs，不是链接(普通目录)就加入到walk_dirs。</p>
+<p>第121~134行，如果是自顶向下生成的，这时候就可以 yield walk这个迭代器的第一个元素了。然后准备第二个元素(这么说可能不对) ：将 top 和 dirs 里的路径名字组合，形成新的路径名，在for循环中调用walk就完成第二层目录的迭代，这样递归下去就可以遍历到所有的子目录，递归的跳出点就在两个return那里。</p>
+<p>第135~140行，如果是自底向上生成的，就先不yield，先去处理待迭代的列表里的路径，层层递归，这样就会先 yield 最低层目录，再 yield 上层的目录。</p>
+<p>最后，将walk函数加入到__all__列表里。总的来说，walk这个函数利用Python的迭代器，设计的很巧妙，都看完了让我写也写不出来。</p>
+<h3 id="未完待续……"><a href="#未完待续……" class="headerlink" title="未完待续……"></a><strong>未完待续……</strong></h3><p>今天写了一下午不知道为啥没保存上，晚上回来打开进度又回到上次写的那里，一下午白干了，刚刚才又凭着记忆重写回来，感觉有的地方跟第一遍用词不一样了。</p>
+<p>os模块源码共1115行，到现在才写到421行，这篇文章已经太长了，我决定分成两篇文章，后续写在<a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/108492310">彻底弄懂Python标准库源码（二）—— os模块（续）</a>里。</p>
+<p>这篇文章是我看着源码凭自己理解写的，里面有一些自己的臆断，有看到错误的朋友，麻烦帮忙指出来更正，感谢！</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2020/06/15/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%20os%E6%A8%A1%E5%9D%97/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/os/" rel="tag">os</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag">编程语言</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2020/07/25/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82%20Python3%E4%B8%AD%E5%85%A5%E5%8F%82%E9%87%8C%E7%9A%84%20%E5%8F%B7%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            彻底弄懂 Python3中入参里的*号的作用
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/05/25/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E7%A0%81%EF%BC%88%E9%9B%B6%EF%BC%89%E2%80%94%E2%80%94%20%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">彻底弄懂Python标准库源码（零）—— 学习计划</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "zy6yBRj9KkWO2XxsT94n1DIW-gzGzoHsz",
+    app_key: "auroBE2PQXkQ05CLi30SFv92",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="半亩方塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+<script type="text/javascript">
+if(!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+  document.write('<script type="text/javascript" src="/js/FunnyTitle.js"><\/script>');
+  document.write('<script type="text/javascript" src="/js/snow.js"><\/script>');
+}
+</script>
+</html>

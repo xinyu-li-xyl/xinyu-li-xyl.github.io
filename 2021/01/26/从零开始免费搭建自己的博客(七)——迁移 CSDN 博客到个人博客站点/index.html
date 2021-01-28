@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点 |  半亩方塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/01/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E4%B8%83)%E2%80%94%E2%80%94%E8%BF%81%E7%A7%BB%20CSDN%20%E5%8D%9A%E5%AE%A2%E5%88%B0%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%AB%99%E7%82%B9/" class="article-date">
+  <time datetime="2021-01-27T07:55:33.000Z" itemprop="datePublished">2021-01-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <blockquote>
+<p>   ​    本文是博客搭建系列文章第六篇，其他文章链接：</p>
+<ol>
+<li>从零开始免费搭建自己的博客(一)——<a target="_blank" rel="noopener" href="https://yushuaige.github.io/2020/12/31/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%80-%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAhexo%E6%A1%86%E6%9E%B6/">本地搭建 Hexo 框架</a></li>
+<li>从零开始免费搭建自己的博客(二)——<a target="_blank" rel="noopener" href="https://yushuaige.github.io/2021/01/01/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%BA%8C-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-GitHub-pages-%E5%BB%BA%E7%AB%99/">基于 GitHub pages 建站</a></li>
+<li>从零开始免费搭建自己的博客(三)——<a target="_blank" rel="noopener" href="https://yushuaige.github.io/2021/01/02/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2-%E4%B8%89-%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-Gitee-pages-%E5%BB%BA%E7%AB%99/">基于 Gitee pages 建站</a></li>
+<li>从零开始免费搭建自己的博客(四)——<a target="_blank" rel="noopener" href="https://yushuaigee.gitee.io/2021/01/11/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E5%9B%9B)%E2%80%94%E2%80%94%E7%BC%96%E5%86%99Markdown%E6%96%87%E7%AB%A0%E5%88%A9%E5%99%A8%20Typora/">编写Markdown文章利器 Typora</a></li>
+<li>从零开始免费搭建自己的博客(五)——<a target="_blank" rel="noopener" href="https://yushuaigee.gitee.io/2021/01/14/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E4%BA%94)%E2%80%94%E2%80%94Typora%20+%20PicGo%20+%20GitHub%20Gitee%E5%9B%BE%E5%BA%8A/">Typora + PicGo + GitHub/Gitee图床</a></li>
+<li>从零开始免费搭建自己的博客(六)——<a target="_blank" rel="noopener" href="https://yushuaigee.gitee.io/2021/01/21/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E5%85%AD)%E2%80%94%E2%80%94%E4%B8%89%E4%B8%AA%E7%AB%99%E7%82%B9%E4%B8%80%E9%94%AE%E5%8F%91%E5%B8%83%E5%8D%9A%E5%AE%A2/">三个站点一键发布博客</a></li>
+<li><strong>从零开始免费搭建自己的博客(七)——迁移 CSDN 博客到个人博客站点</strong></li>
+<li>从零开始免费搭建自己的博客(八)——博客网站个性化设置及优化</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSDN 没有提供文章导出功能，只有导入功能，我们想把自己以前写的文章迁移到其他平台或者自己的博客网站，还得自己想办法爬取下来。可是那是我写的文章啊，竟然不能想拿就拿回来。。。</p>
+<p>我看到需多人的实现思路，是使用文章界面点击编辑按钮的接口，获取自己之前的文章 Markdown 源码。这样还得先登录自己的账号，而且前提是之前文章是用 Markdown 编辑器写的。其实不管是富文本编辑器还是 Markdown 编辑器写的，最终呈现的都是一个 html 网页，不需要登录就可以看到。之前介绍 Typora 时说过， Markdown 语法和 html 语法本来就类似，所以本文思路是直接下载 html 然后转化为 Markdown 格式。</p>
+<p>在 CSDN 页面结构不发生改变的情况下，我们可以用这种方法下载 CSDN 上任意文章并保存成 Markdown 格式。只有写过博客的人才知道原创一篇文章要花费多少精力，所以希望大家如果下载别人的文章一定要标明原地址，这是基本节操。</p>
+<h2 id="工具选择"><a href="#工具选择" class="headerlink" title="工具选择"></a>工具选择</h2><p>语言：<code>Python3</code>。</p>
+<p>第三方库：<code>requests</code>、<code>parsel </code>、<code>tomd</code>。</p>
+<p>当然可以使用上一篇用到的 <a target="_blank" rel="noopener" href="https://github.com/miyakogi/pyppeteer">pyppeteer</a>，不多对于这个需求来说速度太慢。CSDN 目前没有设置很多反爬虫机制，所以用轻量的 <a target="_blank" rel="noopener" href="https://github.com/psf/requests">requests</a> 就够了。</p>
+<p><code>parsel </code>是 <a target="_blank" rel="noopener" href="https://github.com/scrapy">Scrapy</a> 框架内置的 html 解析库，后来独立出来。选择 <a target="_blank" rel="noopener" href="https://github.com/scrapy/parsel">parsel </a>也是因为够用，且比 <a target="_blank" rel="noopener" href="https://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> 更轻。</p>
+<p>html 转 Markdown 的库找到两个：<a target="_blank" rel="noopener" href="https://github.com/gaojiuli/tomd">tomd</a> 和 <a target="_blank" rel="noopener" href="https://github.com/aaronsw/html2text">html2text</a> ，试了一下都挺好用的，美中不足的是两个库转换完的代码块都没有标识语言类别，导致代码无法高亮。我看了 html 源码是有是语言类别信息的，所以需要对库稍作改动才能达到完美的效果。<code>tomd</code> 的原理比较简单粗暴，直接是正则表达式查找替换，源码就一个文件，比较好改，改动点和源码在下面。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><ol>
+<li>获取自己主页文章列表，包括标题和文章地址。</li>
+<li>根据上一步获取的文章地址，获取文章的标题、正文、标签、分类、发布时间。</li>
+<li>根据上一步获取的文章正文，将 html 格式文本转为 md 格式。</li>
+<li>新建<code>.md</code>文件，先添加标题、标签、分类、发布时间，再写入 md 正文。</li>
+<li>使用上一篇文章中实现的一键发布脚本将本地保存的博客发布到自己的博客。</li>
+</ol>
+<h2 id="tomd修改"><a href="#tomd修改" class="headerlink" title="tomd修改"></a>tomd修改</h2><p>在使用<code>tomd</code>的过程中遇到两个问题，好在源码只有一个文件，原理也很简单，稍微看一下代码逻辑就可以解决。</p>
+<ol>
+<li><p>无序列表转化后没有换行，导致无序列表只有一行。需要修改<code>tomd.py</code>文件第<code>103</code>行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/image-20210126224109198.png" alt="image-20210126224109198"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">elif</span> self.tag == <span class="string">&#x27;ul&#x27;</span> <span class="keyword">and</span> tag == <span class="string">&#x27;li&#x27;</span>:</span><br><span class="line">    self.content = re.sub(pattern, <span class="string">&#x27;\n- \g&lt;1&gt;&#x27;</span>, self.content)</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/image-20210126224458389.png" alt="image-20210126224458389"></p>
+</li>
+<li><p>代码块没有标识语言类别，无法代码高亮。需要修改<code>tomd.py</code>文件第<code>19</code>行和第<code>50</code>行。各加三行，根据实际用到的语言。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/image-20210126230335050.png" alt="image-20210126230335050"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/image-20210126230422905.png" alt="image-20210126230422905"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x27;block_code&#x27;: (&#x27;\n```\n&#x27;, &#x27;\n```\n&#x27;),</span></span><br><span class="line"><span class="string">&#x27;block_code_go&#x27;</span>: (<span class="string">&#x27;\n```go\n&#x27;</span>, <span class="string">&#x27;\n```\n&#x27;</span>),</span><br><span class="line"><span class="string">&#x27;block_code_py&#x27;</span>: (<span class="string">&#x27;\n```python\n&#x27;</span>, <span class="string">&#x27;\n```\n&#x27;</span>),</span><br><span class="line"><span class="string">&#x27;block_code_java&#x27;</span>: (<span class="string">&#x27;\n```java\n&#x27;</span>, <span class="string">&#x27;\n```\n&#x27;</span>),    </span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># &#x27;block_code&#x27;: &#x27;&lt;pre.*?&gt;&lt;code.*?&gt;(.*?)&lt;/code&gt;&lt;/pre&gt;&#x27;,</span></span><br><span class="line"><span class="string">&#x27;block_code_go&#x27;</span>: <span class="string">&#x27;&lt;pre.*?&gt;&lt;code.*?Go.*?&gt;(.*?)&lt;/code&gt;&lt;/pre&gt;&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;block_code_py&#x27;</span>: <span class="string">&#x27;&lt;pre.*?&gt;&lt;code.*?python.*?&gt;(.*?)&lt;/code&gt;&lt;/pre&gt;&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;block_code_java&#x27;</span>: <span class="string">&#x27;&lt;pre.*?&gt;&lt;code.*?java.*?&gt;(.*?)&lt;/code&gt;&lt;/pre&gt;&#x27;</span>,</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/image-20210126230230535.png" alt="image-20210126230230535"></p>
+</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">csdn_to_md.py</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> parsel</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> tomd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_article_info</span>(<span class="params">url</span>):</span></span><br><span class="line">    html = requests.get(url, headers=headers).text</span><br><span class="line">    selector = parsel.Selector(html)</span><br><span class="line">    urls = selector.css(<span class="string">&#x27;#articleMeList-blog &gt; div.article-list &gt; div &gt; h4 &gt; a&#x27;</span>).xpath(<span class="string">&#x27;.//@href&#x27;</span>).getall()</span><br><span class="line">    print(<span class="string">&#x27;共找到%d篇文章...&#x27;</span> % <span class="built_in">len</span>(urls))</span><br><span class="line">    <span class="keyword">return</span> urls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_html_from_csdn</span>(<span class="params">url</span>):</span></span><br><span class="line">    html = requests.get(url, headers=headers).text</span><br><span class="line">    selector = parsel.Selector(html)</span><br><span class="line">    title = selector.css(<span class="string">&#x27;div.article-title-box &gt; h1::text&#x27;</span>).get()</span><br><span class="line">    article = selector.css(<span class="string">&#x27;div.article_content&#x27;</span>).get()</span><br><span class="line">    category = selector.css(<span class="string">&#x27;div.blog-tags-box &gt; div &gt; a::text&#x27;</span>).getall()[<span class="number">0</span>]</span><br><span class="line">    tags = selector.css(<span class="string">&#x27;div.blog-tags-box &gt; div &gt; a[data-report-click*=&quot;mod&quot;]::text&#x27;</span>).getall()</span><br><span class="line">    time_stamp = selector.css(<span class="string">&#x27;div &gt; span.time::text&#x27;</span>).get()</span><br><span class="line">    <span class="keyword">return</span> title, article, category, tags, time_stamp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">html_to_md</span>(<span class="params">title, article, category, tags, time_stamp</span>):</span></span><br><span class="line">    md = tomd.convert(article)</span><br><span class="line">    <span class="comment"># print(md)</span></span><br><span class="line">    print(<span class="string">&#x27;正在下载 %s&#x27;</span> % title)</span><br><span class="line">    text = <span class="string">&quot;---\ntitle: %s\ndate: %s\ntags: [%s]\ncategories: %s\n---\n\n%s&quot;</span> % (</span><br><span class="line">        title, time_stamp, <span class="string">&#x27;, &#x27;</span>.join(tags), category, md)</span><br><span class="line">    file_name = title.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;*&#x27;</span>, <span class="string">&#x27; &#x27;</span>). \</span><br><span class="line">        replace(<span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;&lt;&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;&gt;&#x27;</span>, <span class="string">&#x27; &#x27;</span>).replace(<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;articles/%s.md&#x27;</span> % file_name, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>(<span class="params">url</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&#x27;articles&#x27;</span>):</span><br><span class="line">        os.mkdir(<span class="string">&#x27;articles&#x27;</span>)</span><br><span class="line">    article_urls = get_article_info(url)</span><br><span class="line">    <span class="keyword">for</span> article_url <span class="keyword">in</span> article_urls:</span><br><span class="line">        title, article, category, tags, time_stamp = get_html_from_csdn(article_url)</span><br><span class="line">        html_to_md(title, article, category, tags, time_stamp)</span><br><span class="line">    print(<span class="string">&#x27;完成%d篇文章的下载&#x27;</span> % <span class="built_in">len</span>(article_urls))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;blog.csdn.net&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Referer&#x27;</span>: <span class="string">&#x27;https://blog.csdn.net&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3542.0 Safari/537.36&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    start_url = <span class="string">&quot;https://blog.csdn.net/yushuaigee&quot;</span></span><br><span class="line">    main(start_url)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>本文解决了将 CSDN 上使用富文本编辑器写的文章下载到本地转化成 Markdown 格式的问题，然后再配合上一篇中实现的一键发布脚本，就可以实现三个博客站点的同步了。到这里，已经实现了我自认为很完美的效果，以后就可以开开心心安安静静的写博客了。</p>
+<p>我们看别人的独立博客，包括一些博主自己定制的博客园页面时，经常会看到一些有意思的特效，比如切换页签时原标题会变成调皮搞笑的文字，页面点击出现文字或爱心，页面出现跟随鼠标的随机线条，页面动态下雨或雪花，还有可以点击互动的小老鼠、二次元妹子等等，这些效果有的 Hexo 主题就内置了只需要把开关打开，有的需要自己手动加代码实现，因为它们本质上就是一段 js 代码(突然想起在以前公司有一次被安排到前端帮忙，曾经“沉迷”于在系统登录页面添加这些特效，hh)。还有一些针对 Hexo 的优化内容，比如提升页面加载速度，seo 优化，全文搜索插件等。这两项内容准备在最后一篇文章介绍，不过可能要先挖个坑，等告一段落才能完成。一来，最近忙着写博客搭建系列的文章，还没来得及折腾那些特效，有些效果只见过还没用过，亲测过的东西写下来才有价值。二来，由于不想打乱博客搭建系列文章的顺序，许多最近的想法还没来得及写下来，想先把这些内容写一下。</p>
+<p>写本系列文章第一篇之前，我并没有接触过 Hexo 这些东西，不知道 GitHub Pages 还能这样用，更不知道原来搭建博客里面有这么大的名堂，甚至一直没用 Markdown 写博客。决定自己搭建博客后，我先大概查了一下资料，然后把 8 篇文章的标题确定下来，形成一个大纲。其实在写前面几篇文章的时候，我还没把自己的博客搭起来，是后面一边学习一边操作一边记录，从小白的角度去弄懂每个步骤的原理，将过程记录下来，希望可以帮助更多的小伙伴。还有个意外收获，那就是发现了这是一个学习新东西的好方法。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/01/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E4%B8%83)%E2%80%94%E2%80%94%E8%BF%81%E7%A7%BB%20CSDN%20%E5%8D%9A%E5%AE%A2%E5%88%B0%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%AB%99%E7%82%B9/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html%E8%BD%ACmarkdown/" rel="tag">html转markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%8B%E8%BD%BDcsdn%E6%96%87%E7%AB%A0/" rel="tag">下载csdn文章</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag">博客搭建</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2021/01/24/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%85%8D%E8%B4%B9%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2(%E5%85%AD)%E2%80%94%E2%80%94%E4%B8%89%E4%B8%AA%E7%AB%99%E7%82%B9%E4%B8%80%E9%94%AE%E5%8F%91%E5%B8%83%E5%8D%9A%E5%AE%A2/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">从零开始免费搭建自己的博客(六)——三个站点一键发布博客</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "zy6yBRj9KkWO2XxsT94n1DIW-gzGzoHsz",
+    app_key: "auroBE2PQXkQ05CLi30SFv92",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="半亩方塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+<script type="text/javascript">
+if(!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+  document.write('<script type="text/javascript" src="/js/FunnyTitle.js"><\/script>');
+  document.write('<script type="text/javascript" src="/js/snow.js"><\/script>');
+}
+</script>
+</html>
