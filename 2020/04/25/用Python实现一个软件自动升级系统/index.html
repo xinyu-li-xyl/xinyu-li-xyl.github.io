@@ -102,7 +102,10 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p><strong>目录</strong></p>
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/105140425">https://blog.csdn.net/yushuaigee/article/details/105140425</a></p>
+</blockquote>
+<p><strong>目录</strong></p>
 <p><a href="#%E4%B8%80%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AB%AF">一、服务端</a></p>
 <p><a href="#1.%C2%A0XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1. XML配置文件</a></p>
 <p><a href="#%C2%A02.%C2%A0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1"> 2. 服务端代码设计</a></p>
@@ -138,7 +141,7 @@
 <p>server.py是主程序，</p>
 <p>start.bat用来双击启动server.py，</p>
 <p>VersionInfo.xml是存放文件信息的xml</p>
-<p>       <img alt="" height="221" src="https://img-blog.csdnimg.cn/20200425213341739.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="810"></p>
+<p>       <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200425213341739.png" alt="20200425213341739.png"></p>
 <p><strong>1.2 客户端</strong></p>
 <p>TempFolder目录用来存放下载下来的文件，</p>
 <p>venv是python目录，</p>
@@ -146,14 +149,14 @@
 <p>start.bat用来双击启动server.py，</p>
 <p>VersionInfo.xml是存放文件信息的xml，</p>
 <p>VersionInfoTemp.xml是更新时自动生成的，是下载的最新配置文件</p>
-<p>       <img alt="" height="236" src="https://img-blog.csdnimg.cn/20200425213310466.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="812"></p>
+<p>       <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200425213310466.png" alt="20200425213310466.png"></p>
 <h3 id="2-服务端运行效果"><a href="#2-服务端运行效果" class="headerlink" title="2. 服务端运行效果"></a>2. 服务端运行效果</h3><p>默认使用本地测试ip 127.0.0.1，默认端口8888</p>
-<p>     <img alt="" height="185" src="https://img-blog.csdnimg.cn/20200425214624388.png" width="866"></p>
+<p>     <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200425214624388.png" alt="20200425214624388.png"></p>
 <h3 id="3-客户端运行效果"><a href="#3-客户端运行效果" class="headerlink" title="3. 客户端运行效果"></a>3. 客户端运行效果</h3><p>上面窗口是控制台窗口，显示运行过程的日志，下面是更新界面。</p>
 <p>如果不想显示控制台界面，只需要把start.bat里前三行的注释打开即可。</p>
 <p>文件太小可能会一闪而过，因为程序默认更新完立即退出。</p>
-<p>    <img alt="" height="637" src="https://img-blog.csdnimg.cn/20200425215953325.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="705"></p>
-<p>   <img alt="" height="224" src="https://img-blog.csdnimg.cn/20200425215030334.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="484"></p>
+<p>    <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200425215953325.png" alt="20200425215953325.png"></p>
+<p>   <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200425215030334.png" alt="20200425215030334.png"></p>
 <h2 id="四、改进思路"><a href="#四、改进思路" class="headerlink" title="四、改进思路"></a>四、改进思路</h2><p><strong>1.多线程提高效率</strong></p>
 <p>因为没有测试过文件数量和大小非常大的情况，现在程序的所有步骤都是单线程执行，可以将文件扫描和下载等耗时间的步骤，改进成多线程或者协程同时运行，提高程序的运行效率。</p>
 <p><strong>2.文件扫描方式</strong></p>

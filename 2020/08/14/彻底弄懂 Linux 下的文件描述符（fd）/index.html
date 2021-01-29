@@ -78,7 +78,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">1.3k</span>
+            <span class="post-count">1k</span>
         </span>
     </span>
 
@@ -102,7 +102,10 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p><strong>目录</strong></p>
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/107883964">https://blog.csdn.net/yushuaigee/article/details/107883964</a></p>
+</blockquote>
+<p><strong>目录</strong></p>
 <p><a href="#1%E3%80%81%E4%BB%8E%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BE%8B%E5%AD%90%E8%AF%B4%E8%B5%B7">1、从一个最常见的例子说起</a></p>
 <p><a href="#2%E3%80%81Linux%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%EF%BC%88file%20descriptor%EF%BC%89">2、Linux中的文件描述符（file descriptor）</a></p>
 <p><a href="#3%E3%80%81Linux%E4%B8%8A%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B8%BE%E4%BE%8B">3、Linux上打开文件举例</a></p>
@@ -112,25 +115,18 @@
 <p><a href="#7%E3%80%81%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">7、参考链接</a></p>
 <h3 id="1、从一个最常见的例子说起"><a href="#1、从一个最常见的例子说起" class="headerlink" title="1、从一个最常见的例子说起"></a>1、从一个最常见的例子说起</h3><p>在使用Linux的过程中， 我们平时经常看到下面这样的用法：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">5、Python中文件描述符的使用&lt;/h3&gt; </span><br><span class="line">Python中通过 sys 模块封装了标准输入、标准输出和错误输出。通过我们平时常用的内建函数 <span class="built_in">open</span> 可以获取一个文件的文件描述符，首先创建一个 test.py 文件用于打开，然后创建一个 test2.py 文件，输入下面代码保存。 执行，发现新打开文件的文件描述符是**<span class="number">3</span>**。 </span><br><span class="line">&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import sys</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;stdin fd = &#x27;</span>, sys.stdin.fileno())</span><br><span class="line">print(<span class="string">&#x27;stdout fd = &#x27;</span>, sys.stdout.fileno())</span><br><span class="line">print(<span class="string">&#x27;stderr fd = &#x27;</span>, sys.stderr.fileno())</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;test.py&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    print(<span class="string">&#x27;test.py fd = &#x27;</span>, f.fileno())</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> &amp;lt;stdio.h&amp;gt;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> &amp;lt;fcntl.h&amp;gt;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> &amp;lt;unistd.h&amp;gt;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd = open(<span class="string">&quot;test.py&quot;</span>, O_RDONLY);</span><br><span class="line">        <span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;test.py fd = %d \n&quot;</span>, fd);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <ul>
-<li>**1 ** ：表示stdout标准输出</li>
-<li>**2 ** ：表示stderr标准错误</li>
-<li>**&amp; ** ：表示等同于的意思</li>
 <li>当前文件偏移量（调用read()和write()时更新，或使用lseek()直接修改）</li>
 <li>打开文件时的标识（open()的flags参数）</li>
 <li>文件访问模式（如调用open()时所设置的只读模式、只写模式或读写模式）</li>
 <li>与信号驱动相关的设置</li>
-<li>对该文件i-node对象的引用，即i-node 表指针</li>
-<li>在进程 A 中，文件描述符 1 和 20 都指向了同一个打开文件表项，标号为 23（指向了打开文件表中下标为 23 的数组元素），这可能是通过调用 dup()、dup2()、fcntl() 或者对同一个文件多次调用了 open() 函数形成的。</li>
-<li>进程 A 的文件描述符 2 和进程 B 的文件描述符 2 都指向了同一个文件，这可能是在调用 fork() 后出现的（即进程 A、B 是父子进程关系），或者是不同的进程独自去调用 open() 函数打开了同一个文件，此时进程内部的描述符正好分配到与其他进程打开该文件的描述符一样。</li>
-<li>进程 A 的描述符 0 和进程 B 的描述符 3 分别指向不同的打开文件表项，但这些表项均指向 i-node 表的同一个条目（标号为 1976）；换言之，它们指向了同一个文件。发生这种情况是因为每个进程各自对同一个文件发起了 open() 调用。同一个进程两次打开同一个文件，也会发生类似情况。 <h3 id="3、Linux上打开文件举例"><a href="#3、Linux上打开文件举例" class="headerlink" title="3、Linux上打开文件举例"></a>3、Linux上打开文件举例</h3></li>
+<li>对该文件i-node对象的引用，即i-node 表指针<h3 id="5、Python中文件描述符的使用"><a href="#5、Python中文件描述符的使用" class="headerlink" title="5、Python中文件描述符的使用"></a>5、Python中文件描述符的使用</h3></li>
 </ul>
-<h3 id="5、Python中文件描述符的使用"><a href="#5、Python中文件描述符的使用" class="headerlink" title="5、Python中文件描述符的使用"></a>5、Python中文件描述符的使用</h3><img alt="" height="120" src="https://img-blog.csdnimg.cn/20200814153527763.png" width="274">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200814153527763.png" alt="20200814153527763.png"></p>
 <h3 id="6、Linux配置系统最大打开文件描述符个数"><a href="#6、Linux配置系统最大打开文件描述符个数" class="headerlink" title="6、Linux配置系统最大打开文件描述符个数"></a>6、Linux配置系统最大打开文件描述符个数</h3><p><strong>（1）系统级限制</strong></p>
 <p>理论上系统内存有多少就可以打开多少的文件描述符，但是在实际中内核是会做相应的处理，一般最大打开文件数会是系统内存的10%（以KB来计算），称之为系统级限制。这个数字可以通过 <strong>cat /proc/sys/fs/file-max **或者 **sysctl -a | grep fs.file-max</strong> 命令查看。</p>
-<img alt="" height="43" src="https://img-blog.csdnimg.cn/20200814163652926.png" width="389">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200814163652926.png" alt="20200814163652926.png"></p>
 <p>更改系统级限制有临时更改和永久更改两种方式：</p>
 <ul>
 <li> 临时更改：session断开或者系统重启后会恢复原来的设置值。使用命令 <strong>sysctl -w fs.file-max=xxxx</strong>，其中xxxx就是要设置的数字。 </li>
@@ -138,8 +134,7 @@
 </ul>
 <p><strong>（2）用户级限制</strong></p>
 <p>同时为了控制每个进程消耗的文件资源，内核也会对单个进程最大打开文件数做默认限制，即用户级限制。32位系统默认值一般是1024，64位系统默认值一般是65535，可以使用 <strong>ulimit -n</strong> 命令查看。</p>
-<img alt="" height="40" src="https://img-blog.csdnimg.cn/20200814164901907.png" width="228">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200814164901907.png" alt="20200814164901907.png"></p>
 <p>更改用户级限制也有临时更改和永久更改两种方式：</p>
 <ul>
 <li> 临时更改：session断开或者系统重启后会恢复原来的设置值。使用命令 <strong>ulimit -SHn xxxx</strong> 命令来修改，其中xxxx就是要设置的数字。 </li>

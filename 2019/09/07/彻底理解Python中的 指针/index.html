@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="杰克小麻雀的博客" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    彻底理解Python中的&#34;指针&#34; |  半亩方塘
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-彻底理解Python中的 指针"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  彻底理解Python中的&#34;指针&#34;
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88/" class="article-date">
+  <time datetime="2019-09-08T06:11:59.000Z" itemprop="datePublished">2019-09-07</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">9 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/96745994">https://blog.csdn.net/yushuaigee/article/details/96745994</a></p>
+</blockquote>
+<p>学过C，C++语言的同学都知道一个重要的概念——指针。</p>
+<p>Python中有指针的概念吗？我查了许多资料，没人认明确地说Python中有“指针”这一定义。在我看来，Python中虽然没有“指针”的定义，但是却随处可见“指针”的影子。不过这里的“指针”并不完全等同于c语言中的指针，只能是加引号的“指针”。</p>
+<h3 id="一、两个Python例子引发的思考"><a href="#一、两个Python例子引发的思考" class="headerlink" title="一、两个Python例子引发的思考"></a>一、两个Python例子引发的思考</h3><p>第一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --coding=utf-8--</span></span><br><span class="line"><span class="comment"># 第一个例子</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：将参数发送出去（这里简化为打印）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;send: &#x27;</span>, param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list删掉最后一个元素发送出去，也就是[&#x27;a&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun1</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun1...&#x27;</span>)</span><br><span class="line">    param.pop()</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list增加一个元素&#x27;c&#x27;发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun2</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun2...&#x27;</span>)</span><br><span class="line">    param.append(<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun3</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun3...&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_list = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">    fun1(test_list)</span><br><span class="line">    fun2(test_list)</span><br><span class="line">    fun3(test_list)</span><br></pre></td></tr></table></figure>
+<p>我预期的结果为：</p>
+<blockquote>
+<p> run fun1…<br> send:  [‘a’]<br> run fun2…<br> send:  [‘a’, ‘b’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘b’] </p>
+</blockquote>
+<p>实际的结果为：</p>
+<blockquote>
+<p> run fun1…<br> send:  [‘a’]<br> run fun2…<br> send:  [‘a’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘c’] </p>
+</blockquote>
+<p> 按照代码表面来理解，三个函数只是对传进来的“形参”param进行了改变，对原来的“实参”test_list并没有影响，所以每个函数传进去的test_list应该都是 [‘a’, ‘b’]。可是从结果来看，每个函数里的“形参”被改变后，外面的“实参”也跟着改变了。在原来的代码基础上加几条打印，可以看到就是这样。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_list = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun1(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun2(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun3(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> test_list: [‘a’, ‘b’]<br> run fun1…<br> send:  [‘a’]<br> test_list: [‘a’]<br> run fun2…<br> send:  [‘a’, ‘c’]<br> test_list: [‘a’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘c’]<br> test_list: [‘a’, ‘c’] </p>
+</blockquote>
+<p>所以上面例子中三个函数里的param和test_list其实是一个对象，fun1里的pop和fun2里的append都是操作的同一个变量(对象)，也就是说传递到三个函数中的参数是test_list的“地址”。类似C语言中，函数的参数为指针类型。</p>
+<p> 第二个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --coding=utf-8--</span></span><br><span class="line"><span class="comment"># 第二个例子</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：将参数发送出去（这里简化为打印）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;send: &#x27;</span>, param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value的值加上1发送出去，也就是2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun1</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun1...&#x27;</span>)</span><br><span class="line">    param += <span class="number">1</span></span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value的值减去1发送出去，也就是0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun2</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun2...&#x27;</span>)</span><br><span class="line">    param -= <span class="number">1</span></span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value发送出去，也就是1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun3</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun3...&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_value = <span class="number">1</span></span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun1(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun2(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun3(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br></pre></td></tr></table></figure>
+<p>实际输出结果：</p>
+<blockquote>
+<p> run fun1…<br> send:  2<br> run fun2…<br> send:  0<br> run fun3…<br> send:  1 </p>
+</blockquote>
+<p> 这次的结果和上次不太一样，结果表明三个函数里的param和test_value并不是一个对象，fun1里的加1和fun2里的减1操作之后，并没有影响test_value的值，也就是说传递到三个函数中的参数是test_list的“值”(的拷贝)。那么什么时候传的是指针，什么时候传的是值呢？其实只要了解一下Python中创建对象的具体过程，问题就迎刃而解了。</p>
+<h3 id="二、Python中的不可变对象和可变对象"><a href="#二、Python中的不可变对象和可变对象" class="headerlink" title="二、Python中的不可变对象和可变对象"></a>二、Python中的不可变对象和可变对象</h3><p>众所周知，Python中一切皆对象，每个对象至少包含三个数据：引用计数、类型和值。引用计数用于Python的GC机制，类型用于在CPython层运行时保证类型安全性，值就是对象关联的实际值。</p>
+<p>Python对象分为不可变对象和可变对象。可变对象可以修改，上面第一个例子中的test_list（list类型）就属于可变对象，不可变对象无法更改，类似C语言中加了const修饰，上面第二个例子中的test_value（int类型）就属于不可变对象。</p>
+<p><strong>不可变对象：int(整形)、str(字符串)、float(浮点型)、tuple(元组)</strong></p>
+<p><strong>可变对象：dict(字典)、list(列表)、 set(集合）</strong></p>
+<p>        <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/2019090622412710.png" alt="2019090622412710.png"></p>
+<p>这里 x += 1 看似更改了 x 的值，实际上已经改变了ID，所以是新建了一个值。 </p>
+<p>        <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/2019090622470785.png" alt="2019090622470785.png"></p>
+<p>同样str类型的v可以重新赋值，但是不能更改元素。这就类似于C语言中加了const修饰的数组，不能更改它的内容，但是你可以将原来指向它指针改为指向别人。</p>
+<p>可变对象的情形就不一样了，可以任意更改元素。ID不会变，直到重新赋值：</p>
+<p>         <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20190906225303542.png" alt="20190906225303542.png"></p>
+<h3 id="三、C语言中定义变量的过程"><a href="#三、C语言中定义变量的过程" class="headerlink" title="三、C语言中定义变量的过程"></a>三、C语言中定义变量的过程</h3><blockquote>
+<p> 例如：<strong>int x = 2337;</strong> </p>
+</blockquote>
+<p>在C语言中，这行代码的执行分为三步：</p>
+<p><strong>1. 为整数分配足够的内存</strong></p>
+<p><strong>2. 将值2337分配给该内存位置</strong></p>
+<p><strong>3. 将x指向该值</strong></p>
+<p>简化的内存视图如下：</p>
+<img alt="Xçåå­è¡¨ç¤ºï¼2337ï¼" class="has" height="111" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTEuMzM0ZmU3YzEzZTgyLnBuZw?x-oss-process=image/format,png" width="201">
+
+<blockquote>
+<p> 如果将x重新赋值：<strong>x = 2338;</strong> </p>
+</blockquote>
+<p>上面的代码为变量 x 重新分配了一个新值2338，从而<strong>覆盖</strong>了以前的值2337。这意味着在这里变量 x 是<strong>可变的</strong>。更新简化的内存视图如下：</p>
+<img alt="New In-Memory representation of X (2338)" class="has" height="112" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTIuMTRkNjM4ZGFmNzE4LnBuZw?x-oss-process=image/format,png" width="204">
+
+<p>x 的地址并没有变，<strong>这意味着在C语言中定义变量时, x 它代表的是一个内存位置</strong>，可以理解为一个空盒子，而关键字 int 就确定了这个盒子的大小，我们可以将值2337放进这个盒子，也可以将2338放进这个盒子，因为它们是 int 型的值。</p>
+<blockquote>
+<p> 此时再引入一个新的变量：<strong>int y = x;</strong> </p>
+</blockquote>
+<p> 这时会创建一个新的 int 型的盒子 y ，再把 x 中的值赋值过来。在内存中是这样：</p>
+<img alt="In-Memory representation of X (2338) and Y (2338)" class="has" height="121" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTMuNWFmZTExMGZhZjRkLnBuZw?x-oss-process=image/format,png" width="507">
+
+<p>两个变量除了值都是 2338 之外，其他并没有任何关系。任意更改其中一个变量的值，另一个不会受到任何影响。</p>
+<blockquote>
+<p> 例如更改 y 的值为 2339：<strong>y = 2339;</strong> </p>
+</blockquote>
+<p> <img alt="Updated representation of Y (2339)" class="has" height="120" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTQuNDVhNDVkYmJmYWFiLnBuZw?x-oss-process=image/format,png" width="502"></p>
+<h3 id="四、Python中定义对象的过程"><a href="#四、Python中定义对象的过程" class="headerlink" title="四、Python中定义对象的过程"></a>四、Python中定义对象的过程</h3><p>再看一下同样的代码，在Python中运行的情况。严格上来讲Python中的变量和C中的变量的意义不是等价的，Python中的变量或许叫做“名称”会更加贴切一点，看了下面的分析就会有所体会。</p>
+<blockquote>
+<p> 定义一个变量 x：<strong>x = 2337</strong> </p>
+</blockquote>
+<p>与C类似，上面的代码在执行过程中会分解为5步：</p>
+<p><strong>1. 创建一个PyObject</strong></p>
+<p><strong>2. 将PyObject的类型设置为整数型</strong></p>
+<p><strong>3. 将PyObject的值设置为2337</strong></p>
+<p><strong>4.创建一个变量（名称）x</strong></p>
+<p><strong>5.将 x 指向新建的PyObject</strong></p>
+<p><strong>6.将该PyObject的引用计数加 1</strong></p>
+<p>简化的内存视图如下：</p>
+<img alt="Python In-Memory representation of X (2337)" class="has" height="159" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkxLjJiNmU1ZjhlNWJjOS5wbmc?x-oss-process=image/format,png" width="391">
+
+<blockquote>
+<p>  如果将x重新赋值：<strong>x = 2338</strong> </p>
+</blockquote>
+<p> 上面这行代码在Python中的执行过程和在C中有很大不同，具体过程是这样：</p>
+<p><strong>1. 创建一个新的PyObject</strong></p>
+<p><strong>2. 将PyObject的类型设置为整数型</strong></p>
+<p><strong>3. 将PyObject的值设置为2338</strong></p>
+<p><strong>4.将 x 指向新的PyObject</strong></p>
+<p><strong>5.将新的PyObject的引用计数加 1</strong></p>
+<p><strong>6.将旧的PyObject的引用计数减 1</strong></p>
+<p>内存中的情况如下：</p>
+<img alt="Python Name Pointing to new object (2338)" class="has" height="347" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkyLjk5YmI0MzJjMzQzMi5wbmc?x-oss-process=image/format,png" width="407">
+
+<p>引用计数位为0的原对象，将会被Python的内存管理机制销毁。这说明 x 它不是一个空盒子。</p>
+<blockquote>
+<p> 如果是这样呢：<strong>y = x</strong>  </p>
+</blockquote>
+<p> 在内存中会新建一个新名称（变量），但不用创建一个新对象，原来对象的引用计数变成了 2：</p>
+<img alt="X and Y Names pointing to 2338" class="has" height="354" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkzXzEuZWE0MzQ3MWQzYmY2LnBuZw?x-oss-process=image/format,png" width="415">
+
+<p> 现在 x 和 y 都指向同一个对象，但是他们还是不可改变对象。</p>
+<blockquote>
+<p> 比如如果执行： <strong>y += 1</strong> </p>
+</blockquote>
+<p> 这和执行 y = 2339 的过程是一样的：</p>
+<img alt="x name and y name different objects" class="has" height="285" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnk0LjBhMTVlODQxNWExNS5wbmc?x-oss-process=image/format,png" width="521">
+
+<p> 这样看来，我们在Python中不是新建变量，而是新建名称并绑定到变量，所以说Python中的变量和C中的变量的意义不是等价的。当然这只是不可变对象的情况，如果 x, y 是 list 这种类型可变对象，上面的代码改为：</p>
+<blockquote>
+<p> x = [1] # 新建一个PyObject1,名称为x，值为 [1],引用计数为 1<br> x = [2] # 新建一个PyObject2,名称x指向PyObject2,值为 [2],引用计数为1,PyObject1引用计数为0(回收)<br> y = x   # 新建一个名称y,指向PyObject2，值为 [2],引用计数改为 2<br> y.append(3) # PyObject2的值改为 [2,3],名称x和y依然都指向PyObject2,引用计数还是2 </p>
+</blockquote>
+<p>前三行代码执行时，内存情况和不可变对象是一样的，但是最后一行执行时，将不会新建一个新的对象，因为 list 是可变对象，它可以对象的值改成[2,3] , id还是原来的id（其实这里的id和C语言中的地址也不是完全等价的，只是类似）。这就是Python中可变对象和不可变对象的不同之处。</p>
+<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h3><p>综上所述，由Python中的两个例子产生Python中是否像C语言一样也有指针的疑惑，研究了Python中可变对象和不可变对象的区别，接着对比C语言和Python在创建变量时的不同。我以前总是想把Python和C语言联系起来，总是想将C语言中已有的定义和用法套用在Python上，这样虽然方便理解，但是也会产生许多困惑。随着对Python的底层探究地越来越多，我越来越发现Python中有许多新的东西，不能将它们简单地等价于C语言中已有的术语。</p>
+<p>回到最开始的问题，Python中有“指针”吗？我的理解是，如果此处的指针是指C语言中的指针，那么答案是没有，如果这里的指针指的是C语言中的指针思想，那么答案是有。</p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
+<li>Pointers in Python: What’s the Point? (Logan Jones) :<a target="_blank" rel="noopener" href="https://realpython.com/pointers-in-python/#real-pointers-with-ctypes">https://realpython.com/pointers-in-python/#real-pointers-with-ctypes</a></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python%E6%8C%87%E9%92%88/" rel="tag">Python指针</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E5%8E%9F%E7%90%86/" rel="tag">python原理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1/" rel="tag">不可变对象</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1/" rel="tag">可变对象</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2019/12/08/Golang%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E8%A7%84%E5%AE%9A%E5%92%8C%E7%89%B9%E6%80%A7/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Golang学习笔记（一）——那些“奇怪”的规定和特性
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/08/04/%E5%BD%BB%E5%BA%95%E5%BC%84%E6%87%82Python%E4%B8%AD%E7%9A%84GIL%E9%94%81/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">彻底弄懂Python中的GIL锁</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "zy6yBRj9KkWO2XxsT94n1DIW-gzGzoHsz",
+    app_key: "auroBE2PQXkQ05CLi30SFv92",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+  
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> 杰克小麻雀
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/favicon.ico" alt="半亩方塘"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+<script type="text/javascript">
+if(!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)){
+  document.write('<script type="text/javascript" src="/js/FunnyTitle.js"><\/script>');
+  document.write('<script type="text/javascript" src="/js/snow.js"><\/script>');
+}
+</script>
+</html>

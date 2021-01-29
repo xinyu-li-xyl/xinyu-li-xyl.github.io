@@ -78,7 +78,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">6.2k</span>
+            <span class="post-count">6.3k</span>
         </span>
     </span>
 
@@ -102,7 +102,10 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p><strong>目录</strong></p>
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/106755148">https://blog.csdn.net/yushuaigee/article/details/106755148</a></p>
+</blockquote>
+<p><strong>目录</strong></p>
 <p><a href="#%E7%AC%AC1~22%E8%A1%8C%20%E6%A8%A1%E5%9D%97%E6%95%B4%E4%BD%93%E6%B3%A8%E9%87%8A%E3%80%81nt%E4%B8%8Eposix">第1~22行 模块整体注释、nt与posix</a></p>
 <p><a href="#%E7%AC%AC24~46%E8%A1%8C%20%E6%A8%A1%E5%9D%97%E5%BC%95%E5%85%A5%E3%80%81_exists%E6%96%B9%E6%B3%95%E3%80%81_get_exports_list%E6%96%B9%E6%B3%95">第24~46行 模块引入、_exists方法、_get_exports_list方法</a></p>
 <p><a href="#%E7%AC%AC48~97%E8%A1%8C%20%E6%A0%B9%E6%8D%AE%E7%B3%BB%E7%BB%9F%E4%B8%8D%E5%90%8C%E5%AF%BC%E5%85%A5%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E5%B1%9E%E6%80%A7">第48~97行 根据系统不同导入不同的方法和属性</a></p>
@@ -114,8 +117,7 @@
 <p><a href="#%E7%AC%AC280~421%E8%A1%8C%20walk%E2%80%94%E2%80%94%E7%9B%AE%E5%BD%95%E6%A0%91%E7%94%9F%E6%88%90%E5%99%A8">第280~421行 walk——目录树生成器</a></p>
 <p><a href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%E2%80%A6%E2%80%A6">未完待续……</a></p>
 <p>os模块包含了一些与操作系统相关的函数接口，而且它是支持跨平台的，它封装了 nt.py(windows) 和 posix.py (类Unix)两个模块的接口，而后面两个模块是由C语言实现的、直接和系统交互的底层接口。也就是说os模块能够处理平台间的差异问题，使得编写好的程序无需做任何改动就能在不同的平台上运行。如果想要查看os模块的所有内容，可以使用<code>dir(os)</code>方法查看。</p>
-<img alt="" height="260" src="https://img-blog.csdnimg.cn/20200529172306851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="923">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200529172306851.png" alt="20200529172306851.png"></p>
 <p>可以看到os模块中有这么多属性和方法，这些都是可以通过“os.”访问的。因为os模块是使用纯Python实现的标准库，所以在Python安装目录中也可以找到os模块的源码。打开Python安装目录下 \Lib\os.py 文件，或者源码目录下 \Lib\os.py 文件，就可以查看os模块的源码了。整个代码看下来，os.py 主要是将底层接口进行了一层封装，不知道其他标准库是不是也是这样。</p>
 <p>以下标题中的行数是与我所用的3.8.4版本os.py文件真实的行数对应的，而分析文字部分所说的行数，是对应截取的代码段的行数，这样比较方便看。</p>
 <h3 id="第1-22行-模块整体注释、nt与posix"><a href="#第1-22行-模块整体注释、nt与posix" class="headerlink" title="第1~22行 模块整体注释、nt与posix"></a>第1~22行 模块整体注释、nt与posix</h3><p>首先是第1行到第22行，这是一段整个模块的注释。</p>

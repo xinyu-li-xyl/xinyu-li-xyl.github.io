@@ -102,7 +102,10 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>刚学习python时，我关注了许多介绍python的公众号，也经常会在头条和知乎上收到关于python的文章的推送。在这些文章的评论区中，我经常会看到这样的说法：“Python是垃圾语言，先把GIL解决再说吧”，“又在吹Python，GIL不解决我永远不用Python”。刚开始，我也没去关注。后来Python用的越来越多，我不禁纳闷儿，我没感觉到GIL锁在使用python过程中有什么影响啊，事实上我根本感受不到它的存在，怎么会有这么多人因为GIL对python做出如此极端的评价？于是我决定研究一下GIL，看看这些人究竟是因为将Python的性能发挥到了极限，还是因为他们是一些Python的误(wu)解(nao)者(pen)。</p>
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/86537474">https://blog.csdn.net/yushuaigee/article/details/86537474</a></p>
+</blockquote>
+<p>刚学习python时，我关注了许多介绍python的公众号，也经常会在头条和知乎上收到关于python的文章的推送。在这些文章的评论区中，我经常会看到这样的说法：“Python是垃圾语言，先把GIL解决再说吧”，“又在吹Python，GIL不解决我永远不用Python”。刚开始，我也没去关注。后来Python用的越来越多，我不禁纳闷儿，我没感觉到GIL锁在使用python过程中有什么影响啊，事实上我根本感受不到它的存在，怎么会有这么多人因为GIL对python做出如此极端的评价？于是我决定研究一下GIL，看看这些人究竟是因为将Python的性能发挥到了极限，还是因为他们是一些Python的误(wu)解(nao)者(pen)。</p>
 <h3 id="一、初识GIL"><a href="#一、初识GIL" class="headerlink" title="一、初识GIL"></a>一、初识GIL</h3><p>GIL，全称 Global Interpreter Lock ，全局解释锁。下面是<a target="_blank" rel="noopener" href="https://wiki.python.org/moin/GlobalInterpreterLock">官方解释</a>中第一段：</p>
 <blockquote>
 <p> In CPython, the <strong>global interpreter lock</strong>, or <strong>GIL</strong>, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.) </p>
@@ -213,7 +216,7 @@
    
   <nav class="article-nav">
     
-      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88%20/" class="article-nav-link">
+      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           

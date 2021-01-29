@@ -78,7 +78,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">2k</span>
+            <span class="post-count">1.9k</span>
         </span>
     </span>
 
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">9 分钟</span>
+            <span class="post-count">8 分钟</span>
         </span>
     </span>
 </div>
@@ -102,20 +102,13 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p><strong>目录</strong></p>
-<p><a href="#main-toc">一、强制类型转换</a></p>
-<p><a href="#2.strconv%E5%8C%85%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2">二、 strconv包：字符串和数值类型的相互转换</a></p>
-<p><a href="#1.%20Itoa()%EF%BC%9A%E6%95%B4%E5%9E%8B%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%C2%A0%C2%A0integer%C2%A0to%20alphanumeric">1. Itoa()：整型转字符串  integer to alphanumeric</a></p>
-<p><a href="#%C2%A02.%20Atoi()%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%95%B4%E5%9E%8B%C2%A0alphanumeric%20to%20integer">2. Atoi()：字符串转整型 alphanumeric to integer</a></p>
-<p><a href="#%C2%A03.%C2%A0Parse%20%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0(str%E8%BD%AC%E5%85%B6%E4%BB%96):%C2%A0ParseBool()%E3%80%81ParseInt()%E3%80%81ParseUint()%E3%80%81ParseFloat()">3. Parse 系列函数(str转其他): ParseBool()、ParseInt()、ParseUint()、ParseFloat()</a></p>
-<p><a href="#4.Format%20%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0(%E5%85%B6%E4%BB%96%E8%BD%ACstr):%C2%A0FormatBool()%E3%80%81FormatInt()%E3%80%81FormatUint()%E3%80%81FormatFloat()%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B">4.Format 系列函数(其他转str): FormatBool()、FormatInt()、FormatUint()、FormatFloat()</a></p>
-<p><a href="#5.Append%C2%A0%E7%B3%BB%E5%88%97%E5%87%BD%E6%95%B0(%E5%85%B6%E4%BB%96%E8%BD%ACstr%E5%90%8E%E5%8A%A0%E5%88%B0%E5%88%87%E7%89%87%E4%B8%AD)%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B:%C2%A0AppendBool()%E3%80%81AppendFloat()%E3%80%81AppendInt()%E3%80%81AppendUint()">5.Append 系列函数(其他转str后加到切片中): AppendBool()、AppendFloat()、AppendInt()、AppendUint()</a></p>
+  <blockquote>
+<p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/106305233">https://blog.csdn.net/yushuaigee/article/details/106305233</a></p>
+</blockquote>
 <h2 id="一、强制类型转换"><a href="#一、强制类型转换" class="headerlink" title="一、强制类型转换"></a><strong>一、强制类型转换</strong></h2><p>类似于其他语言，Go语言也支持强制类型转换：</p>
-<img alt="" height="123" src="https://img-blog.csdnimg.cn/20200523205009481.png" width="380">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200523205009481.png" alt="20200523205009481.png"></p>
 <p>但是只有相同底层类型的变量之间可以进行相互转换（如将 int16 和 int32 相互转换，float 类型和 int 类型相互转换），不同底层类型的变量相互转换时会引发编译错误（如 bool 类型和 int 类型，string 与 int 类型之间的转换）： </p>
-<img alt="" height="240" src="https://img-blog.csdnimg.cn/20200523200617332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l1c2h1YWlnZWU=,size_16,color_FFFFFF,t_70" width="378">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200523200617332.png" alt="20200523200617332.png"></p>
 <h2 id="二、-strconv包：字符串和数值类型的相互转换"><a href="#二、-strconv包：字符串和数值类型的相互转换" class="headerlink" title="二、 strconv包：字符串和数值类型的相互转换"></a><strong>二、 strconv包：字符串和数值类型的相互转换</strong></h2><p>如果需要string、int、int64、float 等数据类型之间的转换功能，可以使用标准包中的 strconv 包。</p>
 <p>strconv 包中常用的函数包括 <strong>Atoi()**、</strong>Itia()<strong>、</strong>parse** 系列函数、<strong>format **系列函数、</strong>append **系列函数等。</p>
 <h3 id="1-Itoa-：整型转字符串-integer-to-alphanumeric"><a href="#1-Itoa-：整型转字符串-integer-to-alphanumeric" class="headerlink" title="1. Itoa()：整型转字符串  integer to alphanumeric"></a><strong>1. Itoa()：整型转字符串  integer to alphanumeric</strong></h3><p>函数原型：func Itoa(i int) string    输入int，输出string</p>
