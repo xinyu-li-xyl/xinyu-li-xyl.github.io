@@ -106,18 +106,31 @@
 <p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/105140425">https://blog.csdn.net/yushuaigee/article/details/105140425</a></p>
 </blockquote>
 <p><strong>目录</strong></p>
-<p><a href="#%E4%B8%80%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AB%AF">一、服务端</a></p>
-<p><a href="#1.%C2%A0XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1. XML配置文件</a></p>
-<p><a href="#%C2%A02.%C2%A0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1"> 2. 服务端代码设计</a></p>
-<p><a href="#%E4%BA%8C%E3%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF">二、客户端</a></p>
-<p><a href="#1.%C2%A0XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1. XML配置文件</a></p>
-<p><a href="#2.%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1">2. 客户端代码设计</a></p>
-<p><a href="#%E4%B8%89%E3%80%81%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">三、运行效果</a></p>
-<p><a href="#1.%20%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">1. 程序目录结构</a></p>
-<p><a href="#2.%20%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">2. 服务端运行效果</a></p>
-<p><a href="#3.%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">3. 客户端运行效果</a></p>
-<p><a href="#%E5%9B%9B%E3%80%81%E6%94%B9%E8%BF%9B%E6%80%9D%E8%B7%AF">四、改进思路</a></p>
-<p><a href="#%E4%BA%94%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD">五、文件下载</a></p>
+<ul>
+<li><p><a href="#%E4%B8%80%E3%80%81%E6%9C%8D%E5%8A%A1%E7%AB%AF">一、服务端</a></p>
+<ul>
+<li><input disabled="" type="checkbox"> <a href="#1.%C2%A0XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1. XML配置文件</a></li>
+<li><input disabled="" type="checkbox"> <a href="#%C2%A02.%C2%A0%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1"> 2. 服务端代码设计</a></li>
+</ul>
+</li>
+<li><p><a href="#%E4%BA%8C%E3%80%81%E5%AE%A2%E6%88%B7%E7%AB%AF">二、客户端</a></p>
+<ul>
+<li><input disabled="" type="checkbox"> <a href="#1.%C2%A0XML%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1. XML配置文件</a></li>
+<li><input disabled="" type="checkbox"> <a href="#2.%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1">2. 客户端代码设计</a></li>
+</ul>
+</li>
+<li><p><a href="#%E4%B8%89%E3%80%81%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">三、运行效果</a></p>
+<ul>
+<li><input disabled="" type="checkbox"> <a href="#1.%20%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">1. 程序目录结构</a></li>
+<li><input disabled="" type="checkbox"> <a href="#2.%20%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">2. 服务端运行效果</a></li>
+<li><input disabled="" type="checkbox"> <a href="#3.%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C">3. 客户端运行效果</a></li>
+</ul>
+</li>
+<li><p><a href="#%E5%9B%9B%E3%80%81%E6%94%B9%E8%BF%9B%E6%80%9D%E8%B7%AF">四、改进思路</a></p>
+</li>
+<li><p><a href="#%E4%BA%94%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD">五、文件下载</a></p>
+</li>
+</ul>
 <p>软件客户端在发布新版本的时候，有时候只修改了几个文件，没必要让用户重新下载整个客户端再重新安装，同时也不应要求用户每次去手动下载更新的文件，再手动覆盖本地文件。这个时候需要设计一个自动升级机制，在某些条件触发时(比如软件启动的时候)自动查看是否有更新，如果有就将改变的内容下载下来，更新本地旧文件，再根据情况判断是否重启客户端。这个功能现在是桌面程序必备的功能，基本所有的客户端都有这个检查更新的功能。我曾经用Python实现过一个基于http下载的简易自动升级系统，可以独立运行、复用在不同的情景下。</p>
 <p>设计思路很简单：当有新版本需要发布时，将文件放在服务端，生成一个记录每个文件变化的配置文件。客户端本地也有一个记录文件信息的配置文件，客户端检查更新时，将服务端的配置文件下载下来，与本地配置文件进行比较，然后下载有变化的文件，覆盖本地文件（如果文件正在使用中，可能无法覆盖，这时候更新前应该先关闭正在运行的客户端），中间有Tkinter做的界面提示更新进度。更新结束后根据策略决定是否重启客户端。</p>
 <h2 id="一、服务端"><a href="#一、服务端" class="headerlink" title="一、服务端"></a>一、服务端</h2><p>服务端要做的事，首先是选择一个端口号，开启用于响应客户端下载的http服务。然后把指定的目录下的所有文件都扫描一遍，给每个文件记录一个版本号和最后修改日期，再生成一个总版本号，写在XML配置文件里。</p>

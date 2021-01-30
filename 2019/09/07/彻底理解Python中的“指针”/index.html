@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    彻底理解Python中的&#34;指针&#34; |  半亩方塘
+    彻底理解Python中的“指针” |  半亩方塘
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -48,7 +48,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-彻底理解Python中的 指针"
+  id="post-彻底理解Python中的“指针”"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -59,14 +59,14 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  彻底理解Python中的&#34;指针&#34;
+  彻底理解Python中的“指针”
 </h1>
  
 
     </header>
      
     <div class="article-meta">
-      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88/" class="article-date">
+      <a href="/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%E2%80%9C%E6%8C%87%E9%92%88%E2%80%9D/" class="article-date">
   <time datetime="2019-09-08T06:11:59.000Z" itemprop="datePublished">2019-09-07</time>
 </a> 
   <div class="article-category">
@@ -111,25 +111,25 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --coding=utf-8--</span></span><br><span class="line"><span class="comment"># 第一个例子</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：将参数发送出去（这里简化为打印）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;send: &#x27;</span>, param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list删掉最后一个元素发送出去，也就是[&#x27;a&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun1</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun1...&#x27;</span>)</span><br><span class="line">    param.pop()</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list增加一个元素&#x27;c&#x27;发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun2</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun2...&#x27;</span>)</span><br><span class="line">    param.append(<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun3</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun3...&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_list = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">    fun1(test_list)</span><br><span class="line">    fun2(test_list)</span><br><span class="line">    fun3(test_list)</span><br></pre></td></tr></table></figure>
 <p>我预期的结果为：</p>
 <blockquote>
-<p> run fun1…<br> send:  [‘a’]<br> run fun2…<br> send:  [‘a’, ‘b’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘b’] </p>
+<p>run fun1…<br>send:  [‘a’]<br>run fun2…<br>send:  [‘a’, ‘b’, ‘c’]<br>run fun3…<br>send:  [‘a’, ‘b’] </p>
 </blockquote>
 <p>实际的结果为：</p>
 <blockquote>
-<p> run fun1…<br> send:  [‘a’]<br> run fun2…<br> send:  [‘a’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘c’] </p>
+<p>run fun1…<br>send:  [‘a’]<br>run fun2…<br>send:  [‘a’, ‘c’]<br>run fun3…<br>send:  [‘a’, ‘c’] </p>
 </blockquote>
-<p> 按照代码表面来理解，三个函数只是对传进来的“形参”param进行了改变，对原来的“实参”test_list并没有影响，所以每个函数传进去的test_list应该都是 [‘a’, ‘b’]。可是从结果来看，每个函数里的“形参”被改变后，外面的“实参”也跟着改变了。在原来的代码基础上加几条打印，可以看到就是这样。</p>
+<p> 按照代码表面来理解，三个函数只是对传进来的“形参” <code>param </code>进行了改变，对原来的“实参”<code>test_list</code>并没有影响，所以每个函数传进去的<code>test_list</code>应该都是<code> [&#39;a&#39;, &#39;b&#39;]</code>。可是从结果来看，每个函数里的“形参”被改变后，外面的“实参”也跟着改变了。在原来的代码基础上加几条打印，可以看到就是这样。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_list = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun1(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun2(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br><span class="line">    fun3(test_list)</span><br><span class="line">    print(<span class="string">&#x27;test_list:&#x27;</span>, test_list)</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p> test_list: [‘a’, ‘b’]<br> run fun1…<br> send:  [‘a’]<br> test_list: [‘a’]<br> run fun2…<br> send:  [‘a’, ‘c’]<br> test_list: [‘a’, ‘c’]<br> run fun3…<br> send:  [‘a’, ‘c’]<br> test_list: [‘a’, ‘c’] </p>
+<p>test_list: [‘a’, ‘b’]<br>run fun1…<br>send:  [‘a’]<br>test_list: [‘a’]<br>run fun2…<br>send:  [‘a’, ‘c’]<br>test_list: [‘a’, ‘c’]<br>run fun3…<br>send:  [‘a’, ‘c’]<br>test_list: [‘a’, ‘c’] </p>
 </blockquote>
-<p>所以上面例子中三个函数里的param和test_list其实是一个对象，fun1里的pop和fun2里的append都是操作的同一个变量(对象)，也就是说传递到三个函数中的参数是test_list的“地址”。类似C语言中，函数的参数为指针类型。</p>
+<p>所以上面例子中三个函数里的<code>param</code>和<code>test_list</code>其实是一个对象，fun1里的pop和fun2里的append都是操作的同一个变量(对象)，也就是说传递到三个函数中的参数是<code>test_list</code>的“地址”。类似C语言中，函数的参数为指针类型。</p>
 <p> 第二个例子：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --coding=utf-8--</span></span><br><span class="line"><span class="comment"># 第二个例子</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：将参数发送出去（这里简化为打印）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;send: &#x27;</span>, param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value的值加上1发送出去，也就是2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun1</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun1...&#x27;</span>)</span><br><span class="line">    param += <span class="number">1</span></span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value的值减去1发送出去，也就是0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun2</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun2...&#x27;</span>)</span><br><span class="line">    param -= <span class="number">1</span></span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_value发送出去，也就是1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun3</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun3...&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_value = <span class="number">1</span></span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun1(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun2(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br><span class="line">    fun3(test_value)</span><br><span class="line">    <span class="comment"># print(&#x27;test_value:&#x27;, test_value)</span></span><br></pre></td></tr></table></figure>
 <p>实际输出结果：</p>
 <blockquote>
-<p> run fun1…<br> send:  2<br> run fun2…<br> send:  0<br> run fun3…<br> send:  1 </p>
+<p>run fun1…<br>send:  2<br>run fun2…<br>send:  0<br>run fun3…<br>send:  1 </p>
 </blockquote>
-<p> 这次的结果和上次不太一样，结果表明三个函数里的param和test_value并不是一个对象，fun1里的加1和fun2里的减1操作之后，并没有影响test_value的值，也就是说传递到三个函数中的参数是test_list的“值”(的拷贝)。那么什么时候传的是指针，什么时候传的是值呢？其实只要了解一下Python中创建对象的具体过程，问题就迎刃而解了。</p>
+<p> 这次的结果和上次不太一样，结果表明三个函数里的<code>param</code>和<code>test_value</code>并不是一个对象，fun1里的加1和<strong>fun2</strong>里的减1操作之后，并没有影响<code>test_value</code>的值，也就是说传递到三个函数中的参数是<code>test_list</code>的“值”(的拷贝)。那么什么时候传的是指针，什么时候传的是值呢？其实只要了解一下Python中创建对象的具体过程，问题就迎刃而解了。</p>
 <h3 id="二、Python中的不可变对象和可变对象"><a href="#二、Python中的不可变对象和可变对象" class="headerlink" title="二、Python中的不可变对象和可变对象"></a>二、Python中的不可变对象和可变对象</h3><p>众所周知，Python中一切皆对象，每个对象至少包含三个数据：引用计数、类型和值。引用计数用于Python的GC机制，类型用于在CPython层运行时保证类型安全性，值就是对象关联的实际值。</p>
 <p>Python对象分为不可变对象和可变对象。可变对象可以修改，上面第一个例子中的test_list（list类型）就属于可变对象，不可变对象无法更改，类似C语言中加了const修饰，上面第二个例子中的test_value（int类型）就属于不可变对象。</p>
 <p><strong>不可变对象：int(整形)、str(字符串)、float(浮点型)、tuple(元组)</strong></p>
@@ -148,29 +148,26 @@
 <p><strong>2. 将值2337分配给该内存位置</strong></p>
 <p><strong>3. 将x指向该值</strong></p>
 <p>简化的内存视图如下：</p>
-<img alt="Xçåå­è¡¨ç¤ºï¼2337ï¼" class="has" height="111" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTEuMzM0ZmU3YzEzZTgyLnBuZw?x-oss-process=image/format,png" width="201">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/zZTgyLnBuZ.png" alt="zZTgyLnBuZ.png"></p>
 <blockquote>
 <p> 如果将x重新赋值：<strong>x = 2338;</strong> </p>
 </blockquote>
 <p>上面的代码为变量 x 重新分配了一个新值2338，从而<strong>覆盖</strong>了以前的值2337。这意味着在这里变量 x 是<strong>可变的</strong>。更新简化的内存视图如下：</p>
-<img alt="New In-Memory representation of X (2338)" class="has" height="112" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTIuMTRkNjM4ZGFmNzE4LnBuZw?x-oss-process=image/format,png" width="204">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/mNzE4LnBuZ.png" alt="mNzE4LnBuZ.png"></p>
 <p>x 的地址并没有变，<strong>这意味着在C语言中定义变量时, x 它代表的是一个内存位置</strong>，可以理解为一个空盒子，而关键字 int 就确定了这个盒子的大小，我们可以将值2337放进这个盒子，也可以将2338放进这个盒子，因为它们是 int 型的值。</p>
 <blockquote>
 <p> 此时再引入一个新的变量：<strong>int y = x;</strong> </p>
 </blockquote>
 <p> 这时会创建一个新的 int 型的盒子 y ，再把 x 中的值赋值过来。在内存中是这样：</p>
-<img alt="In-Memory representation of X (2338) and Y (2338)" class="has" height="121" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTMuNWFmZTExMGZhZjRkLnBuZw?x-oss-process=image/format,png" width="507">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/hZjRkLnBuZ.png" alt="hZjRkLnBuZ.png"></p>
 <p>两个变量除了值都是 2338 之外，其他并没有任何关系。任意更改其中一个变量的值，另一个不会受到任何影响。</p>
 <blockquote>
 <p> 例如更改 y 的值为 2339：<strong>y = 2339;</strong> </p>
 </blockquote>
-<p> <img alt="Updated representation of Y (2339)" class="has" height="120" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9jX21lbW9yeTQuNDVhNDVkYmJmYWFiLnBuZw?x-oss-process=image/format,png" width="502"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/mYWFiLnBuZ.png" alt="mYWFiLnBuZ.png"></p>
 <h3 id="四、Python中定义对象的过程"><a href="#四、Python中定义对象的过程" class="headerlink" title="四、Python中定义对象的过程"></a>四、Python中定义对象的过程</h3><p>再看一下同样的代码，在Python中运行的情况。严格上来讲Python中的变量和C中的变量的意义不是等价的，Python中的变量或许叫做“名称”会更加贴切一点，看了下面的分析就会有所体会。</p>
 <blockquote>
-<p> 定义一个变量 x：<strong>x = 2337</strong> </p>
+<p>  定义一个变量 x：<strong>x = 2337</strong> </p>
 </blockquote>
 <p>与C类似，上面的代码在执行过程中会分解为5步：</p>
 <p><strong>1. 创建一个PyObject</strong></p>
@@ -180,8 +177,7 @@
 <p><strong>5.将 x 指向新建的PyObject</strong></p>
 <p><strong>6.将该PyObject的引用计数加 1</strong></p>
 <p>简化的内存视图如下：</p>
-<img alt="Python In-Memory representation of X (2337)" class="has" height="159" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkxLjJiNmU1ZjhlNWJjOS5wbmc?x-oss-process=image/format,png" width="391">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/NWJjOS5wbm.png" alt="NWJjOS5wbm.png"></p>
 <blockquote>
 <p>  如果将x重新赋值：<strong>x = 2338</strong> </p>
 </blockquote>
@@ -193,25 +189,22 @@
 <p><strong>5.将新的PyObject的引用计数加 1</strong></p>
 <p><strong>6.将旧的PyObject的引用计数减 1</strong></p>
 <p>内存中的情况如下：</p>
-<img alt="Python Name Pointing to new object (2338)" class="has" height="347" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkyLjk5YmI0MzJjMzQzMi5wbmc?x-oss-process=image/format,png" width="407">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/MzQzMi5wbm.png" alt="MzQzMi5wbm.png"></p>
 <p>引用计数位为0的原对象，将会被Python的内存管理机制销毁。这说明 x 它不是一个空盒子。</p>
 <blockquote>
 <p> 如果是这样呢：<strong>y = x</strong>  </p>
 </blockquote>
 <p> 在内存中会新建一个新名称（变量），但不用创建一个新对象，原来对象的引用计数变成了 2：</p>
-<img alt="X and Y Names pointing to 2338" class="has" height="354" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnkzXzEuZWE0MzQ3MWQzYmY2LnBuZw?x-oss-process=image/format,png" width="415">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/zYmY2LnBuZ.png" alt="zYmY2LnBuZ.png"></p>
 <p> 现在 x 和 y 都指向同一个对象，但是他们还是不可改变对象。</p>
 <blockquote>
 <p> 比如如果执行： <strong>y += 1</strong> </p>
 </blockquote>
 <p> 这和执行 y = 2339 的过程是一样的：</p>
-<img alt="x name and y name different objects" class="has" height="285" src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9maWxlcy5yZWFscHl0aG9uLmNvbS9tZWRpYS9weV9tZW1vcnk0LjBhMTVlODQxNWExNS5wbmc?x-oss-process=image/format,png" width="521">
-
+<p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/NWExNS5wbm.png" alt="NWExNS5wbm.png"></p>
 <p> 这样看来，我们在Python中不是新建变量，而是新建名称并绑定到变量，所以说Python中的变量和C中的变量的意义不是等价的。当然这只是不可变对象的情况，如果 x, y 是 list 这种类型可变对象，上面的代码改为：</p>
 <blockquote>
-<p> x = [1] # 新建一个PyObject1,名称为x，值为 [1],引用计数为 1<br> x = [2] # 新建一个PyObject2,名称x指向PyObject2,值为 [2],引用计数为1,PyObject1引用计数为0(回收)<br> y = x   # 新建一个名称y,指向PyObject2，值为 [2],引用计数改为 2<br> y.append(3) # PyObject2的值改为 [2,3],名称x和y依然都指向PyObject2,引用计数还是2 </p>
+<p> <strong>x = [1]</strong>              # 新建一个 PyObject1 ,名称为x，值为 [1] ,引用计数为 1<br> <strong>x = [2]</strong>              # 新建一个 PyObject2 ,名称x指向 PyObject2 ,值为 [2],引用计数为1, PyObject1 引用计数为0(回收)<br> <strong>y = x</strong>                # 新建一个名称y,指向 PyObject2，值为 [2] ,引用计数改为 2<br> <strong>y.append(3)</strong>  # PyObject2 的值改为 [2,3],名称x和y依然都指向 PyObject2,引用计数还是2 </p>
 </blockquote>
 <p>前三行代码执行时，内存情况和不可变对象是一样的，但是最后一行执行时，将不会新建一个新的对象，因为 list 是可变对象，它可以对象的值改成[2,3] , id还是原来的id（其实这里的id和C语言中的地址也不是完全等价的，只是类似）。这就是Python中可变对象和不可变对象的不同之处。</p>
 <h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h3><p>综上所述，由Python中的两个例子产生Python中是否像C语言一样也有指针的疑惑，研究了Python中可变对象和不可变对象的区别，接着对比C语言和Python在创建变量时的不同。我以前总是想把Python和C语言联系起来，总是想将C语言中已有的定义和用法套用在Python上，这样虽然方便理解，但是也会产生许多困惑。随着对Python的底层探究地越来越多，我越来越发现Python中有许多新的东西，不能将它们简单地等价于C语言中已有的术语。</p>
@@ -283,7 +276,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%20%E6%8C%87%E9%92%88/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2019/09/07/%E5%BD%BB%E5%BA%95%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84%E2%80%9C%E6%8C%87%E9%92%88%E2%80%9D/" alt="微信分享二维码">
     </div>
 </div>
 
