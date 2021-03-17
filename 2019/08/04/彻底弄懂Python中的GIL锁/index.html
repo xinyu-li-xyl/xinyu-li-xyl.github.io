@@ -106,7 +106,7 @@
 <p>作者: 杰克小麻雀<br>原文链接: <a target="_blank" rel="noopener" href="https://blog.csdn.net/yushuaigee/article/details/86537474">https://blog.csdn.net/yushuaigee/article/details/86537474</a></p>
 </blockquote>
 <p>刚学习python时，我关注了许多介绍python的公众号，也经常会在头条和知乎上收到关于python的文章的推送。在这些文章的评论区中，我经常会看到这样的说法：“Python是垃圾语言，先把GIL解决再说吧”，“又在吹Python，GIL不解决我永远不用Python”。刚开始，我也没去关注。后来Python用的越来越多，我不禁纳闷儿，我没感觉到GIL锁在使用python过程中有什么影响啊，事实上我根本感受不到它的存在，怎么会有这么多人因为GIL对python做出如此极端的评价？于是我决定研究一下GIL，看看这些人究竟是因为将Python的性能发挥到了极限，还是因为他们是一些Python的误(wu)解(nao)者(pen)。</p>
-<h3 id="一、初识GIL"><a href="#一、初识GIL" class="headerlink" title="一、初识GIL"></a>一、初识GIL</h3><p>GIL，全称 Global Interpreter Lock ，全局解释锁。下面是<a target="_blank" rel="noopener" href="https://wiki.python.org/moin/GlobalInterpreterLock">官方解释</a>中第一段：</p>
+<h3 id="初识GIL"><a href="#初识GIL" class="headerlink" title="初识GIL"></a>初识GIL</h3><p>GIL，全称 Global Interpreter Lock ，全局解释锁。下面是<a target="_blank" rel="noopener" href="https://wiki.python.org/moin/GlobalInterpreterLock">官方解释</a>中第一段：</p>
 <blockquote>
 <p> In CPython, the <strong>global interpreter lock</strong>, or <strong>GIL</strong>, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.) </p>
 </blockquote>
@@ -118,18 +118,18 @@
 <p>不过要明确一点，GIL不是Python的特性，它是Python的C解释器在实现的时候引入的特性，不是说我们的Python代码写出来就自带了GIL，而是在执行时，CPython解释器在解释多线程程序时会受到GIL锁的影响。 </p>
 <p>首先说什么是解释器，我们知道像Python这样的动态语言，是边解释边执行的。我们写的源代码在运行时要先被转换成字节码，然后再转换为机器码，CPU才能执行。这个源代码–&gt;字节码–&gt;机器码的过程，就是Python解释器帮我们完成的。其实和C语言这种静态语言程序写好之后的编译链接的过程差不多，不过C语言只需要一次，而python是每次执行都要来一遍。那什么是Python的C解释器呢？因为Python的解释器有很多种，用C语言实现的就叫做CPython。此外还有IPython，PyPy，Jython，IronPython等，这么多类型有啥区别，下篇博客再做研究。而使用最广泛的、我们绝大多数使用的都是CPython，因为我们从官网下载python自带的解释器就是CPython，这就是为什么大家都把GIL作为诟病Python的理由。</p>
 <p>我在想，既然有的解释器不存在GIL，那它们的流行程度为什么没有超过CPyhon呢？我猜想有两种可能，一是GIL锁这个缺点影响并不大，二就是因为CPython有着其他解释器无法替代的更多优点。到底是哪一个？下面继续研究。</p>
-<h3 id="二、引入GIL的原因"><a href="#二、引入GIL的原因" class="headerlink" title="二、引入GIL的原因"></a>二、引入GIL的原因</h3><p>为什么说GIL的产生是历史原因？因为多线程编程是随着多核CPU发展而发展的，而Python第一版出来的时候还是单核CPU的时代，所以都是在单核CPU的前提下设计的。任由Guido这样的神人也不会想到多核CPU会发展的如此之快，再说当时Python的产生也是个“意外”，Guido也不会想到他1989年为了打发圣诞节假期发明的一种编程语言需要好好设计一下多线程的部分，否则会影响2019年地球对面的程序员在使用这个语言做多线程编程的效率。</p>
+<h3 id="引入GIL的原因"><a href="#引入GIL的原因" class="headerlink" title="引入GIL的原因"></a>引入GIL的原因</h3><p>为什么说GIL的产生是历史原因？因为多线程编程是随着多核CPU发展而发展的，而Python第一版出来的时候还是单核CPU的时代，所以都是在单核CPU的前提下设计的。任由Guido这样的神人也不会想到多核CPU会发展的如此之快，再说当时Python的产生也是个“意外”，Guido也不会想到他1989年为了打发圣诞节假期发明的一种编程语言需要好好设计一下多线程的部分，否则会影响2019年地球对面的程序员在使用这个语言做多线程编程的效率。</p>
 <p>以下引用自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/SuKiWX/p/8804974.html">python中的GIL详解——背着吉他的王小可</a></p>
 <blockquote>
 <p> 为了利用多核，Python开始支持多线程。而解决多线程之间数据完整性和状态同步的最简单方法自然就是加锁。 于是有了GIL这把超级大锁，而当越来越多的代码库开发者接受了这种设定后，他们开始大量依赖这种特性（即默认python内部对象是thread-safe的，无需在实现时考虑额外的内存锁和同步操作）。<br> 慢慢的这种实现方式被发现是蛋疼且低效的。但当大家试图去拆分和去除GIL的时候，发现大量库代码开发者已经重度依赖GIL而非常难以去除了。有多难？做个类比，像MySQL这样的“小项目”为了把Buffer Pool Mutex这把大锁拆分成各个小锁也花了从5.5到5.6再到5.7多个大版为期近5年的时间，本且仍在继续。MySQL这个背后有公司支持且有固定开发团队的产品走的如此艰难，那又更何况Python这样核心开发和代码贡献者高度社区化的团队呢？<br> 所以简单的说GIL的存在更多的是历史原因。如果推到重来，多线程的问题依然还是要面对，但是至少会比目前GIL这种方式会更优雅。  </p>
 </blockquote>
-<h3 id="三、解决GIL？"><a href="#三、解决GIL？" class="headerlink" title="三、解决GIL？"></a>三、解决GIL？</h3><p>Python社区这么多大牛，不会没有人想过去解决这个问题，只是到现在没有找到比现有方案更加有效和优雅的方案。经过几天的查阅资料，我意识到GIL在某些情况下确实算作Python的一个缺陷，但仅仅是某些情况下，所以不能因为这个全盘而否定Python这门编程语言，事实上否定也没用了，因为它现在实在是太火了。</p>
+<h3 id="解决GIL？"><a href="#解决GIL？" class="headerlink" title="解决GIL？"></a>解决GIL？</h3><p>Python社区这么多大牛，不会没有人想过去解决这个问题，只是到现在没有找到比现有方案更加有效和优雅的方案。经过几天的查阅资料，我意识到GIL在某些情况下确实算作Python的一个缺陷，但仅仅是某些情况下，所以不能因为这个全盘而否定Python这门编程语言，事实上否定也没用了，因为它现在实在是太火了。</p>
 <p>我认为我们要认清事情的本质，不要谈GIL色变。作为编程语言的使用者，我们先分析自己的需求。</p>
 <p>首先，如果没有用到多线程编程，整个程序只需要串行执行，你完全不必在意GIL的存在，看看热闹就行了。</p>
 <p>其次，用到了多线程编程，但是对并行（同时做不同事情）没有要求，只是对并发（交替做不同事情）有要求。例如设想这样一个场景：一个服务器接收端，需要时刻监听发送端发送的消息，进行不同的操作，如果所做的操作需要耗时较长，这时如果只有一个线程，去执行耗时较长的操作时，会造成监听下一条消息的阻塞，这时候我们可以启动一个子线程去执行耗时的操作，同时主线程又继续监听下一条消息。这个情况下，我们受到GIL锁的影响不大，完全可以接受。</p>
 <p>再者，如果确实对并行要求比较高，那么Python还有用multiprocess（多进程）替代Thread可供选择。multiprocess库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。</p>
 <p>最后，你如果觉得无论如何Python也不能解决你的问题，它实在太影响程序的效率了，那么为什么不换一个语言呢，从来没有人说速度是Python的强项。编程语言只是一门工具，程序员才是工具的使用者，我们不能让工具限制人，而是要合理利用不同的工具来达到自己的目的。</p>
-<h3 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h3><p>最后总结，我的两个问题也得到了答案，首先听到Python就喷GIL肯定是不对的。为什么其他解释器无法替代CPython的地位，既是因为GIL锁这个缺点影响并没有想像的那么大，也是因为CPython有着其他解释器无法替代的更多优点。GIL锁由于历史局限性而存在，作为一个效率方面的缺陷，它正在被积极的解决，但毫无疑问的是它还将继续长期存在。联想到最近香港的新闻，这使我想起了我们国家的“一国两制”和“搁置争议”，虽然看起来后面带来了一些难题，但是这不能改变这是当时最富有智慧的解决办法的事实。竟然和GIL的问题有些许的异曲同工之妙。。。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>最后总结，我的两个问题也得到了答案，首先听到Python就喷GIL肯定是不对的。为什么其他解释器无法替代CPython的地位，既是因为GIL锁这个缺点影响并没有想像的那么大，也是因为CPython有着其他解释器无法替代的更多优点。GIL锁由于历史局限性而存在，作为一个效率方面的缺陷，它正在被积极的解决，但毫无疑问的是它还将继续长期存在。联想到最近香港的新闻，这使我想起了我们国家的“一国两制”和“搁置争议”，虽然看起来后面带来了一些难题，但是这不能改变这是当时最富有智慧的解决办法的事实。竟然和GIL的问题有些许的异曲同工之妙。。。</p>
 <p>参考链接：</p>
 <ul>
 <li>1. GlobalInterpreterLock：<a target="_blank" rel="noopener" href="https://wiki.python.org/moin/GlobalInterpreterLock">https://wiki.python.org/moin/GlobalInterpreterLock</a></li>

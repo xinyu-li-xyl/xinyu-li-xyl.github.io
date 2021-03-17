@@ -107,7 +107,7 @@
 </blockquote>
 <p>学过C，C++语言的同学都知道一个重要的概念——指针。</p>
 <p>Python中有指针的概念吗？我查了许多资料，没人认明确地说Python中有“指针”这一定义。在我看来，Python中虽然没有“指针”的定义，但是却随处可见“指针”的影子。不过这里的“指针”并不完全等同于c语言中的指针，只能是加引号的“指针”。</p>
-<h3 id="一、两个Python例子引发的思考"><a href="#一、两个Python例子引发的思考" class="headerlink" title="一、两个Python例子引发的思考"></a>一、两个Python例子引发的思考</h3><p>第一个例子：</p>
+<h3 id="两个Python例子引发的思考"><a href="#两个Python例子引发的思考" class="headerlink" title="两个Python例子引发的思考"></a>两个Python例子引发的思考</h3><p>第一个例子：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --coding=utf-8--</span></span><br><span class="line"><span class="comment"># 第一个例子</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：将参数发送出去（这里简化为打印）</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;send: &#x27;</span>, param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list删掉最后一个元素发送出去，也就是[&#x27;a&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun1</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun1...&#x27;</span>)</span><br><span class="line">    param.pop()</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list增加一个元素&#x27;c&#x27;发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun2</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun2...&#x27;</span>)</span><br><span class="line">    param.append(<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法预期功能：把test_list发送出去，也就是[&#x27;a&#x27;, &#x27;b&#x27;]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun3</span>(<span class="params">param</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;run fun3...&#x27;</span>)</span><br><span class="line">    send(param)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test_list = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]</span><br><span class="line">    fun1(test_list)</span><br><span class="line">    fun2(test_list)</span><br><span class="line">    fun3(test_list)</span><br></pre></td></tr></table></figure>
 <p>我预期的结果为：</p>
 <blockquote>
@@ -130,7 +130,7 @@
 <p>run fun1…<br>send:  2<br>run fun2…<br>send:  0<br>run fun3…<br>send:  1 </p>
 </blockquote>
 <p> 这次的结果和上次不太一样，结果表明三个函数里的<code>param</code>和<code>test_value</code>并不是一个对象，fun1里的加1和<strong>fun2</strong>里的减1操作之后，并没有影响<code>test_value</code>的值，也就是说传递到三个函数中的参数是<code>test_list</code>的“值”(的拷贝)。那么什么时候传的是指针，什么时候传的是值呢？其实只要了解一下Python中创建对象的具体过程，问题就迎刃而解了。</p>
-<h3 id="二、Python中的不可变对象和可变对象"><a href="#二、Python中的不可变对象和可变对象" class="headerlink" title="二、Python中的不可变对象和可变对象"></a>二、Python中的不可变对象和可变对象</h3><p>众所周知，Python中一切皆对象，每个对象至少包含三个数据：引用计数、类型和值。引用计数用于Python的GC机制，类型用于在CPython层运行时保证类型安全性，值就是对象关联的实际值。</p>
+<h3 id="Python中的不可变对象和可变对象"><a href="#Python中的不可变对象和可变对象" class="headerlink" title="Python中的不可变对象和可变对象"></a>Python中的不可变对象和可变对象</h3><p>众所周知，Python中一切皆对象，每个对象至少包含三个数据：引用计数、类型和值。引用计数用于Python的GC机制，类型用于在CPython层运行时保证类型安全性，值就是对象关联的实际值。</p>
 <p>Python对象分为不可变对象和可变对象。可变对象可以修改，上面第一个例子中的test_list（list类型）就属于可变对象，不可变对象无法更改，类似C语言中加了const修饰，上面第二个例子中的test_value（int类型）就属于不可变对象。</p>
 <p><strong>不可变对象：int(整形)、str(字符串)、float(浮点型)、tuple(元组)</strong></p>
 <p><strong>可变对象：dict(字典)、list(列表)、 set(集合）</strong></p>
@@ -140,7 +140,7 @@
 <p>同样str类型的v可以重新赋值，但是不能更改元素。这就类似于C语言中加了const修饰的数组，不能更改它的内容，但是你可以将原来指向它指针改为指向别人。</p>
 <p>可变对象的情形就不一样了，可以任意更改元素。ID不会变，直到重新赋值：</p>
 <p>         <img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20190906225303542.png" alt="20190906225303542.png"></p>
-<h3 id="三、C语言中定义变量的过程"><a href="#三、C语言中定义变量的过程" class="headerlink" title="三、C语言中定义变量的过程"></a>三、C语言中定义变量的过程</h3><blockquote>
+<h3 id="C语言中定义变量的过程"><a href="#C语言中定义变量的过程" class="headerlink" title="C语言中定义变量的过程"></a>C语言中定义变量的过程</h3><blockquote>
 <p> 例如：<strong>int x = 2337;</strong> </p>
 </blockquote>
 <p>在C语言中，这行代码的执行分为三步：</p>
@@ -165,7 +165,7 @@
 <p> 例如更改 y 的值为 2339：<strong>y = 2339;</strong> </p>
 </blockquote>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/mYWFiLnBuZ.png" alt="mYWFiLnBuZ.png"></p>
-<h3 id="四、Python中定义对象的过程"><a href="#四、Python中定义对象的过程" class="headerlink" title="四、Python中定义对象的过程"></a>四、Python中定义对象的过程</h3><p>再看一下同样的代码，在Python中运行的情况。严格上来讲Python中的变量和C中的变量的意义不是等价的，Python中的变量或许叫做“名称”会更加贴切一点，看了下面的分析就会有所体会。</p>
+<h3 id="Python中定义对象的过程"><a href="#Python中定义对象的过程" class="headerlink" title="Python中定义对象的过程"></a>Python中定义对象的过程</h3><p>再看一下同样的代码，在Python中运行的情况。严格上来讲Python中的变量和C中的变量的意义不是等价的，Python中的变量或许叫做“名称”会更加贴切一点，看了下面的分析就会有所体会。</p>
 <blockquote>
 <p>  定义一个变量 x：<strong>x = 2337</strong> </p>
 </blockquote>
@@ -207,7 +207,7 @@
 <p> <strong>x = [1]</strong>              # 新建一个 PyObject1 ,名称为x，值为 [1] ,引用计数为 1<br> <strong>x = [2]</strong>              # 新建一个 PyObject2 ,名称x指向 PyObject2 ,值为 [2],引用计数为1, PyObject1 引用计数为0(回收)<br> <strong>y = x</strong>                # 新建一个名称y,指向 PyObject2，值为 [2] ,引用计数改为 2<br> <strong>y.append(3)</strong>  # PyObject2 的值改为 [2,3],名称x和y依然都指向 PyObject2,引用计数还是2 </p>
 </blockquote>
 <p>前三行代码执行时，内存情况和不可变对象是一样的，但是最后一行执行时，将不会新建一个新的对象，因为 list 是可变对象，它可以对象的值改成[2,3] , id还是原来的id（其实这里的id和C语言中的地址也不是完全等价的，只是类似）。这就是Python中可变对象和不可变对象的不同之处。</p>
-<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h3><p>综上所述，由Python中的两个例子产生Python中是否像C语言一样也有指针的疑惑，研究了Python中可变对象和不可变对象的区别，接着对比C语言和Python在创建变量时的不同。我以前总是想把Python和C语言联系起来，总是想将C语言中已有的定义和用法套用在Python上，这样虽然方便理解，但是也会产生许多困惑。随着对Python的底层探究地越来越多，我越来越发现Python中有许多新的东西，不能将它们简单地等价于C语言中已有的术语。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>综上所述，由Python中的两个例子产生Python中是否像C语言一样也有指针的疑惑，研究了Python中可变对象和不可变对象的区别，接着对比C语言和Python在创建变量时的不同。我以前总是想把Python和C语言联系起来，总是想将C语言中已有的定义和用法套用在Python上，这样虽然方便理解，但是也会产生许多困惑。随着对Python的底层探究地越来越多，我越来越发现Python中有许多新的东西，不能将它们简单地等价于C语言中已有的术语。</p>
 <p>回到最开始的问题，Python中有“指针”吗？我的理解是，如果此处的指针是指C语言中的指针，那么答案是没有，如果这里的指针指的是C语言中的指针思想，那么答案是有。</p>
 <h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
 <li>Pointers in Python: What’s the Point? (Logan Jones) :<a target="_blank" rel="noopener" href="https://realpython.com/pointers-in-python/#real-pointers-with-ctypes">https://realpython.com/pointers-in-python/#real-pointers-with-ctypes</a></li>
