@@ -2185,7 +2185,7 @@
   </entry>
   <entry>
     <title>Python 相关文件常见的后缀名详解</title>
-    <url>/2020/12/02/Python%20%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E5%B8%B8%E8%A7%81%E7%9A%84%E5%90%8E%E7%BC%80%E5%90%8D%E8%AF%A6%E8%A7%A3/</url>
+    <url>/2021/05/02/Python%20%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6%E5%B8%B8%E8%A7%81%E7%9A%84%E5%90%8E%E7%BC%80%E5%90%8D%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<p>常见的 Python 文件后缀有：<code>py </code>、<code>pyc</code> 、<code>pyo</code>、 <code>pyi</code>、<code>pyw</code>、 <code>pyd </code>、 <code>pyx</code> 等。</p>
 <p>本文只介绍相对常见的一些后缀名，至于一些特别冷门的文件格式，例如一些文章提到的<code>pyz</code>、<code>pywz</code>、<code>rpy</code>、<code>pyde</code>、<code>pyp</code>、 <code>pyt</code>等，并没有进行研究。因为这些扩展名资料很少，网上搜到的文章似乎都是同一个出处，只是简单提了一句，说了等于没说。</p>
 <h3 id="py"><a href="#py" class="headerlink" title="py"></a>py</h3><p>最常见的 Python 源代码文件。</p>
