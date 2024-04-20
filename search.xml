@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
-  <entry>
-    <title>Golang学习笔记（一）——那些“奇怪”的规定和特性</title>
-    <url>/2019/12/08/Golang%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E8%A7%84%E5%AE%9A%E5%92%8C%E7%89%B9%E6%80%A7/</url>
+ <url>/饺子/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E9%82%A3%E4%BA%9B%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E8%A7%84%E5%AE%9A%E5%92%8C%E7%89%B9%E6%80%A7/</url  <entry>
+    <title>饺子</title>
+   >
     <content><![CDATA[<blockquote>
-<p>作者: 杰克小麻雀<br>原文链接: <a href="https://blog.csdn.net/yushuaigee/article/details/103444529">https://blog.csdn.net/yushuaigee/article/details/103444529</a></p>
+<p>作者 ：李新宇</p>
 </blockquote>
-<p>这几天看了一下Go语言的基础知识，还没有在项目中使用，所以还没体会到它的性能优势。而在学习基础用法部分时我最大的感受就是它的一些特性和规定很“奇怪”。以前听说Go语言声明变量时，类型关键字在变量名称后面就感觉怪怪的，没想到还有许多这样奇怪的地方（主要是和C、Python相比），在这里将这几周的学习内容和感受记录一下以备查阅。</p>
-<h3 id="1-去掉循环冗余括号"><a href="#1-去掉循环冗余括号" class="headerlink" title="1. 去掉循环冗余括号"></a>1. 去掉循环冗余括号</h3><p>C语言的数值循环：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> a = <span class="number">0</span>;a&lt;<span class="number">10</span>;a++)&#123;</span><br><span class="line">    <span class="comment">// 循环代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Go语言的数值循环：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> a := <span class="number">0</span>;a&lt;<span class="number">10</span>;a++&#123;</span><br><span class="line">    <span class="comment">// 循环代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>虽然这个括号确实没什么实际作用，但是Go语言中的循环的风格和C语言太像，没有那两个括号感觉怪怪的。 </p>
+<p>饺子，一种美味的传统美食，宛如一个个精致的小元宝，承载着丰富的文化内涵和独特的魅力。形态上，饺子圆润饱满，边缘整齐，精致可爱。面皮柔软而有弹性，厚度适中，既能包裹丰富的馅料，又不失口感的细腻。</p>
+<p>饺子的制作：</p>
+<p>制作过程更是充满了乐趣和仪式感。一家人围坐在一起，擀面、包馅，其乐融融。每一个饺子都融入了制作者的心意和情感。煮熟后的饺子，热气腾腾，香气扑鼻。轻轻咬上一口，馅料的鲜美瞬间在口中释放，汁水流淌，满口生香。面皮的嚼劲与馅料的美味相得益彰，带来丰富的口感层次。 </p>
 <h3 id="2-去掉表达式冗余括号"><a href="#2-去掉表达式冗余括号" class="headerlink" title="2. 去掉表达式冗余括号"></a>2. 去掉表达式冗余括号</h3><p>C语言的判断语句：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (表达式)&#123;</span><br><span class="line">    <span class="comment">// 表达式成立</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Go语言的判断语句：</p>
