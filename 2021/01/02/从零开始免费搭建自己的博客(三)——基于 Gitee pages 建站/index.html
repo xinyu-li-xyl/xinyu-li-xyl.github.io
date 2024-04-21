@@ -121,7 +121,7 @@
 <p>好消息是现在国内有和 GitHub 功能类似的 Gitee，中文名码云。之前也有注意到这个平台，当时以为他仅仅是山寨 GitHub 而已，肯定火不起来。没想到随着 GitHub 网络环境越来越差，下载个工程才几kb的速度，经常等了很久之后下载失败。有一次尝试了下将 GitHub 项目同步到 Gitee 再下载，速度直接起飞，真香。随着许多有影响力的项目加入了 Gitee ，一些大佬的博客也开始推荐使用码云了，使用的人也越来越多了。</p>
 <p>当然了，使用 Gitee Pages 相对于 GitHub Pages 网速是上来了，也有很多缺点。我在实际使用过程中遇到了许多DAN疼的地方，比如每次提交需要手动更新部署，以及大于1M图片登陆后可见等，我会在下面文章中用<strong>加粗</strong>字体指出。没办法，鱼和熊掌不可兼得( ╯▽╰)。准备在第八篇讲优化的文章中尝试一种完美解决方案(GitHub + CDN加速)。</p>
 <p>本篇文章介绍怎样利用 Gitee  提供的免费静态网页托管服务 Gitee Pages 建站。</p>
-<h2 id="一、-Gitee-Pages-简介"><a href="#一、-Gitee-Pages-简介" class="headerlink" title="一、 Gitee Pages 简介"></a>一、 Gitee Pages 简介</h2><p>上篇说了，GitHub 设计 Pages 功能是为了让用户能设计一个图文并茂的网页作为项目首页，提升新手友好度。那么Gitee为什么要提供网页托管服务呢？应该是同样的原因，或者说是因为 GitHub 有这个功能？( ╯▽╰)</p>
+<h2 id="一、-Gitee-Pages-简介"><a href="#一、-Gitee-Pages-简介" class="headerlink" title="一、 Gitee Pages 简介"></a>一、 Gitee Pages 简介</h2><p>上篇说了，GitHub 设计 Pages 功能是为了让用户能设计一个图文并茂的网页作为项目主页，提升新手友好度。那么Gitee为什么要提供网页托管服务呢？应该是同样的原因，或者说是因为 GitHub 有这个功能？( ╯▽╰)</p>
 <p><a target="_blank" rel="noopener" href="https://gitee.com/help/articles/4136">Gitee pages 官网</a> 的介绍：Gitee Pages 是一个免费的静态网页托管服务，您可以使用 Gitee Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用 Gitee 的 Pages服务。目前 Gitee Pages 支持 Jekyll、Hugo、Hexo编译静态资源。</p>
 <h2 id="二、Gitee-Pages-准备"><a href="#二、Gitee-Pages-准备" class="headerlink" title="二、Gitee Pages 准备"></a>二、Gitee Pages 准备</h2><p>在发布之前，要先准备好自己的 Gitee Pages 。</p>
 <p>Gitee Pages 仓库的创建方法和 GitHub 略有不同，官网的帮助文档提供了两种创建方法，第一种是直接在 Gitee 上创建仓库，第二种是直接把 GitHub 创建好的仓库同步过来。比如已经按照上一篇的方法在 GitHub 建立了博客，想在 Gitee 再搭建一次作为一个备份，可以直接用第二种方法同步过来。</p>

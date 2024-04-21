@@ -382,7 +382,7 @@
 <p>好消息是现在国内有和 GitHub 功能类似的 Gitee，中文名码云。之前也有注意到这个平台，当时以为他仅仅是山寨 GitHub 而已，肯定火不起来。没想到随着 GitHub 网络环境越来越差，下载个工程才几kb的速度，经常等了很久之后下载失败。有一次尝试了下将 GitHub 项目同步到 Gitee 再下载，速度直接起飞，真香。随着许多有影响力的项目加入了 Gitee ，一些大佬的博客也开始推荐使用码云了，使用的人也越来越多了。</p>
 <p>当然了，使用 Gitee Pages 相对于 GitHub Pages 网速是上来了，也有很多缺点。我在实际使用过程中遇到了许多DAN疼的地方，比如每次提交需要手动更新部署，以及大于1M图片登陆后可见等，我会在下面文章中用<strong>加粗</strong>字体指出。没办法，鱼和熊掌不可兼得( ╯▽╰)。准备在第八篇讲优化的文章中尝试一种完美解决方案(GitHub + CDN加速)。</p>
 <p>本篇文章介绍怎样利用 Gitee  提供的免费静态网页托管服务 Gitee Pages 建站。</p>
-<h2 id="一、-Gitee-Pages-简介"><a href="#一、-Gitee-Pages-简介" class="headerlink" title="一、 Gitee Pages 简介"></a>一、 Gitee Pages 简介</h2><p>上篇说了，GitHub 设计 Pages 功能是为了让用户能设计一个图文并茂的网页作为项目首页，提升新手友好度。那么Gitee为什么要提供网页托管服务呢？应该是同样的原因，或者说是因为 GitHub 有这个功能？( ╯▽╰)</p>
+<h2 id="一、-Gitee-Pages-简介"><a href="#一、-Gitee-Pages-简介" class="headerlink" title="一、 Gitee Pages 简介"></a>一、 Gitee Pages 简介</h2><p>上篇说了，GitHub 设计 Pages 功能是为了让用户能设计一个图文并茂的网页作为项目主页，提升新手友好度。那么Gitee为什么要提供网页托管服务呢？应该是同样的原因，或者说是因为 GitHub 有这个功能？( ╯▽╰)</p>
 <p><a href="https://gitee.com/help/articles/4136">Gitee pages 官网</a> 的介绍：Gitee Pages 是一个免费的静态网页托管服务，您可以使用 Gitee Pages 托管博客、项目官网等静态网页。如果您使用过 Github Pages 那么您会很快上手使用 Gitee 的 Pages服务。目前 Gitee Pages 支持 Jekyll、Hugo、Hexo编译静态资源。</p>
 <h2 id="二、Gitee-Pages-准备"><a href="#二、Gitee-Pages-准备" class="headerlink" title="二、Gitee Pages 准备"></a>二、Gitee Pages 准备</h2><p>在发布之前，要先准备好自己的 Gitee Pages 。</p>
 <p>Gitee Pages 仓库的创建方法和 GitHub 略有不同，官网的帮助文档提供了两种创建方法，第一种是直接在 Gitee 上创建仓库，第二种是直接把 GitHub 创建好的仓库同步过来。比如已经按照上一篇的方法在 GitHub 建立了博客，想在 Gitee 再搭建一次作为一个备份，可以直接用第二种方法同步过来。</p>
@@ -488,8 +488,8 @@
 <p>当前云计算如此流行，许多平台都提供了静态网页托管服务，其中最方便的当然是 GitHub Pages，只需要注册一个账号就可以使用。GitHub Pages的服务器毕竟在国外，如果觉得访问太慢，也可以选择国内功能相似的 Gitee Pages。</p>
 <p>本篇文章介绍怎样利用 GitHub 提供的免费静态网页托管服务 GitHub Pages 建站。</p>
 <h2 id="一、-GitHub-Pages-简介"><a href="#一、-GitHub-Pages-简介" class="headerlink" title="一、 GitHub Pages 简介"></a>一、 GitHub Pages 简介</h2><p>GitHub 是世界上最流行的软件源代码托管服务平台，为什么要提供网页托管服务呢？</p>
-<p>这是因为一个项目的主页如果只有源码，对新接触的人很不友好，不知从何处下手。虽然已经有了 readme.md 文件，但毕竟不如一个直观的网页来的直接。于是 GitHub 就设计了 Pages 功能，允许用户设计一个图文并茂的网页作为项目首页。</p>
-<p>虽然 GitHub Pages 的初衷是提供自定义的项目首页，但是它的玩法不止这一个。因此许多博主都用这个功能来搭建自己的博客，因为它实在是太太方便了。</p>
+<p>这是因为一个项目的主页如果只有源码，对新接触的人很不友好，不知从何处下手。虽然已经有了 readme.md 文件，但毕竟不如一个直观的网页来的直接。于是 GitHub 就设计了 Pages 功能，允许用户设计一个图文并茂的网页作为项目主页。</p>
+<p>虽然 GitHub Pages 的初衷是提供自定义的项目主页，但是它的玩法不止这一个。因此许多博主都用这个功能来搭建自己的博客，因为它实在是太太方便了。</p>
 <p>去GitHub Pages 官网 <a href="https://pages.github.com/">pages.github</a> ，拉到最后，可以看到官方也推荐使用 GitHub Pages 搭建博客，并且提供了示例教程。</p>
 <h2 id="二、GitHub-Pages-准备"><a href="#二、GitHub-Pages-准备" class="headerlink" title="二、GitHub Pages 准备"></a>二、GitHub Pages 准备</h2><p>在发布之前，要先准备好自己的GitHub Pages 。</p>
 <h3 id="1-注册-GitHub-账号"><a href="#1-注册-GitHub-账号" class="headerlink" title="1. 注册 GitHub 账号"></a>1. 注册 GitHub 账号</h3><p>首先需要注册一个 GitHub 账号，如果已经有账号直接看下一步。</p>
@@ -576,14 +576,14 @@
 <li> 最好开源。这个原因是一般开源软件都会满足上面三个条件，而且比较好获取，直接去下载就行了。 </li>
 <li> 绿色免安装。绿色软件解压即用，免去纠结安装在哪个盘，要不要检查开机启动之类的烦恼。 </li>
 </ul>
-<h2 id="Dynamic-theme"><a href="#Dynamic-theme" class="headerlink" title="Dynamic theme"></a>Dynamic theme</h2><p>今天推荐的第一款软件 Dynamic theme，每天自动更新桌面壁纸，壁纸源可以选Windows聚焦和Bing每日壁纸。微软Bing搜索的首页每天会更新一张非常漂亮图片，相信很多人看到都会有把这些图片设为桌面壁纸的冲动，这款软件就满足了这个功能。</p>
+<h2 id="Dynamic-theme"><a href="#Dynamic-theme" class="headerlink" title="Dynamic theme"></a>Dynamic theme</h2><p>今天推荐的第一款软件 Dynamic theme，每天自动更新桌面壁纸，壁纸源可以选Windows聚焦和Bing每日壁纸。微软Bing搜索的主页每天会更新一张非常漂亮图片，相信很多人看到都会有把这些图片设为桌面壁纸的冲动，这款软件就满足了这个功能。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200823174716788.png" alt="20200823174716788.png"></p>
 <p>Dynamic theme的界面非常简洁，模仿Win10的风格，用起来感觉是系统自带的设置一样。</p>
 <p><strong>图标：</strong></p>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200823175437664.png" alt="20200823175437664.png"></p>
 <p><strong>主界面：</strong></p>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200823175419211.png" alt="20200823175419211.png"></p>
-<p>默认是从Bing首页下载壁纸，可以点击切换。点击“查看历史”，可以查看最近更新的壁纸。</p>
+<p>默认是从Bing主页下载壁纸，可以点击切换。点击“查看历史”，可以查看最近更新的壁纸。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200823192343810.gif" alt="20200823192343810.gif"></p>
 <p>它不仅能自动换桌面壁纸，也可以换锁屏界面和windows动态磁贴的背景。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/yushuaige/myblog@master/img/20200823182101938.png" alt="20200823182101938.png"></p>
@@ -1191,7 +1191,7 @@
 <li><p><strong>stun</strong></p>
 <p>Demo 示例：<a href="https://liuyib.github.io/">Liuyib’s Blog</a></p>
 <p>GitHub 主页：<a href="https://github.com/liuyib/hexo-theme-stun">hexo-theme-stun</a></p>
-<p>这是一个漂亮、简洁的 Hexo 主题，增加了首页图片，和白天黑夜模式，最重要的是文章浏览界面非常干净美观。我就是看到一篇博客使用的这个主题，特别漂亮，才有了想自己搭博客的强烈愿望。</p>
+<p>这是一个漂亮、简洁的 Hexo 主题，增加了主页图片，和白天黑夜模式，最重要的是文章浏览界面非常干净美观。我就是看到一篇博客使用的这个主题，特别漂亮，才有了想自己搭博客的强烈愿望。</p>
 <hr>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/test-1608904463540.gif" alt="test"></p>
 <hr>
@@ -1204,7 +1204,7 @@
 <li><p><strong>matery</strong></p>
 <p>Demo 示例：<a href="http://blinkfox.com/">闪烁之狐</a></p>
 <p>GitHub 主页：<a href="https://github.com/blinkfox/hexo-theme-matery">hexo-theme-matery</a></p>
-<p>同样是一个很漂亮的主题，除了首页的图片，它会为每一篇文章添加一张非常漂亮的封面图，而且集成了很多强大的功能插件，比喻词云，访问统计，音乐播放，视频播放，在线聊天等等。</p>
+<p>同样是一个很漂亮的主题，除了主页的图片，它会为每一篇文章添加一张非常漂亮的封面图，而且集成了很多强大的功能插件，比喻词云，访问统计，音乐播放，视频播放，在线聊天等等。</p>
 <hr>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/test-1608995730975.gif" alt="test"></p>
 <hr>
@@ -1266,7 +1266,7 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-pug</span><br></pre></td></tr></table></figure>
 <h3 id="5-修改主题"><a href="#5-修改主题" class="headerlink" title="5. 修改主题"></a>5. 修改主题</h3></li>
 </ul>
-<p>更换主题后，我们需要修改一些基本属性，比如博客名字、首页图片等，或者增加一些个性化属性，比如鼠标指针样式，雪花特效，点击特效等。本篇文章先介绍一下如何修改基本属性，以便于接下来发布网站，在本系列文章第七篇再介绍高级的个性化设置。</p>
+<p>更换主题后，我们需要修改一些基本属性，比如博客名字、主页图片等，或者增加一些个性化属性，比如鼠标指针样式，雪花特效，点击特效等。本篇文章先介绍一下如何修改基本属性，以便于接下来发布网站，在本系列文章第七篇再介绍高级的个性化设置。</p>
 <p>Hexo 的配置大部分都保存在博客根目录下的<code>_config.yml</code>文件，我这里是<code>D:\MyBlog\_config.yml</code>，我们叫它<code>根目录配置文件</code>，直接修改这个文件就可以更改博客的一些设置，像前面更换主题就是修改这个文件的参数实现的。关于这个文件的每个参数的详细意义，可以在 <a href="https://hexo.io/zh-cn/docs/">Hexo官方文档</a>里查看，每一个参数都有示例，讲解的非常详细。</p>
 <p>此外，下载的第三方主题的根目录下也有一个<code>_config.yml</code>文件，比如 <strong>ayer</strong> 主题，我这里就是<code>D:\MyBlog\themes\ayer\_config.yml</code>文件，我们叫它<code>主题配置文件</code>。关于这个文件每个参数的详细意义，可以在每个主题的 GitHub 主页看到详细说明。</p>
 <p>如果你使用的是自带的默认主题，那么所有配置都应该在<code>根目录配置文件</code>修改。如果是用的是第三方那个主题，需要两个文件配合修改。</p>
@@ -1277,10 +1277,10 @@
 <p>然后，参考 <strong>ayer</strong> 主题官方帮助文档 <a href="https://shen-yu.gitee.io/2019/ayer/">Ayer中文说明</a>。打开 <strong>ayer</strong> 主题的<code>主题配置文件</code>(D:\MyBlog\themes\ayer_config.yml)。</p>
 <p>修改第 2 ~ 10行，关掉不需要的侧边栏。</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">主页:</span> <span class="string">/</span></span><br><span class="line">  <span class="string">归档:</span> <span class="string">/archives</span></span><br><span class="line">  <span class="string">分类:</span> <span class="string">/categories</span></span><br><span class="line">  <span class="string">标签:</span> <span class="string">/tags</span></span><br><span class="line"><span class="comment">#  旅行: /tags/旅行/</span></span><br><span class="line"><span class="comment">#  摄影: http://shenyu-vip.lofter.com</span></span><br><span class="line"><span class="comment">#  友链: /friends</span></span><br><span class="line">  <span class="string">关于我:</span> <span class="string">/2019/about</span></span><br></pre></td></tr></table></figure>
-<p>修改第 14 ~ 18行，自定义首页滚动显示的标题。</p>
+<p>修改第 14 ~ 18行，自定义主页滚动显示的标题。</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">subtitle:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span> <span class="comment"># 是否开启动效</span></span><br><span class="line">  <span class="attr">text:</span> <span class="string">欢迎来到李新宇的博客</span></span><br><span class="line">  <span class="attr">text2:</span> <span class="string">临渊羡鱼，不如退而结网</span> </span><br><span class="line">  <span class="attr">text3:</span> <span class="string">问渠哪得清如许,为有源头活水来</span></span><br></pre></td></tr></table></figure>
 <p>修改第 26 ~ 27行，修改网站图标和侧边栏logo。只需要把自己的图标文件按覆盖原来的文件，完整目录为<code>‪D:\MyBlog\themes\ayer\source\favicon.ico</code>。关于图标，推荐一个可以下载各种尺寸图标的网站： <a href="https://www.easyicon.net/">easyicon</a>，也可以把自己准备好的图片进行在线格式转换： <a href="https://convertio.co/zh/ico-converter/">在线ico转换</a></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 浏览器标签栏显示图标</span></span><br><span class="line"><span class="attr">favicon:</span> <span class="string">/favicon.ico</span> </span><br><span class="line"><span class="comment"># 首页侧边栏图标</span></span><br><span class="line"><span class="attr">logo:</span> <span class="string">/favicon.ico</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 浏览器标签栏显示图标</span></span><br><span class="line"><span class="attr">favicon:</span> <span class="string">/favicon.ico</span> </span><br><span class="line"><span class="comment"># 主页侧边栏图标</span></span><br><span class="line"><span class="attr">logo:</span> <span class="string">/favicon.ico</span></span><br></pre></td></tr></table></figure>
 <p>修改第 31 ~ 34行，更换封面为自己的图片。先将自己准备好的封面图片 <code>cover9.jpg</code> 放到<code>D:\MyBlog\themes\ayer\source\images</code>目录下。</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">cover:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">/images/cover9.jpg</span></span><br><span class="line">  <span class="attr">logo:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
 <p>第 125 行，关闭右上角的 GitHub forkme。在这个背景下有点丑。</p>

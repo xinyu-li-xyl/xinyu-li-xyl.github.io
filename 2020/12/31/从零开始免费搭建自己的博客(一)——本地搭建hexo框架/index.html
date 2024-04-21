@@ -207,7 +207,7 @@
 <li><p><strong>stun</strong></p>
 <p>Demo 示例：<a target="_blank" rel="noopener" href="https://liuyib.github.io/">Liuyib’s Blog</a></p>
 <p>GitHub 主页：<a target="_blank" rel="noopener" href="https://github.com/liuyib/hexo-theme-stun">hexo-theme-stun</a></p>
-<p>这是一个漂亮、简洁的 Hexo 主题，增加了首页图片，和白天黑夜模式，最重要的是文章浏览界面非常干净美观。我就是看到一篇博客使用的这个主题，特别漂亮，才有了想自己搭博客的强烈愿望。</p>
+<p>这是一个漂亮、简洁的 Hexo 主题，增加了主页图片，和白天黑夜模式，最重要的是文章浏览界面非常干净美观。我就是看到一篇博客使用的这个主题，特别漂亮，才有了想自己搭博客的强烈愿望。</p>
 <hr>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/test-1608904463540.gif" alt="test"></p>
 <hr>
@@ -220,7 +220,7 @@
 <li><p><strong>matery</strong></p>
 <p>Demo 示例：<a target="_blank" rel="noopener" href="http://blinkfox.com/">闪烁之狐</a></p>
 <p>GitHub 主页：<a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery">hexo-theme-matery</a></p>
-<p>同样是一个很漂亮的主题，除了首页的图片，它会为每一篇文章添加一张非常漂亮的封面图，而且集成了很多强大的功能插件，比喻词云，访问统计，音乐播放，视频播放，在线聊天等等。</p>
+<p>同样是一个很漂亮的主题，除了主页的图片，它会为每一篇文章添加一张非常漂亮的封面图，而且集成了很多强大的功能插件，比喻词云，访问统计，音乐播放，视频播放，在线聊天等等。</p>
 <hr>
 <p><img src="https://yushuaigee.gitee.io/myblog/img/test-1608995730975.gif" alt="test"></p>
 <hr>
@@ -282,7 +282,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug</span><br></pre></td></tr></table></figure>
 <h3 id="5-修改主题"><a href="#5-修改主题" class="headerlink" title="5. 修改主题"></a>5. 修改主题</h3></li>
 </ul>
-<p>更换主题后，我们需要修改一些基本属性，比如博客名字、首页图片等，或者增加一些个性化属性，比如鼠标指针样式，雪花特效，点击特效等。本篇文章先介绍一下如何修改基本属性，以便于接下来发布网站，在本系列文章第七篇再介绍高级的个性化设置。</p>
+<p>更换主题后，我们需要修改一些基本属性，比如博客名字、主页图片等，或者增加一些个性化属性，比如鼠标指针样式，雪花特效，点击特效等。本篇文章先介绍一下如何修改基本属性，以便于接下来发布网站，在本系列文章第七篇再介绍高级的个性化设置。</p>
 <p>Hexo 的配置大部分都保存在博客根目录下的<code>_config.yml</code>文件，我这里是<code>D:\MyBlog\_config.yml</code>，我们叫它<code>根目录配置文件</code>，直接修改这个文件就可以更改博客的一些设置，像前面更换主题就是修改这个文件的参数实现的。关于这个文件的每个参数的详细意义，可以在 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo官方文档</a>里查看，每一个参数都有示例，讲解的非常详细。</p>
 <p>此外，下载的第三方主题的根目录下也有一个<code>_config.yml</code>文件，比如 <strong>ayer</strong> 主题，我这里就是<code>D:\MyBlog\themes\ayer\_config.yml</code>文件，我们叫它<code>主题配置文件</code>。关于这个文件每个参数的详细意义，可以在每个主题的 GitHub 主页看到详细说明。</p>
 <p>如果你使用的是自带的默认主题，那么所有配置都应该在<code>根目录配置文件</code>修改。如果是用的是第三方那个主题，需要两个文件配合修改。</p>
@@ -293,10 +293,10 @@
 <p>然后，参考 <strong>ayer</strong> 主题官方帮助文档 <a target="_blank" rel="noopener" href="https://shen-yu.gitee.io/2019/ayer/">Ayer中文说明</a>。打开 <strong>ayer</strong> 主题的<code>主题配置文件</code>(D:\MyBlog\themes\ayer_config.yml)。</p>
 <p>修改第 2 ~ 10行，关掉不需要的侧边栏。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">主页:</span> <span class="string">/</span></span><br><span class="line">  <span class="string">归档:</span> <span class="string">/archives</span></span><br><span class="line">  <span class="string">分类:</span> <span class="string">/categories</span></span><br><span class="line">  <span class="string">标签:</span> <span class="string">/tags</span></span><br><span class="line"><span class="comment">#  旅行: /tags/旅行/</span></span><br><span class="line"><span class="comment">#  摄影: http://shenyu-vip.lofter.com</span></span><br><span class="line"><span class="comment">#  友链: /friends</span></span><br><span class="line">  <span class="string">关于我:</span> <span class="string">/2019/about</span></span><br></pre></td></tr></table></figure>
-<p>修改第 14 ~ 18行，自定义首页滚动显示的标题。</p>
+<p>修改第 14 ~ 18行，自定义主页滚动显示的标题。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">subtitle:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span> <span class="comment"># 是否开启动效</span></span><br><span class="line">  <span class="attr">text:</span> <span class="string">欢迎来到李新宇的博客</span></span><br><span class="line">  <span class="attr">text2:</span> <span class="string">临渊羡鱼，不如退而结网</span> </span><br><span class="line">  <span class="attr">text3:</span> <span class="string">问渠哪得清如许,为有源头活水来</span></span><br></pre></td></tr></table></figure>
 <p>修改第 26 ~ 27行，修改网站图标和侧边栏logo。只需要把自己的图标文件按覆盖原来的文件，完整目录为<code>‪D:\MyBlog\themes\ayer\source\favicon.ico</code>。关于图标，推荐一个可以下载各种尺寸图标的网站： <a target="_blank" rel="noopener" href="https://www.easyicon.net/">easyicon</a>，也可以把自己准备好的图片进行在线格式转换： <a target="_blank" rel="noopener" href="https://convertio.co/zh/ico-converter/">在线ico转换</a></p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 浏览器标签栏显示图标</span></span><br><span class="line"><span class="attr">favicon:</span> <span class="string">/favicon.ico</span> </span><br><span class="line"><span class="comment"># 首页侧边栏图标</span></span><br><span class="line"><span class="attr">logo:</span> <span class="string">/favicon.ico</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 浏览器标签栏显示图标</span></span><br><span class="line"><span class="attr">favicon:</span> <span class="string">/favicon.ico</span> </span><br><span class="line"><span class="comment"># 主页侧边栏图标</span></span><br><span class="line"><span class="attr">logo:</span> <span class="string">/favicon.ico</span></span><br></pre></td></tr></table></figure>
 <p>修改第 31 ~ 34行，更换封面为自己的图片。先将自己准备好的封面图片 <code>cover9.jpg</code> 放到<code>D:\MyBlog\themes\ayer\source\images</code>目录下。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">cover:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">/images/cover9.jpg</span></span><br><span class="line">  <span class="attr">logo:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
 <p>第 125 行，关闭右上角的 GitHub forkme。在这个背景下有点丑。</p>
